@@ -6,8 +6,9 @@
 /* Ensure the actions menu appears correctly on mobile */
 @media (max-width: 600px) {
 	.MuiSpeedDial-root {
-		left: 1rem !important;
-		top: 6rem !important;
+		bottom: 1.5rem !important;
+		/* Changed to bottom positioning */
+		left: 1.5rem !important;
 	}
 
 	.MuiSpeedDial-actions {

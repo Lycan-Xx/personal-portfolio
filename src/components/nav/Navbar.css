@@ -99,6 +99,7 @@
 	color: white;
 	text-decoration: none;
 	font-weight: 600;
+	cursor: pointer;
 }
 
 .nav-link:hover {
@@ -134,28 +135,31 @@
 /* Mobile menu dropdown */
 .mobile-menu {
 	position: absolute;
-	top: 3.5rem;
-	left: 50%;
-	transform: translateX(-50%);
-	background-color: rgba(255, 255, 255, 0.9);
+	top: 100%;
+	left: 0;
+	width: 100%;
+	background-color: rgba(255, 255, 255, 0.2);
 	backdrop-filter: blur(8px);
-	border-radius: 0.5rem;
-	width: 83.333333%;
-	padding: 1rem;
-	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+	padding: 0.75rem 1.5rem;
+	transform-origin: top;
+	overflow: hidden;
+	border-bottom-left-radius: 2rem;
+	border-bottom-right-radius: 2rem;
 }
 
 /* Mobile menu links */
 .mobile-menu-link {
 	display: block;
-	padding: 0.5rem 1rem;
-	border-radius: 0.375rem;
+	padding: 0.75rem 1rem;
+	border-radius: 400px;
 	text-decoration: none;
 	font-weight: 600;
+	color: white;
+	transition: all 0.3s ease;
 }
 
 .mobile-menu-link:hover {
-	background-color: rgba(229, 231, 235, 1);
+	background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Menu button styling */

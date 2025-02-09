@@ -6,8 +6,8 @@ import Resume from "../../settings/resume.json";
 const useStyles = makeStyles((theme) => ({
 	speedDial: {
 		position: "fixed",
-		top: theme.spacing(12),
-		left: theme.spacing(4),
+		bottom: theme.spacing(6),  // Match ThemeToggle bottom spacing
+		left: theme.spacing(6),    // Use left spacing to match ThemeToggle's right spacing
 		zIndex: 1000,
 	},
 	iconColor: {
