@@ -1,0 +1,16 @@
+.MuiSpeedDial-root {
+	position: fixed !important;
+	z-index: 1000 !important;
+}
+
+/* Ensure the actions menu appears correctly on mobile */
+@media (max-width: 600px) {
+	.MuiSpeedDial-root {
+		left: 1rem !important;
+		top: 6rem !important;
+	}
+
+	.MuiSpeedDial-actions {
+		padding-top: 0.5rem;
+	}
+}
