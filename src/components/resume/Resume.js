@@ -3,18 +3,22 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Link } from '@material-ui/core';
 import { TextDecrypt } from '../content/TextDecrypt';
 import ResumePDF from './../../assets/Tan_Mark_Resume.pdf';
-import {
-	ResumeIcon
-} from '../content/ResumeButton';
+import { ResumeIcon } from '../content/ResumeButton';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
 	resumeBtn: {
-		position: 'fixed',
-		top: '80px', // Positioned below navbar
-		right: '2rem',
 		padding: '0.5rem 1rem',
-		zIndex: 999,
-	},
+		border: `1px solid ${theme.palette.foreground.default}`,
+		borderRadius: '8px',
+		display: 'flex',
+		alignItems: 'center',
+		gap: '0.5rem',
+		transition: 'all 0.3s ease',
+		'&:hover': {
+			background: theme.palette.primary.main,
+			borderColor: theme.palette.primary.main,
+		}
+	}
 }));
 
 export const Resume = () => {
