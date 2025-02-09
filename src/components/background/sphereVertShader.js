@@ -209,8 +209,9 @@ void main() {
 
   vUv = uv;
 
-  noise = turbulence(0.01 * position + normal + time * 0.8);
-  vec3 displacement = vec3((position.x) * noise, position.y * noise, position.z * noise);
-  gl_Position = projectionMatrix * modelViewMatrix * vec4((position + normal) + displacement, 1.0);
+  // Adjust noise for dripping effect
+  noise = turbulence(0.02 * position + normal + time * 0.5);
+  vec3 displacement = vec3(position.x * noise, position.y * noise, position.z * noise);
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position + normal + displacement, 1.0);
 }
 `;

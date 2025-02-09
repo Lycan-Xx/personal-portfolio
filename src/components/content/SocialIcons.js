@@ -4,49 +4,53 @@ import { makeStyles } from '@material-ui/core/styles';
 import Resume from '../../settings/resume.json';
 
 const useStyles = makeStyles((theme) => ({
-  socialIcons: {
-    position: 'fixed',
-    top: theme.spacing(6),
-    right: theme.spacing(6),
-  },
-  iconButton: {
-    height: '2.5rem',
-    width: '2.5rem',
-    display: 'block',
-    marginBottom: theme.spacing(2),
-  },
-  icon: {
-    fontSize: '1.25rem',
-  },
+	social: {
+		position: 'fixed',
+		left: '2rem',
+		top: '50%',
+		transform: 'translateY(-50%)',
+		display: 'flex',
+		flexDirection: 'column',
+		gap: '1rem',
+		zIndex: 999,
+	},
+	icon: {
+		fontSize: '1.5rem',
+		transition: 'all 0.3s ease',
+		'&:hover': {
+			color: theme.palette.primary.main,
+			transform: 'scale(1.2)',
+		},
+	},
 }));
 
 export const SocialIcons = () => {
-  const classes = useStyles();
+	const classes = useStyles();
 
-  const socialItems = Resume.basics.profiles.map((socialItem) => (
-    <Link
-      href={socialItem.url}
-      key={socialItem.network.toLowerCase()}
-      target='_blank'
-      rel='noopener noreferrer'
-      underline='none'
-      color='inherit'
-    >
-      <Tooltip
-        title={socialItem.username}
-        placement='left'
-        TransitionComponent={Zoom}
-      >
-        <IconButton
-          color='inherit'
-          aria-label={socialItem.network}
-          className={classes.iconButton}
-        >
-          <i className={`${classes.icon} ${socialItem.x_icon}`}></i>
-        </IconButton>
-      </Tooltip>
-    </Link>
-  ));
+	const socialItems = Resume.basics.profiles.map((socialItem) => (
+		<Link
+			href={socialItem.url}
+			key={socialItem.network.toLowerCase()}
+			target='_blank'
+			rel='noopener noreferrer'
+			underline='none'
+			color='inherit'
+		>
+			<Tooltip
+				title={socialItem.username}
+				placement='left'
+				TransitionComponent={Zoom}
+			>
+				<IconButton
+					color='inherit'
+					aria-label={socialItem.network}
+					className={classes.iconButton}
+				>
+					<i className={`${classes.icon} ${socialItem.x_icon}`}></i>
+				</IconButton>
+			</Tooltip>
+		</Link>
+	));
 
-  return <div className={classes.socialIcons}>{socialItems}</div>;
+	return <div className={classes.social}>{socialItems}</div>;
 };
