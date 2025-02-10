@@ -1,0 +1,137 @@
+/* Today.css */
+
+.card {
+	position: fixed;
+	top: 160px;
+	/* Position below Resume button */
+	right: 2rem;
+	width: 600px;
+	/* Increased to accommodate longer text */
+	min-height: 220px;
+	/* Increased height */
+	background: rgba(30, 30, 30, 0.40);
+	/* Semi-transparent dark background */
+	backdrop-filter: blur(10px);
+	border: 1px solid rgb(255, 255, 255);
+	/* 1px grey border */
+	border-radius: 20px;
+	z-index: 999;
+	padding: 1.5rem;
+}
+
+.card-content {
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+}
+
+.greeting {
+	color: #ff9e17;
+	/* Digital green for a techy look */
+	opacity: 0.9;
+	font-size: 1.8rem !important;
+	font-family: 'Space Mono', 'Courier New', monospace !important;
+	white-space: nowrap;
+	/* Changed to wrap for longer text */
+	line-height: 1.3 !important;
+	overflow: hidden;
+	border-right: 1px solid #ff9e17;
+	/* Simulated typewriter cursor */
+	letter-spacing: 0.02em;
+	font-weight: 600 !important;
+	max-width: 100%;
+	padding-right: 10px;
+	/* Space for cursor */
+}
+
+.time-of-day {
+	color: #ff9e17;
+	font-size: 1.5rem !important;
+	font-family: 'Space Mono', 'Courier New', monospace !important;
+	opacity: 0.8;
+}
+
+.time {
+	color: #ccc;
+	/* Grey color for clock digits */
+	font-size: 3rem !important;
+	font-family: 'Space Mono', 'Courier New', monospace !important;
+	margin-top: 0.5rem;
+	letter-spacing: 0.1em;
+	opacity: 0.85;
+}
+
+.date {
+	opacity: 0.6;
+	font-size: 1.1rem !important;
+	margin-top: 0.5rem;
+	font-family: 'Space Mono', 'Courier New', monospace !important;
+	/* Retro-looking font */
+	color: #ccc;
+	letter-spacing: 0.05em;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+	.card {
+		position: relative;
+		top: auto;
+		right: auto;
+		width: 450px;
+		min-height: 200px;
+		padding: 1.25rem;
+		margin: 0 auto;
+	}
+
+	.greeting {
+		font-size: 1.4rem !important;
+		line-height: 1.2 !important;
+	}
+
+	.time-of-day {
+		font-size: 1.2rem !important;
+	}
+
+	.time {
+		font-size: 2.5rem !important;
+	}
+
+	.date {
+		font-size: 1rem !important;
+	}
+}
+
+@media (max-width: 480px) {
+	.card {
+		width: 320px;
+		padding: 1rem;
+	}
+
+	.greeting {
+		font-size: 1.2rem !important;
+		line-height: 1.2 !important;
+	}
+
+	.time-of-day {
+		font-size: 1rem !important;
+	}
+
+	.time {
+		font-size: 2rem !important;
+	}
+
+	.date {
+		font-size: 0.9rem !important;
+	}
+}
+
+/* For very small screens */
+@media (max-width: 350px) {
+	.card {
+		width: 280px;
+	}
+
+	.greeting {
+		font-size: 1.1rem !important;
+	}
+}

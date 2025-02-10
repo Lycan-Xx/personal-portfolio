@@ -1,60 +1,79 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, Card, CardContent } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import { format } from "date-fns";
-
-const useStyles = makeStyles((theme) => ({
-	card: {
-		position: 'fixed',
-		top: '160px',  // Position below Resume button
-		right: '2rem',
-		width: '280px',
-		background: `${theme.palette.background.default}dd`, // Semi-transparent
-		backdropFilter: 'blur(10px)',
-		border: `1px solid ${theme.palette.foreground.default}`,
-		borderRadius: '8px',
-		zIndex: 999,
-		[theme.breakpoints.down('sm')]: {
-			top: '200px',
-			right: '1.5rem',
-			width: '240px',
-		}
-	},
-	time: {
-		color: theme.palette.primary.main,
-		marginTop: theme.spacing(1)
-	},
-	date: {
-		opacity: 0.8,
-		fontSize: '0.9rem',
-		marginTop: theme.spacing(1)
-	}
-}));
+import "./Today.css"; // Import the CSS styling
 
 export const Today = () => {
-	const classes = useStyles();
-	const date = new Date();
-	const hour = date.getHours();
-	const timeOfDay =
-		(hour < 4 && "night") ||
-		(hour < 12 && "morning") ||
-		(hour < 18 && "afternoon") ||
-		(hour < 22 && "evening") ||
-		"night";
+	const [currentTime, setCurrentTime] = useState(new Date());
+	const [displayedGreeting, setDisplayedGreeting] = useState("");
+	const [displayedTimeOfDay, setDisplayedTimeOfDay] = useState("");
 
-	const formattedDate = format(date, 'EEEE, MMMM do yyyy');
-	const formattedTime = format(date, 'h:mm a');
+	// Update the current time every second
+	useEffect(() => {
+		const timerId = setInterval(() => {
+			setCurrentTime(new Date());
+		}, 1000);
+		return () => clearInterval(timerId);
+	}, []);
+
+	// Typewriter effect for the greeting with a 10-second replay
+	useEffect(() => {
+		const animateGreeting = () => {
+			const now = new Date();
+			const hour = now.getHours();
+			let timeOfDay = "";
+			if (hour < 4) timeOfDay = "Nocturnal Protocols";
+			else if (hour < 12) timeOfDay = "AM Bitstream";
+			else if (hour < 18) timeOfDay = "Midday Matrix";
+			else if (hour < 22) timeOfDay = "Evening Algorithm";
+			else timeOfDay = "Nocturnal Protocols";
+
+			// Nerdy welcome message including time-of-day context
+			const fullGreeting = `Greetings, digital traveler!`;
+			setDisplayedGreeting(""); // Reset the greeting
+			setDisplayedTimeOfDay(""); // Reset the time of day
+			let index = 0;
+			const intervalId = setInterval(() => {
+				if (index < fullGreeting.length) {
+					setDisplayedGreeting((prev) => prev + fullGreeting.charAt(index));
+				} else if (index < fullGreeting.length + timeOfDay.length) {
+					setDisplayedTimeOfDay((prev) => prev + timeOfDay.charAt(index - fullGreeting.length));
+				}
+				index++;
+				if (index >= fullGreeting.length + timeOfDay.length) {
+					clearInterval(intervalId);
+				}
+			}, 100); // 100ms per character
+		};
+
+		animateGreeting(); // Run on mount
+
+		// Replay the animation every 10 seconds
+		const greetingInterval = setInterval(() => {
+			animateGreeting();
+		}, 10000);
+
+		return () => clearInterval(greetingInterval);
+	}, []);
+
+	// Format the time as a 24-hour clock with seconds
+	const formattedTime = format(currentTime, "HH:mm:ss");
+	// Format the date in a more detailed format
+	const formattedDate = format(currentTime, "EEEE, MMMM do, yyyy");
 
 	return (
-		<Card className={classes.card} elevation={3}>
-			<CardContent>
-				<Typography variant="h6">
-					Good {timeOfDay}!
+		<Card className="card" elevation={3}>
+			<CardContent className="card-content">
+				<Typography variant="h4" className="greeting">
+					{displayedGreeting}
 				</Typography>
-				<Typography variant="body1" className={classes.time}>
+				<Typography variant="h5" className="time-of-day">
+					{displayedTimeOfDay}
+				</Typography>
+				<Typography variant="h3" className="time">
 					{formattedTime}
 				</Typography>
-				<Typography variant="body2" className={classes.date}>
+				<Typography variant="body1" className="date">
 					{formattedDate}
 				</Typography>
 			</CardContent>
