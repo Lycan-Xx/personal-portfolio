@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Card, CardContent } from "@material-ui/core";
+import { Typography, Card, CardContent } from "@mui/material";
 import { format } from "date-fns";
 import "./Today.css"; // Import the CSS styling
 

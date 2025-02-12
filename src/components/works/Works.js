@@ -1,10 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { useState } from "react";
-import { Container } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { Card } from "flowbite-react";
-import { Typography, Link } from "@material-ui/core";
+import { Container, Card } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import { Typography, Link } from "@mui/material";
 
 import "./Works.css";
 
@@ -123,6 +122,6 @@ export const Works = () => {
 					))}
 				</div>
 			</Container>
-		</section>
+		</section >
 	);
 };

@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { useRef } from "react";
-import { Container, Typography, TextField, Button } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Container, Typography, TextField, Button } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import { TextDecrypt } from "../content/TextDecrypt";
 import Swal from 'sweetalert2';
 
