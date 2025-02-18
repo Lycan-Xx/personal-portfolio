@@ -56,3 +56,15 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
+
+
+## When installaing (remember)
+
+- npm install --legacy-peer-deps
+- npm audit fix --force
+
+    Repeat again if it does not start
+
+### Then (optional)
+
+- npm install --force
