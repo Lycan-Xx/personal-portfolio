@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
-import { Container, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Container, Typography } from "@mui/material";
+import { makeStyles } from "@mui/styles"; // Update this line
 import { TextDecrypt } from "../content/TextDecrypt";
 import { FirstName, LastName } from "../../utils/getName";
 

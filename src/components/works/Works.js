@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { useState } from "react";
-import { Container } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Container } from "@mui/material";
+import { makeStyles } from "@mui/styles"; // Update this line
 import { Card } from "flowbite-react";
-import { Typography, Link } from "@material-ui/core";
+import { Typography, Link } from "@mui/material";
 
 import "./Works.css";
 

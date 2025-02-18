@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/styles"; // Update this line
 
 const useStyles = makeStyles((theme) => ({
 	svgHover: {

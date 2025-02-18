@@ -1,54 +1,55 @@
 /**
  * Clean up a scene's materials and geometry
  */
-export const cleanScene = scene => {
-  scene.traverse(object => {
-    if (!object.isMesh) return;
+export const cleanScene = (scene) => {
+	if (!scene) return;
 
-    object.geometry.dispose();
-
-    if (object.material.isMaterial) {
-      cleanMaterial(object.material);
-    } else {
-      for (const material of object.material) {
-        cleanMaterial(material);
-      }
-    }
-  });
-
-  scene.dispose();
+	scene.traverse(object => {
+		if (object.isMesh) {
+			if (object.geometry) {
+				object.geometry.dispose();
+			}
+			if (object.material) {
+				if (object.material.map) object.material.map.dispose();
+				object.material.dispose();
+			}
+		}
+	});
+	scene.clear();
 };
 
 /**
  * Clean up and dispose of a material
  */
 export const cleanMaterial = material => {
-  material.dispose();
+	material.dispose();
 
-  for (const key of Object.keys(material)) {
-    const value = material[key];
-    if (value && typeof value === 'object' && 'minFilter' in value) {
-      value.dispose();
-    }
-  }
+	for (const key of Object.keys(material)) {
+		const value = material[key];
+		if (value && typeof value === 'object' && 'minFilter' in value) {
+			value.dispose();
+		}
+	}
 };
 
 /**
  * Clean up and dispose of a renderer
  */
-export const cleanRenderer = renderer => {
-  renderer.dispose();
-  renderer.forceContextLoss();
-  renderer = null;
+export const cleanRenderer = (renderer) => {
+	renderer.dispose();
+	renderer.forceContextLoss();
+	renderer.domElement = null;
 };
 
 /**
  * Clean up lights by removing them from their parent
  */
 export const removeLights = lights => {
-  for (const light of lights) {
-    light.parent.remove(light);
-  }
+	for (const light of lights) {
+		if (light.parent) {
+			light.parent.remove(light);
+		}
+	}
 };
 
 /**

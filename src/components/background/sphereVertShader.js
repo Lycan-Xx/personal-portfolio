@@ -189,29 +189,12 @@ float turbulence(vec3 p) {
 }
 
 // START
-uniform float time;
 varying vec2 vUv;
-varying vec3 vNormal;
-varying float noise;
-
-varying vec3 vViewPosition;
+varying vec3 vPosition;
 
 void main() {
-  #include <beginnormal_vertex>
-  #include <defaultnormal_vertex>
-  #include <begin_vertex>
-  #include <project_vertex>
-  #ifndef FLAT_SHADED // Normal computed with derivatives when FLAT_SHADED
-    vNormal = normalize(transformedNormal);
-  #endif
-
-  vViewPosition = - mvPosition.xyz;
-
   vUv = uv;
-
-  // Adjust noise for dripping effect
-  noise = turbulence(0.02 * position + normal + time * 0.5);
-  vec3 displacement = vec3(position.x * noise, position.y * noise, position.z * noise);
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(position + normal + displacement, 1.0);
+  vPosition = position;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }
 `;

@@ -1,6 +1,6 @@
 import React from "react";
 import { ThemeProvider } from "../components/theme/ThemeProvider";
-import { CssBaseline } from "@material-ui/core";
+import { CssBaseline } from "@mui/material";
 import { Home } from "../pages/Home";
 import { Works } from "../components/works/Works";
 import { About } from "../components/about/About";
