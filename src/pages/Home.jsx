@@ -5,11 +5,7 @@ import { makeStyles } from '@mui/styles';
 import AnimatedBackground from '../components/background/AnimatedBackground';
 import { ThemeToggle } from '../components/theme/ThemeToggle';
 import { Resume } from '../components/resume/Resume';
-import { SocialIcons } from '../components/content/SocialIcons';
-import { SpeedDials } from '../components/speedDial/SpeedDial';
-import Navbar from '../components/nav/Navbar';
-import { About } from '../components/about/About';
-import { Contact } from '../components/contact/Contact';
+import SpeedDial from '../components/speedDial/SpeedDial';
 import { Today } from '../components/content/Today';
 
 const useStyles = makeStyles((theme) => ({
@@ -53,12 +49,7 @@ export const Home = () => {
       <AnimatedBackground />
       <Content />
       <ThemeToggle />
-      <Hidden smDown>
-        <SocialIcons />
-      </Hidden>
-      <Hidden mdUp>
-        <SpeedDials />
-      </Hidden>
+      <SpeedDial />
       {isVisible && (
         <>
           <div className={classes.resumeContainer}>
