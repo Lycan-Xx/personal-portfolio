@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { throttle } from 'lodash';
 
 const navItems = [
   { id: "home", label: "Home" },
@@ -14,7 +15,7 @@ const Navbar = () => {
   const [currentSection, setCurrentSection] = useState("Home");
 
   useEffect(() => {
-    const handleScroll = () => {
+    const handleScroll = throttle(() => {
       const scrollPosition = window.scrollY;
       navItems.forEach((item) => {
         const section = document.getElementById(item.id);
@@ -23,8 +24,8 @@ const Navbar = () => {
           setCurrentSection(item.label);
         }
       });
-    };
-    
+    }, 100);
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -39,7 +40,7 @@ const Navbar = () => {
       <div className="bg-white/20 backdrop-blur-sm rounded-2xl py-3 px-6 shadow-lg">
         <div className="flex items-center justify-between md:justify-center">
           {/* Mobile Section Name */}
-          <div className="md:hidden font-medium text-white">
+          <div className="md:hidden font-semibold font-mono text-white">
             {currentSection}
           </div>
 
@@ -49,7 +50,8 @@ const Navbar = () => {
               <motion.a
                 key={item.id}
                 href={`#${item.id}`}
-                className={`px-4 py-2 rounded-2xl text-lg font-bold transition-colors duration-200 ${
+                aria-label={`Navigate to ${item.label}`}
+                className={`px-4 py-2 rounded-2xl text-lg font-semibold font-mono transition-colors duration-200 ${
                   activeNav === item.id
                     ? "text-white border border-white rounded-lg"
                     : "text-[#22d3ee]"
@@ -92,13 +94,14 @@ const Navbar = () => {
             transition={{ duration: 0.2 }}
             className="mt-4 bg-white/20 backdrop-blur-sm rounded-3xl p-4 shadow-xl md:hidden"
           >
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-2 items-start">
               {navItems.map((item) => (
                 <motion.a
                   key={item.id}
                   href={`#${item.id}`}
+                  aria-label={`Navigate to ${item.label}`}
                   onClick={() => setShowMobileMenu(false)}
-                  className={`px-4 py-2 rounded-xl text-[1rem] font-medium text-center transition-colors duration-200 ${
+                  className={`px-4 py-2 rounded-xl text-[1rem] font-mono font-semibold text-left w-full transition-colors duration-200 ${
                     activeNav === item.id
                       ? "text-white"
                       : "text-[#22d3ee]"
