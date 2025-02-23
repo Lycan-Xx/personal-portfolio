@@ -1,6 +1,5 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { TextDecrypt } from "./TextDecrypt";
 import Resume from "../../settings/resume.json";
 import { FirstName, LastName } from "../../utils/getName";
 
@@ -15,14 +14,14 @@ export const Content = () => {
           className="mb-8"
         >
           <h2 className="text-xl md:text-2xl text-cyan-400 mb-4 font-mono">
-            <TextDecrypt text={`${Resume.basics.x_title}`} />
+            {Resume.basics.x_title}
           </h2>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
-            <TextDecrypt text={`${FirstName} ${LastName}`} />
+            {FirstName} {LastName}
           </h1>
           <div className="text-3xl md:text-5xl lg:text-6xl text-gray-300 font-light">
-            <TextDecrypt text={`${Resume.basics.job1} `} />
-            <TextDecrypt text={`${Resume.basics.job2}`} />
+            {Resume.basics.job1} <br />
+            {Resume.basics.job2}
           </div>
         </motion.div>
 

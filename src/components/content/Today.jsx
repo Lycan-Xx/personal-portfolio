@@ -57,19 +57,16 @@ export const Today = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="glass-card p-6 md:p-8 max-w-md w-full mx-auto"
+      className="glass-card w-[300px] p-6 mx-auto"
     >
       <div className="space-y-4">
-        <h3 className="text-2xl md:text-3xl font-bold text-cyan-400 font-mono">
-          {displayedGreeting}
+        <h3 className="text-2xl font-bold text-cyan-400">
+          Current Time
         </h3>
-        <p className="text-xl text-gray-400 font-mono">
-          {displayedTimeOfDay}
-        </p>
-        <div className="text-4xl md:text-5xl font-bold text-white font-mono tracking-wider">
+        <div className="text-4xl font-bold text-white font-mono tracking-wider">
           {formattedTime}
         </div>
-        <p className="text-lg text-gray-400 font-mono">
+        <p className="text-lg text-gray-400">
           {formattedDate}
         </p>
       </div>

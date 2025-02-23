@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { TextDecrypt } from "../content/TextDecrypt";
 import { FirstName, LastName } from "../../utils/getName";
 import { FaCode, FaLinux, FaShieldAlt } from "react-icons/fa";
 import {
@@ -92,7 +91,7 @@ export const About = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="section-heading">
-              <TextDecrypt text={`Hello there!`} />
+              Hello there!
             </h2>
             <p className="text-xl text-gray-400 mb-8">
               I'm {FirstName} {LastName}, a multidisciplinary designer & developer.

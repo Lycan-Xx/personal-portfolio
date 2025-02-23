@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TextDecrypt } from '../content/TextDecrypt';
 import { ResumeIcon } from '../content/ResumeButton';
 
 export const Resume = () => {
@@ -15,7 +14,7 @@ export const Resume = () => {
     >
       <ResumeIcon />
       <span className="font-mono">
-        <TextDecrypt text="Resume" />
+		Resume
       </span>
     </motion.a>
   );

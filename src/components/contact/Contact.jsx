@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { TextDecrypt } from "../content/TextDecrypt";
 import emailjs from '@emailjs/browser';
 import Swal from 'sweetalert2';
 
@@ -142,7 +141,7 @@ export const Contact = () => {
             className="w-full lg:w-1/2 text-center lg:text-left"
           >
             <h2 className="section-heading">
-              <TextDecrypt text="Let's Connect" />
+              Let's Connect
             </h2>
             <p className="text-xl text-gray-400 mb-8">
               Have a project in mind? Want to collaborate? Or just want to say hi?
