@@ -1,9 +1,10 @@
 import React, { useEffect, useState, createContext } from "react";
 import { LightTheme, DarkTheme } from "./Themes";
-import { ThemeProvider as MuiThemeProvider } from '@mui/styles';
+import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
+
 export const ThemeContext = createContext();
 
-export const ThemeProvider = ({ children }) => {
+export const CustomThemeProvider = ({ children }) => {
 	const getInitialMode = () => {
 		if (typeof localStorage === "undefined") return true;
 		const isReturningUser = "dark" in localStorage;
@@ -43,9 +44,7 @@ export const ThemeProvider = ({ children }) => {
 				toggleTheme,
 			}}
 		>
-			<MuiThemeProvider
-				theme={theme === "light" ? LightTheme : DarkTheme}
-			>
+			<MuiThemeProvider theme={theme === "light" ? LightTheme : DarkTheme}>
 				{children}
 			</MuiThemeProvider>
 		</ThemeContext.Provider>

@@ -1,5 +1,5 @@
 import React from "react";
-import { ThemeProvider } from "../components/theme/ThemeProvider";
+import { CustomThemeProvider } from "../components/theme/ThemeProvider";
 import { CssBaseline } from "@mui/material";
 import { Home } from "../pages/Home";
 import { Works } from "../components/works/Works";
@@ -9,7 +9,7 @@ import Navbar from '../components/nav/Navbar';
 
 export const App = () => {
 	return (
-		<ThemeProvider>
+		<CustomThemeProvider>
 			<CssBaseline />
 			<Navbar />
 			<main>
@@ -18,6 +18,6 @@ export const App = () => {
 				<About />
 				<Contact />
 			</main>
-		</ThemeProvider>
+		</CustomThemeProvider>
 	);
 };

@@ -1,8 +1,10 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "./ThemeProvider";
 import { Tooltip, IconButton, Zoom } from "@mui/material";
-import { makeStyles } from "@mui/styles"; // Update this line
-import { Brightness4, Brightness7 } from '@mui/icons-material';
+import { makeStyles } from "@mui/styles";
+import Brightness4 from '@mui/icons-material/Brightness4';
+import Brightness7 from '@mui/icons-material/Brightness7';
+
 const useStyles = makeStyles((theme) => ({
 	iconButton: {
 		position: "fixed",

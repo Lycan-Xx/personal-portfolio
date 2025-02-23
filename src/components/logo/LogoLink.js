@@ -1,6 +1,6 @@
 import React from "react";
-import { Link, Tooltip, Zoom } from "@mui/material";
-import { makeStyles } from "@mui/styles"; // Update this line
+import { Link, Tooltip, Zoom } from "@mui/styles";
+import { makeStyles } from "@mui/styles";
 import Resume from "../../settings/resume.json";
 
 const useStyles = makeStyles((theme) => ({

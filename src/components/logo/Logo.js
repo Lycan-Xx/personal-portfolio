@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles } from "@mui/styles"; // Update this line
+import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
 	svgHover: {

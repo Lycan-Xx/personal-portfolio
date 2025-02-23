@@ -1,34 +1,87 @@
-* {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: 0;
-  box-sizing: border-box;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: #42bcbc;
+    --color-secondary: #ec704c;
+    --color-background: #0f172a;
+    --color-card: rgba(30, 41, 59, 0.5);
+  }
+
+  * {
+    @apply m-0 p-0 border-0 outline-0 box-border;
+  }
+
+  ::selection {
+    @apply bg-cyan-500/30 text-white;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-[var(--color-background)] text-gray-100 font-sans antialiased;
+  }
 }
-::-moz-selection {
-  background: #00bfbf;
-  color: #fafafa;
-  text-shadow: none;
+
+@layer components {
+  .glass-card {
+    @apply bg-[var(--color-card)] backdrop-blur-lg border border-white/10 rounded-2xl shadow-xl;
+  }
+
+  .glass-button {
+    @apply px-6 py-3 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 
+           rounded-xl text-cyan-400 font-medium transition-all duration-300 
+           hover:border-cyan-500/40 hover:scale-105 active:scale-95;
+  }
+
+  .section-heading {
+    @apply text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-gray-400 
+           bg-clip-text text-transparent mb-6;
+  }
+
+  .animated-gradient {
+    @apply absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-purple-500/20 to-pink-500/20 
+           animate-gradient blur-3xl opacity-30;
+  }
 }
-::selection {
-  background: #00bfbf;
-  color: #fafafa;
-  text-shadow: none;
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
-::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
 }
-html {
-  overflow: scroll;
-  overflow-x: hidden;
-  font-size: 16px;
-  scroll-behavior: smooth;
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
 }
-body {
-  transition: all 0.5s ease;
+
+.animate-gradient {
+  animation: gradient 15s ease infinite;
+  background-size: 400% 400%;
 }
-p {
-  margin-block-start: 0.5em;
-  margin-block-end: 0.5em;
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.text-glow {
+  text-shadow: 0 0 10px var(--color-primary);
+}
+
+.card-hover {
+  @apply transition-all duration-300 hover:translate-y-[-5px] hover:shadow-2xl;
 }
