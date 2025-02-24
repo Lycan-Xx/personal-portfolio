@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Content } from '../components/content/Content';
-import { Hidden } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import AnimatedBackground from '../components/background/AnimatedBackground';
 import { ThemeToggle } from '../components/theme/ThemeToggle';
 import { Resume } from '../components/resume/Resume';
 import SpeedDial from '../components/speedDial/SpeedDial';
-import { Today } from '../components/content/Today';
+import About from '../components/about/About';
+import Contact from '../components/contact/Contact';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,15 +48,13 @@ export const Home = () => {
     <div className={classes.root} id="home">
       <AnimatedBackground />
       <Content />
+
       <ThemeToggle />
       <SpeedDial />
       {isVisible && (
-        <>
-          <div className={classes.resumeContainer}>
-            <Resume />
-          </div>
-          <Today />
-        </>
+        <div className={classes.resumeContainer}>
+          <Resume />
+        </div>
       )}
     </div>
   );

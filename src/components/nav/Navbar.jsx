@@ -53,7 +53,7 @@ const Navbar = () => {
                 aria-label={`Navigate to ${item.label}`}
                 className={`px-4 py-2 rounded-2xl text-lg font-semibold font-mono transition-colors duration-200 ${
                   activeNav === item.id
-                    ? "text-white border border-white rounded-lg"
+                    ? "text-white border-[0.2rem] border-[#22d3ee] rounded-xl"
                     : "text-[#22d3ee]"
                 }`}
                 whileHover={{ scale: 1.05 }}

@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import emailjs from '@emailjs/browser';
-import Swal from 'sweetalert2';
+import emailjs from "@emailjs/browser";
+import Swal from "sweetalert2";
 
-export const Contact = () => {
+const Contact = () => {
   const form = useRef();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -13,31 +13,31 @@ export const Contact = () => {
 
     try {
       await emailjs.sendForm(
-        'service_8bezxog',
-        'template_jmsk313',
+        "service_8bezxog",
+        "template_jmsk313",
         form.current,
-        'knwNTK4YU4K30HYMd'
+        "knwNTK4YU4K30HYMd"
       );
 
       Swal.fire({
-        icon: 'success',
-        title: 'Message Sent!',
-        text: 'I\'ll get back to you as soon as possible.',
+        icon: "success",
+        title: "Message Sent!",
+        text: "I'll get back to you as soon as possible.",
         showConfirmButton: false,
         timer: 2000,
-        background: '#1e293b',
-        color: '#fff'
+        background: "#1e293b",
+        color: "#fff",
       });
 
       e.target.reset();
     } catch (error) {
       console.error(error);
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Something went wrong. Please try again later.',
-        background: '#1e293b',
-        color: '#fff'
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong. Please try again later.",
+        background: "#1e293b",
+        color: "#fff",
       });
     } finally {
       setIsSubmitting(false);
@@ -45,25 +45,42 @@ export const Contact = () => {
   };
 
   return (
-    <section id="contact" className="min-h-screen py-20 px-4 md:px-8 relative">
+    <section id="contact" className="relative min-h-screen py-20 px-4 md:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+        {/* Section Heading */}
+        <div className="text-center mb-12">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-4"
+          >
+            Contact
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-xl md:text-2xl text-gray-300"
+          >
+            Get in touch and let's build something amazing together.
+          </motion.p>
+        </div>
+
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Form */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="w-full lg:w-1/2"
+            className="glass-card p-8"
           >
-            <form
-              ref={form}
-              onSubmit={sendEmail}
-              className="glass-card p-8"
-            >
-              <div className="mb-6">
+            <form ref={form} onSubmit={sendEmail} className="space-y-6">
+              <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-gray-300 mb-2"
+                  className="block text-lg font-medium text-gray-300 mb-2"
                 >
                   Name
                 </label>
@@ -72,15 +89,15 @@ export const Contact = () => {
                   name="name"
                   id="name"
                   required
-                  className="w-full px-4 py-3 rounded-lg bg-dark-lighter/50 border border-gray-600 text-white focus:outline-none focus:border-cyan-400 transition-colors"
+                  className="w-full px-4 py-3 rounded-lg bg-dark-lighter/50 border border-gray-600 text-white focus:outline-none focus:border-cyan-400 transition-colors text-lg"
                   placeholder="Your name"
                 />
               </div>
 
-              <div className="mb-6">
+              <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-300 mb-2"
+                  className="block text-lg font-medium text-gray-300 mb-2"
                 >
                   Email
                 </label>
@@ -89,15 +106,15 @@ export const Contact = () => {
                   name="email"
                   id="email"
                   required
-                  className="w-full px-4 py-3 rounded-lg bg-dark-lighter/50 border border-gray-600 text-white focus:outline-none focus:border-cyan-400 transition-colors"
+                  className="w-full px-4 py-3 rounded-lg bg-dark-lighter/50 border border-gray-600 text-white focus:outline-none focus:border-cyan-400 transition-colors text-lg"
                   placeholder="your.email@example.com"
                 />
               </div>
 
-              <div className="mb-6">
+              <div>
                 <label
                   htmlFor="message"
-                  className="block text-sm font-medium text-gray-300 mb-2"
+                  className="block text-lg font-medium text-gray-300 mb-2"
                 >
                   Message
                 </label>
@@ -106,7 +123,7 @@ export const Contact = () => {
                   id="message"
                   required
                   rows="5"
-                  className="w-full px-4 py-3 rounded-lg bg-dark-lighter/50 border border-gray-600 text-white focus:outline-none focus:border-cyan-400 transition-colors resize-none"
+                  className="w-full px-4 py-3 rounded-lg bg-dark-lighter/50 border border-gray-600 text-white focus:outline-none focus:border-cyan-400 transition-colors resize-none text-lg"
                   placeholder="Your message..."
                 />
               </div>
@@ -115,55 +132,66 @@ export const Contact = () => {
                 type="submit"
                 disabled={isSubmitting}
                 className={`glass-button w-full flex items-center justify-center ${
-                  isSubmitting ? 'opacity-75 cursor-not-allowed' : ''
+                  isSubmitting ? "opacity-75 cursor-not-allowed" : ""
                 }`}
               >
                 {isSubmitting ? (
                   <span className="flex items-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-cyan-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-cyan-400"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
                     </svg>
                     Sending...
                   </span>
                 ) : (
-                  'Send Message'
+                  "Send Message"
                 )}
               </button>
             </form>
           </motion.div>
 
-          {/* Contact Info */}
+          {/* Contact Information */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="w-full lg:w-1/2 text-center lg:text-left"
+            className="glass-card p-8 text-left"
           >
-            <h2 className="section-heading">
-              Let's Connect
-            </h2>
-            <p className="text-xl text-gray-400 mb-8">
-              Have a project in mind? Want to collaborate? Or just want to say hi?
-              I'd love to hear from you!
+            <h2 className="text-2xl font-bold text-white mb-6">Let's Connect</h2>
+            <p className="text-lg text-gray-300 mb-6">
+              Have a project in mind? Want to collaborate? Or just want to say hi? I'd love to hear from you!
             </p>
-            <div className="glass-card p-8 space-y-4">
-              <p className="text-gray-300 flex items-center gap-2">
-                <span className="text-cyan-400">📧</span> markcmtan@gmail.com
+            <div className="space-y-4">
+              <p className="flex items-center gap-2 text-lg text-gray-300">
+                <span className="text-cyan-400">Email:</span>
+                markcmtan@gmail.com
               </p>
-              <p className="text-gray-300 flex items-center gap-2">
-                <span className="text-cyan-400">📍</span> Angeles, Philippines
+              <p className="flex items-center gap-2 text-lg text-gray-300">
+                <span className="text-cyan-400">Location:</span>
+                Angeles, Philippines
               </p>
             </div>
           </motion.div>
         </div>
       </div>
-
-      {/* Background Elements */}
-      <div className="absolute inset-0 -z-10">
-        <div className="animated-gradient opacity-10" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--color-background)_70%)]" />
-      </div>
     </section>
   );
 };
+
+export default Contact;

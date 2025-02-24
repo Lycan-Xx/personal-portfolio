@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { FirstName, LastName } from "../../utils/getName";
 import { FaCode, FaLinux, FaShieldAlt } from "react-icons/fa";
 import {
   SiReact,
@@ -21,17 +20,17 @@ const skills = [
   {
     icon: <FaCode className="text-4xl text-cyan-400" />,
     title: "Web Development",
-    description: "Creating fast, scalable, and efficient web applications.",
+    description: "Developing fast, scalable web applications using modern frameworks.",
   },
   {
     icon: <FaLinux className="text-4xl text-cyan-400" />,
     title: "Linux Administration",
-    description: "Managing systems, automation, and security configurations.",
+    description: "System management, automation, and securing server environments.",
   },
   {
     icon: <FaShieldAlt className="text-4xl text-cyan-400" />,
     title: "Security Auditing",
-    description: "Analyzing and strengthening system security.",
+    description: "Analyzing system vulnerabilities and enforcing robust security measures.",
   },
 ];
 
@@ -58,111 +57,113 @@ const SkillCard = ({ skill, index }) => {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 30 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
       transition={{ duration: 0.6, delay: index * 0.2 }}
-      className="glass-card p-6 flex flex-col items-center text-center transform transition-all duration-300 hover:scale-105"
+      className="glass-card p-6 flex flex-col items-center text-center transition-shadow duration-300 hover:shadow-2xl"
     >
       {skill.icon}
-      <h3 className="text-xl font-bold text-white mt-4 mb-2">{skill.title}</h3>
-      <p className="text-gray-400">{skill.description}</p>
+      <h3 className="mt-4 text-xl font-bold text-white">{skill.title}</h3>
+      <p className="mt-2 text-gray-300 text-sm">{skill.description}</p>
     </motion.div>
   );
 };
 
-export const About = () => {
-  const [bioRef, bioInView] = useInView({
-    threshold: 0.2,
-    triggerOnce: true,
-  });
+const About = () => {
+  const [bioRef, bioInView] = useInView({ threshold: 0.2, triggerOnce: true });
+  const [techRef, techInView] = useInView({ threshold: 0.2, triggerOnce: true });
 
-  const [techRef, techInView] = useInView({
-    threshold: 0.2,
-    triggerOnce: true,
-  });
+  // Simulated resume data
+  const Resume = { basics: { name: "Mark Tan" } };
+  const names = Resume.basics.name.split(" ");
+  const FirstName = names[0];
+  const LastName = names[names.length - 1];
 
   return (
-    <section id="about" className="min-h-screen py-20 px-4 md:px-8 relative">
+    <section id="about" className="relative min-h-screen py-20 px-4 md:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="section-heading">
-              Hello there!
-            </h2>
-            <p className="text-xl text-gray-400 mb-8">
-              I'm {FirstName} {LastName}, a multidisciplinary designer & developer.
-            </p>
-          </motion.div>
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-4">
+            About Me
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-300">
+            I am {FirstName} {LastName}, a multidisciplinary designer and developer.
+          </p>
+        </motion.div>
 
-          {/* Skills Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            {skills.map((skill, index) => (
-              <SkillCard key={index} skill={skill} index={index} />
-            ))}
-          </div>
-
+        {/* Main Content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Bio Section */}
           <motion.div
             ref={bioRef}
-            initial={{ opacity: 0, y: 20 }}
-            animate={bioInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6 }}
-            className="glass-card p-8 mb-16 text-left"
-          >
-            <h3 className="text-2xl font-bold text-cyan-400 mb-4">📌 About Me</h3>
-            <div className="space-y-4 text-gray-300">
-              <p>
-                I'm always hungry for knowledge, a glutton for learning if you will. I enjoy working independently,
-                but I thrive when collaborating with a purpose-driven team focused on solving real everyday problems
-                using the latest technologies.
-              </p>
-              <p>
-                As an introvert, I prefer calm and focused environments. My curiosity drives me to understand how things work,
-                and I embrace challenges that push my foundational knowledge.
-              </p>
-              <p>
-                Currently, I'm a Chemistry student at university. While I may not be the top of my class, I grasp concepts
-                well and am always improving. My true aspiration is to become a full-stack developer specializing in backend
-                systems.
-              </p>
-            </div>
-          </motion.div>
-
-          {/* Tech Stack */}
-          <motion.div
-            ref={techRef}
-            initial={{ opacity: 0, y: 20 }}
-            animate={techInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            initial={{ opacity: 0, x: -30 }}
+            animate={bioInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6 }}
             className="glass-card p-8"
           >
-            <h3 className="text-2xl font-bold text-white mb-8">Tech Stack</h3>
-            <div className="flex flex-wrap justify-center gap-8">
-              {techStack.map((tech, index) => (
-                <motion.div
-                  key={index}
-                  whileHover={{ scale: 1.2, color: "#42bcbc" }}
-                  whileTap={{ scale: 0.9 }}
-                  className="text-3xl text-gray-400 hover:text-cyan-400 transition-colors duration-300 cursor-pointer"
-                  title={tech.name}
-                >
-                  {tech.icon}
-                </motion.div>
-              ))}
+            <h2 className="text-2xl font-bold text-cyan-400 mb-4">About Me</h2>
+            <div className="space-y-4 text-gray-300 leading-relaxed">
+              <p>
+                I am passionate about continuous learning and self-improvement.
+                I thrive in both independent and collaborative environments, and I enjoy leveraging cutting-edge technologies to solve everyday challenges.
+              </p>
+              <p>
+                My journey in technology has given me a solid foundation in both web development and system administration. I am committed to building robust, user-friendly solutions.
+              </p>
+              <p>
+                I am currently pursuing higher education while further honing my skills as a full-stack developer.
+              </p>
             </div>
           </motion.div>
-        </div>
-      </div>
 
-      {/* Background Elements */}
-      <div className="absolute inset-0 -z-10">
-        <div className="animated-gradient opacity-10" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--color-background)_70%)]" />
+          {/* Skills and Tech Stack Section */}
+          <div className="flex flex-col gap-12">
+            {/* Skills Grid */}
+            <motion.div
+              className="grid grid-cols-1 sm:grid-cols-2 gap-8"
+              initial={{ opacity: 0, x: 30 }}
+              animate={bioInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.6 }}
+            >
+              {skills.map((skill, index) => (
+                <SkillCard key={index} skill={skill} index={index} />
+              ))}
+            </motion.div>
+
+            {/* Tech Stack */}
+            <motion.div
+              ref={techRef}
+              initial={{ opacity: 0, y: 30 }}
+              animate={techInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6 }}
+              className="glass-card p-8"
+            >
+              <h2 className="text-2xl font-bold text-white mb-6">Tech Stack</h2>
+              <div className="flex flex-wrap justify-center gap-6">
+                {techStack.map((tech, index) => (
+                  <motion.div
+                    key={index}
+                    whileHover={{ scale: 1.2, color: "#42bcbc" }}
+                    whileTap={{ scale: 0.9 }}
+                    className="text-3xl text-gray-400 hover:text-cyan-400 transition-colors duration-300 cursor-pointer"
+                    title={tech.name}
+                  >
+                    {tech.icon}
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   );
 };
+
+export default About;

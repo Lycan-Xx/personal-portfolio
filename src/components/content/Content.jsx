@@ -2,11 +2,17 @@ import React from "react";
 import { motion } from "framer-motion";
 import Resume from "../../settings/resume.json";
 import { FirstName, LastName } from "../../utils/getName";
+import { Today } from "./Today";
 
 export const Content = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="relative z-10 text-center">
+    <section className="min-h-screen relative px-4 md:px-8 flex flex-col md:flex-row items-center justify-center">
+      {/* Today component: on mobile, order 1 (top); on desktop, order 2 (right) */}
+      <div className="order-1 md:order-2 md:ml-8 mb-8 md:mb-0">
+        <Today />
+      </div>
+      {/* Main Content: on mobile, order 2 (below Today); on desktop, order 1 (left) */}
+      <div className="order-2 md:order-1 relative z-10 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -34,12 +40,6 @@ export const Content = () => {
           {Resume.basics.description}
         </motion.p>
       </div>
-
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden -z-10">
-        <div className="animated-gradient" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--color-background)_70%)]" />
-      </div>
-    </div>
+    </section>
   );
 };

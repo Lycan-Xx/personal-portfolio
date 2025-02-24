@@ -71,7 +71,7 @@ const SpeedDial = () => {
         {/* Main Toggle Button */}
         <motion.button
           onClick={handleToggle}
-          className="glass-button group flex items-center gap-3 bg-white/20 backdrop-blur-lg px-3 py-2 rounded-full shadow-lg md:w-auto w-12 h-12 md:h-auto overflow-hidden"
+          className="glass-button group flex items-center gap-3  backdrop-blur-lg px-3 py-2 rounded-xl shadow-lg md:w-auto w-12 h-12 md:h-auto overflow-hidden"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -114,7 +114,7 @@ const SpeedDial = () => {
                     href={profile.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="relative glass-button group flex items-center gap-3 px-4 py-2 rounded-full hover:bg-black/5 transition-colors duration-200"
+                    className="relative backdrop-blur-[2rem] glass-button group flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-black/5 transition-colors duration-200"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
