@@ -40,7 +40,7 @@ const Navbar = () => {
       <div className="bg-white/20 backdrop-blur-sm rounded-2xl py-3 px-6 shadow-lg">
         <div className="flex items-center justify-between md:justify-center">
           {/* Mobile Section Name */}
-          <div className="md:hidden font-semibold font-mono text-white">
+          <div className="md:hidden font-bold font-mono text-cyan-400">
             {currentSection}
           </div>
 

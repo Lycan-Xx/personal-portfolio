@@ -1,77 +1,108 @@
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { format } from "date-fns";
 
 export const Today = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [displayedGreeting, setDisplayedGreeting] = useState("");
-  const [displayedTimeOfDay, setDisplayedTimeOfDay] = useState("");
-
-  // Update time every second.
+  const [typedText, setTypedText] = useState("");
+  const [isTyping, setIsTyping] = useState(true);
+  
+  const timeOfDayMessage = useMemo(() => {
+	const hour = currentTime.getHours();
+  
+	if (hour < 4) return "Midnight Code Crunch (No Sleep Mode)";
+	if (hour < 12) return "AM Coffee & Code";
+	if (hour < 18) return "Afternoon Debugging Spree";
+	if (hour < 22) return "Evening Optimization Party";
+	return "Late Night Algorithm Jam";
+  }, [currentTime]);
+  
+  // Combined greeting text
+  const fullGreeting = useMemo(() => {
+	return `Welcome, fellow coder! You've booted into the realm of ${timeOfDayMessage}. Time to push some code, squash some bugs, and make the magic happen!`;
+  }, [timeOfDayMessage]);
+  
+  // Typewriter effect implementation using useCallback for better performance
+  const runTypewriter = useCallback(() => {
+	setIsTyping(true);
+	setTypedText(""); // Clear text first
+	
+	// Slight delay before starting to type
+	const startDelay = setTimeout(() => {
+	  let index = 0;
+	  const typeInterval = setInterval(() => {
+		if (index < fullGreeting.length) {
+		  setTypedText(text => fullGreeting.substring(0, index + 1)); // Use substring instead
+		  index++;
+		} else {
+		  clearInterval(typeInterval);
+		  setIsTyping(false);
+		}
+	  }, 50);
+	  
+	  return () => clearInterval(typeInterval);
+	}, 50);
+	
+	return () => clearTimeout(startDelay);
+  }, [fullGreeting]);
+  
+  // Clock update effect - runs every second
   useEffect(() => {
-    const timerId = setInterval(() => {
+    const clockInterval = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
-    return () => clearInterval(timerId);
+    
+    return () => clearInterval(clockInterval);
   }, []);
-
-  // Animate the greeting and time-of-day message.
+  
+  // Typewriter reset effect - resets every 10 seconds if not currently typing
   useEffect(() => {
-    const animateGreeting = () => {
-      const now = new Date();
-      const hour = now.getHours();
-      let timeOfDay = "";
-      if (hour < 4) timeOfDay = "Nocturnal Protocols";
-      else if (hour < 12) timeOfDay = "AM Bitstream";
-      else if (hour < 18) timeOfDay = "Midday Matrix";
-      else if (hour < 22) timeOfDay = "Evening Algorithm";
-      else timeOfDay = "Nocturnal Protocols";
-
-      const fullGreeting = "Greetings, digital traveler!";
-      let index = 0;
-      setDisplayedGreeting("");
-      setDisplayedTimeOfDay("");
-
-      const intervalId = setInterval(() => {
-        if (index < fullGreeting.length) {
-          setDisplayedGreeting((prev) => prev + fullGreeting.charAt(index));
-        } else if (index < fullGreeting.length + timeOfDay.length) {
-          setDisplayedTimeOfDay((prev) =>
-            prev + timeOfDay.charAt(index - fullGreeting.length)
-          );
-        }
-        index++;
-        if (index >= fullGreeting.length + timeOfDay.length) {
-          clearInterval(intervalId);
-        }
-      }, 50);
-    };
-
-    animateGreeting();
-    const greetingInterval = setInterval(animateGreeting, 10000);
-    return () => clearInterval(greetingInterval);
-  }, []);
-
+    if (!isTyping) {
+      const resetInterval = setTimeout(() => {
+        runTypewriter();
+      }, 10000);
+      
+      return () => clearTimeout(resetInterval);
+    }
+  }, [isTyping, runTypewriter]);
+  
+  // Initial typewriter run
+  useEffect(() => {
+    const typewriterCleanup = runTypewriter();
+    return typewriterCleanup;
+  }, [runTypewriter]);
+  
+  // Formatted time and date strings
   const formattedTime = format(currentTime, "HH:mm:ss");
   const formattedDate = format(currentTime, "EEEE, MMMM do, yyyy");
-
+  // Split the formatted date into parts for styling
+  const dateParts = formattedDate.split(" ");
+  
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="glass-card w-full max-w-sm p-6 mx-auto"
+    <div 
+      className="glass-card w-full max-w-sm p-6 mx-auto opacity-0 translate-y-5 animate-fade-in-up"
     >
       <div className="space-y-4">
         <h3 className="text-2xl font-bold text-cyan-400">Current Time</h3>
         <div className="text-4xl font-bold text-white font-mono tracking-wider">
           {formattedTime}
         </div>
-        <p className="text-lg text-gray-400">{formattedDate}</p>
-        <div className="mt-4 text-lg font-medium text-gray-300">
-          {displayedGreeting} {displayedTimeOfDay}
+        <p className="text-lg text-gray-400 font-bold">
+          {dateParts.map((part, index) => (
+            <span
+              key={index}
+              style={{
+                color: index === 0 ? "#ec704c" : index === 1 ? "#22d3ee" : index === 2 ? "white" : "red",
+              }}
+            >
+              {part}{" "}
+            </span>
+          ))}
+        </p>
+        <div className="mt-4 text-lg font-medium font-mono text-gray-300 min-h-[28px]">
+          {typedText}
+          <span className={`ml-1 inline-block w-2 h-4 bg-cyan-400 ${isTyping ? 'animate-blink' : 'opacity-0'}`}></span>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
