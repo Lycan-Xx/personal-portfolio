@@ -1,7 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { FaCode, FaLinux, FaShieldAlt } from "react-icons/fa";
+import { FaCode, FaLinux, FaShieldAlt, FaWrench } from "react-icons/fa";
+import { SlChemistry } from "react-icons/sl";
 import {
   SiReact,
   SiJavascript,
@@ -20,17 +21,32 @@ const skills = [
   {
     icon: <FaCode className="text-4xl text-cyan-400" />,
     title: "Web Development",
-    description: "Developing fast, scalable web applications using modern frameworks.",
+    description:
+      "Crafting blazing fast web apps—debugging is optional, laughter is guaranteed!",
   },
   {
     icon: <FaLinux className="text-4xl text-cyan-400" />,
     title: "Linux Administration",
-    description: "System management, automation, and securing server environments.",
+    description:
+      "Taming unruly servers with terminal magic and a pinch of geek humor!",
   },
   {
     icon: <FaShieldAlt className="text-4xl text-cyan-400" />,
     title: "Security Auditing",
-    description: "Analyzing system vulnerabilities and enforcing robust security measures.",
+    description:
+      "Hunting down vulnerabilities like a cyber detective with a side of puns!",
+  },
+  {
+    icon: <SlChemistry className="text-4xl text-cyan-400" />,
+    title: "Chemist",
+    description:
+      "Mixing up chemical concoctions that might fizz, pop, and occasionally even sparkle—safety goggles on!",
+  },
+  {
+    icon: <FaWrench className="text-4xl text-cyan-400" />,
+    title: "Computer Repair",
+    description:
+      "Reviving your tech with a toolbox of duct tape, witty banter, and a dash of magic!",
   },
 ];
 
@@ -90,7 +106,7 @@ const About = () => {
           className="text-center mb-12"
         >
           <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-4">
-            About Me
+            Who am I
           </h1>
           <p className="text-xl md:text-2xl text-gray-300">
             I am {FirstName} {LastName}, a multidisciplinary designer and developer.
@@ -110,14 +126,14 @@ const About = () => {
             <h2 className="text-2xl font-bold text-cyan-400 mb-4">About Me</h2>
             <div className="space-y-4 text-gray-300 leading-relaxed">
               <p>
-                I am passionate about continuous learning and self-improvement.
-                I thrive in both independent and collaborative environments, and I enjoy leveraging cutting-edge technologies to solve everyday challenges.
+                I am very fond of continuous learning and self-improvement.
+                While i prefer working privately, i don't dislike collaborative environments, and I enjoy leveraging cutting-edge technologies to solve everyday challenges.
               </p>
               <p>
-                My journey in technology has given me a solid foundation in both web development and system administration. I am committed to building robust, user-friendly solutions.
+                My journey in technology has given me a solid foundation in both web development and system administration. I am set on building robust and user-friendly solutions.
               </p>
               <p>
-                I am currently pursuing higher education while further honing my skills as a full-stack developer.
+                I am currently pursuing a degree in Chemistry while further honing my skills as a full-stack developer.
               </p>
             </div>
           </motion.div>
@@ -149,7 +165,7 @@ const About = () => {
                 {techStack.map((tech, index) => (
                   <motion.div
                     key={index}
-                    whileHover={{ scale: 1.2, color: "#42bcbc" }}
+                    whileHover={{ scale: 2, color: "#42bcbc" }}
                     whileTap={{ scale: 0.9 }}
                     className="text-3xl text-gray-400 hover:text-cyan-400 transition-colors duration-300 cursor-pointer"
                     title={tech.name}

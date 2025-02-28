@@ -12,13 +12,18 @@ export const App = () => {
 	return (
 		<CustomThemeProvider>
 			<CssBaseline />
-			<VideoBackground />
 			<Navbar />
 			<main>
 				<Home />
 				<Works />
-				<About />
-				<Contact />
+				{/* About and Contact come after the VideoBackground */}
+
+
+				<div className="relative">
+					<VideoBackground />
+					<About />
+					<Contact />
+				</div>
 			</main>
 		</CustomThemeProvider>
 	);
