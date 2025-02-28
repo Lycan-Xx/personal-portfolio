@@ -142,3 +142,36 @@
 section {
 	scroll-margin-top: 100px;
 }
+
+
+
+
+
+
+
+
+
+/* ------------------------------------------------- */
+
+
+
+.github-calendar-container {
+	width: 100%;
+	overflow-x: auto;
+	padding: 1rem 0;
+}
+
+.react-activity-calendar__calendar {
+	width: 100%;
+	min-width: 730px;
+}
+
+/* Custom theme colors for calendar */
+.react-activity-calendar__calendar rect {
+	transition: all 0.2s ease;
+}
+
+.react-activity-calendar__calendar rect:hover {
+	stroke: #42bcbc;
+	stroke-width: 2px;
+}

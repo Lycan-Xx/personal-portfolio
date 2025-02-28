@@ -56,3 +56,13 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
+
+
+
+
+## Inspirations 
+
+Mark tan
+Bloggify - https://github.com/Bloggify/github-calendar
+grubersjoe - https://github.com/grubersjoe/react-github-calendar
+
