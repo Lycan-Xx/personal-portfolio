@@ -153,8 +153,6 @@ section {
 
 /* ------------------------------------------------- */
 
-
-
 .github-calendar-container {
 	width: 100%;
 	overflow-x: auto;
@@ -174,4 +172,11 @@ section {
 .react-activity-calendar__calendar rect:hover {
 	stroke: #42bcbc;
 	stroke-width: 2px;
+}
+
+.glass-card {
+	background: rgba(30, 41, 59, 0.7);
+	backdrop-filter: blur(10px);
+	border-radius: 10px;
+	border: 1px solid rgba(255, 255, 255, 0.1);
 }
