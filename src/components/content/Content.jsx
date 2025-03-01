@@ -38,7 +38,7 @@ export const Content = () => {
 					<h2 className="text-xl text-start md:text-4xl text-cyan-400 mb-4 font-mono">
 						{Resume.basics.x_title}
 					</h2>
-					<h1 className="text-4xl text-white from-white to-secondary md:text-6xl lg:text-7xl font-bold mb-6">
+					<h1 style={{ fontFamily: "ChocoCooky" }} className="text-4xl text-gray-200 md:text-6xl lg:text-7xl font-bold mb-6">
 						{FirstName} (Sani) {LastName}
 					</h1>
 					<div className="text-3xl md:text-5xl lg:text-6xl text-gray-300 font-light">

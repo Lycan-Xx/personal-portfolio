@@ -84,7 +84,7 @@ const Contact = () => {
 							</p>
 							<p className="flex items-center gap-2 text-lg text-gray-300">
 								<span className="text-cyan-400">Location:</span>
-								Yola, Adamawa state
+								Adamawa, Nigeria
 							</p>
 						</div>
 					</motion.div>
