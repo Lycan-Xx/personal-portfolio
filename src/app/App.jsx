@@ -7,6 +7,7 @@ import About from "../components/about/About";
 import Contact from "../components/contact/Contact";
 import Navbar from '../components/nav/Navbar';
 import VideoBackground from "../components/background/VideoBackground";
+import NameRotationAnimation from "../pages/rotate";
 
 export const App = () => {
 	return (
@@ -22,6 +23,7 @@ export const App = () => {
 				<div className="relative">
 					<VideoBackground />
 					<About />
+					<NameRotationAnimation />
 					<Contact />
 				</div>
 			</main>

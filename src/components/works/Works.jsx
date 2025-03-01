@@ -135,7 +135,7 @@ export const Works = () => {
 						style={{ fontFamily: "ChocoCooky" }}
 					>
 						<h2 className="section-heading">
-							Featured Projects:
+							Featured Projects
 						</h2>
 						<p className="text-gray-400 max-w-2xl mx-auto mt-8 text-2xl">
 							Here are some of the projects I've worked on and i'am proud of. Each project is unique and purpose driven to solve a problem.
