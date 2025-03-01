@@ -98,21 +98,30 @@ const About = () => {
 
 	return (
 		<section id="about" className="relative min-h-screen py-20 px-4 md:px-8">
-			<div className="max-w-7xl mx-auto">
-				{/* Header */}
-				<motion.div
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.6 }}
-					className="text-center mb-12"
-				>
-					<h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-4">
-						Who am I
-					</h1>
-					<p className="text-xl md:text-2xl text-gray-300">
-						I am {FirstName} {LastName}, a multidisciplinary designer and developer.
-					</p>
-				</motion.div>
+			<div className="max-w-7xl mx-auto" style={{ fontFamily: "ChocoCooky" }}
+			>
+				<header className="mb-8">
+					<motion.h1
+						initial="hidden"
+						animate="visible"
+						variants={{
+							hidden: { opacity: 0, y: 20 },
+							visible: { opacity: 1, y: 0 },
+						}}
+						transition={{ duration: 0.6 }}
+						className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent mb-4"
+					>
+						Who Am I & What I Do
+					</motion.h1>
+					<motion.p
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.6, delay: 0.2 }}
+						className="text-xl md:text-2xl bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent"
+					>
+						I am <span className="text-cyan-400">{FirstName} (Sani) {LastName}</span>, a multidisciplinary technician and developer.
+					</motion.p>
+				</header>
 
 				{/* Main Content */}
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -124,11 +133,12 @@ const About = () => {
 						transition={{ duration: 0.6 }}
 						className="glass-card p-8"
 					>
-						<h2 className="text-2xl font-bold text-cyan-400 mb-4">About Me</h2>
+						<h2 className="text-2xl font-bold text-cyan-400 mb-4">
+							A Little Bit About Myself
+						</h2>
 						<div className="space-y-4 text-gray-300 leading-relaxed">
 							<p>
-								I am very fond of continuous learning and self-improvement.
-								While i prefer working privately, i don't dislike collaborative environments, and I enjoy leveraging cutting-edge technologies to solve everyday challenges.
+								I am very fond of continuous learning and self-improvement. While I prefer working privately, I don't dislike collaborative environments, and I enjoy leveraging cutting-edge technologies to solve everyday challenges.
 							</p>
 							<p>
 								My journey in technology has given me a solid foundation in both web development and system administration. I am set on building robust and user-friendly solutions.
@@ -138,6 +148,8 @@ const About = () => {
 							</p>
 						</div>
 					</motion.div>
+					{/* Other content can follow */}
+
 
 					{/* Skills and Tech Stack Section */}
 					<div className="flex flex-col gap-12">

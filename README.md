@@ -66,3 +66,11 @@ Mark tan
 Bloggify - https://github.com/Bloggify/github-calendar
 grubersjoe - https://github.com/grubersjoe/react-github-calendar
 
+
+
+## Setting up github contributions graph
+
+- In the github-contributions-api, populate the .env file with your github PERSOANL ACCESS TOKEN
+
+
+THE LOGIC

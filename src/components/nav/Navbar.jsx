@@ -26,7 +26,12 @@ const Navbar = () => {
 	return (
 		<nav className="fixed top-4 left-1/2 -translate-x-1/2 w-11/12 max-w-4xl z-50">
 			<div className="glass-card py-3 px-6">
-				<div className="flex items-center justify-between md:justify-center">
+				<div className="flex items-center justify-between md:justify-center h-12">
+					{/* Current Section Name - Mobile Only */}
+					<div className="md:hidden font-bold font-mono text-cyan-400">
+						{navItems.find(item => item.id === activeNav)?.label || 'Home'}
+					</div>
+
 					{/* Desktop Navigation */}
 					<div className="hidden md:flex space-x-2">
 						{navItems.map((item) => (
@@ -53,16 +58,16 @@ const Navbar = () => {
 					{/* Mobile Menu Button */}
 					<button
 						onClick={() => setShowMobileMenu(!showMobileMenu)}
-						className="md:hidden p-2 rounded-full text-white hover:bg-cyan-400/10 transition-colors duration-300"
-						aria-label="Toggle mobile menu"
+						className="md:hidden p-2 rounded-full hover:bg-cyan-400/10 transition-colors duration-300"
+						aria-label="Toggle menu"
 					>
 						<span className="sr-only">Toggle menu</span>
 						{!showMobileMenu ? (
-							<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<svg className="w-6 h-6 stroke-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
 							</svg>
 						) : (
-							<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<svg className="w-6 h-6 stroke-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
 							</svg>
 						)}

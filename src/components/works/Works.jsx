@@ -70,11 +70,11 @@ const ProjectCard = ({ project, index }) => {
 				</div>
 
 				<div className="p-6 space-y-4">
-					<h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">
+					<h3 className="text-xl font-sans font-bold text-white group-hover:text-cyan-400 transition-colors">
 						{project.title}
 					</h3>
 
-					<p className="text-gray-400 text-sm line-clamp-3">
+					<p className="text-gray-400 text-sm line-clamp-3" style={{ fontFamily: "ChocoCooky" }}>
 						{project.description}
 					</p>
 
@@ -82,7 +82,7 @@ const ProjectCard = ({ project, index }) => {
 						{project.tags.map((tag, i) => (
 							<span
 								key={i}
-								className="px-3 py-1 text-xs font-medium text-cyan-400 bg-cyan-400/10 rounded-full"
+								className="px-3 py-1 text-xs font-medium font-mono text-cyan-400 bg-cyan-400/10 rounded-full"
 							>
 								{tag}
 							</span>
@@ -92,7 +92,7 @@ const ProjectCard = ({ project, index }) => {
 					<motion.a
 						href={project.link}
 						whileHover={{ x: 5 }}
-						className="inline-flex items-center text-sm font-medium text-cyan-400 hover:text-cyan-300 transition-colors"
+						className="inline-flex items-center font-sans text-sm font-medium text-cyan-400 hover:text-cyan-300 transition-colors"
 					>
 						View Project
 						<svg
@@ -111,7 +111,7 @@ const ProjectCard = ({ project, index }) => {
 					</motion.a>
 				</div>
 			</div>
-		</motion.div>
+		</motion.div >
 	);
 };
 
@@ -131,13 +131,18 @@ export const Works = () => {
 						initial={{ opacity: 0, y: 20 }}
 						animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
 						transition={{ duration: 0.6 }}
-						className="text-center mb-16 relative z-10"
+						className="mb-16 relative z-10 text-start"
+						style={{ fontFamily: "ChocoCooky" }}
 					>
 						<h2 className="section-heading">
-							Featured Projects
+							Featured Projects:
 						</h2>
-						<p className="text-gray-400 max-w-2xl mx-auto">
-							Here are some of my favorite projects I've worked on. Each project is unique and demonstrates different aspects of my skills and expertise.
+						<p className="text-gray-400 max-w-2xl mx-auto mt-8 text-2xl">
+							Here are some of the projects I've worked on and i'am proud of. Each project is unique and purpose driven to solve a problem.
+						</p>
+
+						<p className="text-gray-400 max-w-2xl mx-auto mt-8 text-2xl">
+							They also demonstrate different aspects of my skills and expertise.
 						</p>
 					</motion.div>
 
