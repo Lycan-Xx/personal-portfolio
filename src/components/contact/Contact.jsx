@@ -11,6 +11,8 @@ const Contact = () => {
 		e.preventDefault();
 		setIsSubmitting(true);
 
+		// hello
+
 		try {
 			await emailjs.sendForm(
 				"service_8bezxog",
