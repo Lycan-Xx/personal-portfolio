@@ -1,45 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Linkedin, Github, Flag, MessageCircle, MessageSquare } from 'lucide-react';
+import { FaLinkedin, FaGithub, FaTwitter, FaTelegram, FaDiscord } from 'react-icons/fa';
+import { MdEmail } from 'react-icons/md';
 
 const profiles = [
-  { 
-    network: "Google",
-    username: "markcmtan@gmail.com",
-    url: "mailto:markcmtan@gmail.com",
-    icon: Mail
-  },
   {
     network: "LinkedIn",
-    username: "mcmtan",
-    url: "https://www.linkedin.com/in/mcmtan/",
-    icon: Linkedin
+    username: "mohammad-bello",
+    url: "https://www.linkedin.com/in/mohammad-bello/",
+    icon: FaLinkedin
   },
   {
     network: "GitHub",
-    username: "taniyow",
-    url: "https://github.com/taniyow",
-    icon: Github
+    username: "Lycan-Xx",
+    url: "https://github.com/Lycan-Xx",
+    icon: FaGithub
   },
   {
-    network: "GitLab",
-    username: "taniyow",
-    url: "https://gitlab.com/taniyow",
-    icon: Flag
+    network: "Twitter",
+    username: "LycanXx2",
+    url: "https://x.com/LycanXx2",
+    icon: FaTwitter
   },
   {
     network: "Telegram",
-    username: "marktaniyow",
-    url: "https://t.me/marktaniyow",
-    icon: MessageCircle
+    username: "lycan_xx1",
+    url: "https://t.me/lycan_xx1",
+    icon: FaTelegram
   },
   {
     network: "Discord",
-    username: "taniyow#9142",
-    url: "https://discord.com",
-    icon: MessageSquare
+    username: "lycan_xx0",
+    url: "https://discord.com/users/lycan_xx0",
+    icon: FaDiscord
   }
 ];
+
 
 const SpeedDial = () => {
   const [isOpen, setIsOpen] = useState(false);
