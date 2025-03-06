@@ -7,5 +7,5 @@ export default defineConfig({
 		port: 3000,
 		open: true
 	},
-	base: '/react-portfolio/'
+	base: '/personal-portfolio/'
 });
