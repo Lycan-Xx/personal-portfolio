@@ -1,5 +1,4 @@
 import React from 'react';
-import video from "../../assets/video.mp4";
 
 const VideoBackground = () => {
 	return (
@@ -14,7 +13,7 @@ const VideoBackground = () => {
 				muted
 				playsInline
 			>
-				<source src={video} type="video/mp4" />
+				<source src="https://res.cloudinary.com/cloudinary-lycan-xx/video/upload/v1742122953/portfolio%20assets/k2qldotcgcu6a73op9ki.mp4" type="video/mp4" />
 				Your browser does not support the video tag.
 			</video>
 		</div>

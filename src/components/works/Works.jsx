@@ -5,7 +5,7 @@ import { useInView } from "react-intersection-observer";
 const projects = [
 	{
 		id: 1,
-		title: "React Portfolio",
+		title: "My Personal Portfolio",
 		description: "Designed and developed a ReactJS portfolio with fancy 3D animations using Three.js for the background element.",
 		image: "https://picsum.photos/seed/portfolio/800/600",
 		tags: ["React", "Three.js", "Framer Motion", "Tailwind CSS"],
@@ -13,23 +13,23 @@ const projects = [
 	},
 	{
 		id: 2,
-		title: "VeriTru Project",
-		description: "An advocacy project website built using MEAN stack with a fact-checking tool to promote actions against fake news.",
+		title: "Mailcreak newsletter manager",
+		description: "A web app designed to streamline newsletter creation, subscriber management, and compile performance tracking. Built with React, Tailwind CSS. Planning on setting up the backend that manages the system.",
 		image: "https://picsum.photos/seed/veritru/800/600",
-		tags: ["MongoDB", "Express", "Angular", "Node.js"],
-		link: "#"
+		tags: ["Javascript", "React", "TailwindCSS", "Node.js"],
+		link: "https://lycan-xx.github.io/Mailcreak/"
 	},
 	{
 		id: 3,
-		title: "LoFo Project",
+		title: "eVault Landing Page",
 		description: "Logistics and Forwarding website built using ReactJS to design and develop its front-end.",
 		image: "https://picsum.photos/seed/lofo/800/600",
 		tags: ["React", "Redux", "Material-UI", "Firebase"],
-		link: "#"
+		link: "https://evault.com.ng"
 	},
 	{
 		id: 4,
-		title: "Startup Project",
+		title: "ABKHD online market place",
 		description: "A website portfolio project for the Startup Dev Team built using MEVN stack to demonstrate the CRUD capabilities of the tech stack.",
 		image: "https://picsum.photos/seed/startup/800/600",
 		tags: ["Vue.js", "MongoDB", "Express", "Node.js"],
