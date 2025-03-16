@@ -15,5 +15,8 @@
 		"dotenv": "^16.4.7",
 		"express": "^4.21.2",
 		"node-fetch": "^3.3.2"
+	},
+	"devDependencies": {
+		"webpack-bundle-analyzer": "^4.10.2"
 	}
 }

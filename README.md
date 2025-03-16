@@ -74,3 +74,11 @@ grubersjoe - https://github.com/grubersjoe/react-github-calendar
 
 
 THE LOGIC
+
+
+
+
+
+## Things i need to add 
+
+configur and setup emailjs for mail delivery
