@@ -9,6 +9,8 @@ module.exports = {
 			colors: {
 				primary: "#42bcbc",
 				secondary: "#ec704c",
+				loader: "#20c9e2",
+				loaderBg: "#151c29",
 				dark: {
 					DEFAULT: "#0f172a",
 					lighter: "#1e293b",
@@ -24,6 +26,9 @@ module.exports = {
 				'float': 'float 6s ease-in-out infinite',
 				'pulse-slow': 'pulse 3s ease-in-out infinite',
 				'text-reveal': 'text-reveal 1.5s ease-out forwards',
+				'box-bounce-1': 'box-bounce-1 1.5s infinite',
+				'box-bounce-2': 'box-bounce-2 1.5s infinite',
+				'box-bounce-3': 'box-bounce-3 1.5s infinite',
 			},
 			keyframes: {
 				gradient: {
@@ -41,6 +46,36 @@ module.exports = {
 				'text-reveal': {
 					'0%': { transform: 'translateY(100%)', opacity: '0' },
 					'100%': { transform: 'translateY(0)', opacity: '1' },
+				},
+				'box-bounce-1': {
+					'0%, 70%, 100%': {
+						transform: 'translateY(0) rotate(0deg)',
+						boxShadow: '0 15px 35px rgba(32, 201, 226, 0.1)'
+					},
+					'30%': {
+						transform: 'translateY(-30px) rotate(45deg)',
+						boxShadow: '0 25px 45px rgba(32, 201, 226, 0.3)'
+					},
+				},
+				'box-bounce-2': {
+					'0%, 30%, 100%': {
+						transform: 'translateY(0) rotate(0deg)',
+						boxShadow: '0 15px 35px rgba(32, 201, 226, 0.1)'
+					},
+					'60%': {
+						transform: 'translateY(-30px) rotate(45deg)',
+						boxShadow: '0 25px 45px rgba(32, 201, 226, 0.3)'
+					},
+				},
+				'box-bounce-3': {
+					'0%, 60%, 100%': {
+						transform: 'translateY(0) rotate(0deg)',
+						boxShadow: '0 15px 35px rgba(32, 201, 226, 0.1)'
+					},
+					'90%': {
+						transform: 'translateY(-30px) rotate(45deg)',
+						boxShadow: '0 25px 45px rgba(32, 201, 226, 0.3)'
+					},
 				},
 			},
 			backdropBlur: {
