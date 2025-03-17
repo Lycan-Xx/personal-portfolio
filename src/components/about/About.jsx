@@ -8,7 +8,7 @@ import {
 	SiJavascript,
 	SiHtml5,
 	SiCss3,
-	SiGo,
+	SiTailwindcss,
 	SiMongodb,
 	SiSupabase,
 	SiRender,
@@ -56,7 +56,7 @@ const techStack = [
 	{ icon: <SiJavascript />, name: "JavaScript" },
 	{ icon: <SiHtml5 />, name: "HTML5" },
 	{ icon: <SiCss3 />, name: "CSS3" },
-	{ icon: <SiGo />, name: "Go" },
+	{ icon: <SiTailwindcss />, name: "Tailwind CSS" },
 	{ icon: <SiMongodb />, name: "MongoDB" },
 	{ icon: <SiSupabase />, name: "Supabase" },
 	{ icon: <SiRender />, name: "Render" },
@@ -124,7 +124,7 @@ const About = () => {
 				</header>
 
 				{/* Main Content */}
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
 					{/* Bio Section */}
 					<motion.div
 						ref={bioRef}
@@ -148,48 +148,47 @@ const About = () => {
 							</p>
 						</div>
 					</motion.div>
-					{/* Other content can follow */}
 
-
-					{/* Skills and Tech Stack Section */}
-					<div className="flex flex-col gap-12">
-						{/* Skills Grid */}
-						<motion.div
-							className="grid grid-cols-1 sm:grid-cols-2 gap-8"
-							initial={{ opacity: 0, x: 30 }}
-							animate={bioInView ? { opacity: 1, x: 0 } : {}}
-							transition={{ duration: 0.6 }}
-						>
-							{skills.map((skill, index) => (
-								<SkillCard key={index} skill={skill} index={index} />
-							))}
-						</motion.div>
-
-						{/* Tech Stack */}
-						<motion.div
-							ref={techRef}
-							initial={{ opacity: 0, y: 30 }}
-							animate={techInView ? { opacity: 1, y: 0 } : {}}
-							transition={{ duration: 0.6 }}
-							className="glass-card p-8"
-						>
-							<h2 className="text-2xl font-bold text-white mb-6">Tech Stack</h2>
-							<div className="flex flex-wrap justify-center gap-6">
-								{techStack.map((tech, index) => (
-									<motion.div
-										key={index}
-										whileHover={{ scale: 2, color: "#42bcbc" }}
-										whileTap={{ scale: 0.9 }}
-										className="text-3xl text-gray-400 hover:text-cyan-400 transition-colors duration-300 cursor-pointer"
-										title={tech.name}
-									>
-										{tech.icon}
-									</motion.div>
-								))}
-							</div>
-						</motion.div>
-					</div>
+					{/* Skills Grid */}
+					<motion.div
+						className="grid grid-cols-1 sm:grid-cols-2 gap-8"
+						initial={{ opacity: 0, x: 30 }}
+						animate={bioInView ? { opacity: 1, x: 0 } : {}}
+						transition={{ duration: 0.6 }}
+					>
+						{skills.map((skill, index) => (
+							<SkillCard key={index} skill={skill} index={index} />
+						))}
+					</motion.div>
 				</div>
+
+				{/* Tech Stack Section - Now full width at the bottom */}
+				<motion.div
+					ref={techRef}
+					initial={{ opacity: 0, y: 30 }}
+					animate={techInView ? { opacity: 1, y: 0 } : {}}
+					transition={{ duration: 0.6 }}
+					className="glass-card p-8 w-full mb-16"
+				>
+					<h2 className="text-3xl font-bold text-white mb-8 text-center">My Tech Arsenal</h2>
+					<div className="flex flex-wrap justify-center gap-12">
+						{techStack.map((tech, index) => (
+							<motion.div
+								key={index}
+								whileHover={{ scale: 1.2, y: -10 }}
+								whileTap={{ scale: 0.95 }}
+								className="flex flex-col items-center group"
+							>
+								<div className="text-5xl mb-3 text-gray-300 group-hover:text-cyan-400 transition-all duration-300 cursor-pointer">
+									{tech.icon}
+								</div>
+								<span className="text-sm text-gray-400 group-hover:text-cyan-400 font-medium opacity-0 group-hover:opacity-100 transition-all duration-300">
+									{tech.name}
+								</span>
+							</motion.div>
+						))}
+					</div>
+				</motion.div>
 
 				{/* GitHub Calendar Section */}
 				<GitHubContributions />

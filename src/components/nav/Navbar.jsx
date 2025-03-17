@@ -75,7 +75,7 @@ const Navbar = () => {
 						</div>
 
 						{/* Desktop Navigation */}
-						<div className="hidden md:flex items-center space-x-2">
+						<div className="hidden md:flex items-center space-x-10">
 							{navItems.map((item) => (
 								<motion.div 
 									key={item.id}
