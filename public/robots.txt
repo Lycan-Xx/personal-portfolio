@@ -1,3 +1,0 @@
-Sitemap: 
-User-agent: *
-Disallow: /test/

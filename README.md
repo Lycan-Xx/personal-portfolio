@@ -82,3 +82,5 @@ THE LOGIC
 ## Things i need to add 
 
 configur and setup emailjs for mail delivery
+A blog summary component that wll have my top 3 recent blogs (medium)
+
