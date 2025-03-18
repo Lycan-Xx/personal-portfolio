@@ -103,12 +103,7 @@ const Contact = () => {
 					>
 						<form ref={form} onSubmit={sendEmail} className="space-y-6">
 							<div>
-								<label
-									htmlFor="name"
-									className="block text-lg font-medium text-gray-300 mb-2"
-								>
-									Name
-								</label>
+
 								<input
 									type="text"
 									name="name"
@@ -120,12 +115,7 @@ const Contact = () => {
 							</div>
 
 							<div>
-								<label
-									htmlFor="email"
-									className="block text-lg font-medium text-gray-300 mb-2"
-								>
-									Email
-								</label>
+
 								<input
 									type="email"
 									name="email"
@@ -137,12 +127,7 @@ const Contact = () => {
 							</div>
 
 							<div>
-								<label
-									htmlFor="message"
-									className="block text-lg font-medium text-gray-300 mb-2"
-								>
-									Message
-								</label>
+
 								<textarea
 									name="message"
 									id="message"
