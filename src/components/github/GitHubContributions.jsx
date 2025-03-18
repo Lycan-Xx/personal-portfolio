@@ -1,92 +1,9 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect, Suspense, lazy, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
 // Lazy load the GitHubCalendar component
 const GitHubCalendar = lazy(() => import('react-github-calendar'));
-
-// Web Worker for streak calculations
-// Create a separate file named 'streakWorker.js' with this content:
-/*
-self.onmessage = function(e) {
-  const { contributions } = e.data;
-  const streaks = calculateStreaks(contributions);
-  self.postMessage(streaks);
-};
-
-function calculateStreaks(contributions) {
-  if (!contributions || contributions.length === 0) {
-	return {
-	  longestStreak: { days: 0, start: '', end: '' },
-	  currentStreak: { days: 0, start: '', end: '' },
-	};
-  }
-
-  // Format date helper
-  const formatDate = (dateStr) => {
-	if (!dateStr) return '';
-	const date = new Date(dateStr);
-	return `${date.toLocaleString('default', { month: 'long' })} ${date.getDate()}`;
-  };
-
-  // Reverse array so the most recent days come first
-  const sortedContributions = [...contributions].reverse();
-  let currentStreak = { days: 0, start: '', end: '' };
-  let longestStreak = { days: 0, start: '', end: '' };
-  let tempStreak = { days: 0, start: '', end: '' };
-
-  // Calculate current streak (from most recent day until first zero)
-  let streakActive = false;
-  for (let i = 0; i < sortedContributions.length; i++) {
-	const { date, count } = sortedContributions[i];
-	if (count > 0) {
-	  if (!streakActive) {
-		streakActive = true;
-		currentStreak.start = date;
-		currentStreak.days = 1;
-	  } else {
-		currentStreak.days++;
-	  }
-	  currentStreak.end = date;
-	} else if (streakActive) {
-	  break;
-	}
-  }
-
-  // Calculate longest streak
-  streakActive = false;
-  sortedContributions.forEach(({ date, count }) => {
-	if (count > 0) {
-	  if (!streakActive) {
-		streakActive = true;
-		tempStreak = { days: 1, start: date, end: date };
-	  } else {
-		tempStreak.days++;
-		tempStreak.end = date;
-	  }
-	  if (tempStreak.days > longestStreak.days) {
-		longestStreak = { ...tempStreak };
-	  }
-	} else {
-	  streakActive = false;
-	  tempStreak = { days: 0, start: '', end: '' };
-	}
-  });
-
-  return {
-	longestStreak: {
-	  days: longestStreak.days,
-	  start: formatDate(longestStreak.start),
-	  end: formatDate(longestStreak.end),
-	},
-	currentStreak: {
-	  days: currentStreak.days,
-	  start: formatDate(currentStreak.start),
-	  end: formatDate(currentStreak.end),
-	},
-  };
-}
-*/
 
 // Cache helper with expiration time
 const useCache = (key, ttl = 3600000) => { // Default TTL: 1 hour
@@ -140,6 +57,96 @@ const StatsBox = ({ title, value, subtitle, delay }) => (
 	</motion.div>
 );
 
+// Error boundary component
+class GitHubErrorBoundary extends React.Component {
+	state = { hasError: false };
+
+	static getDerivedStateFromError(error) {
+		return { hasError: true };
+	}
+
+	render() {
+		if (this.state.hasError) {
+			return <div className="glass-card p-4">Failed to load GitHub contributions</div>;
+		}
+		return this.props.children;
+	}
+}
+
+// Fallback streak calculation when worker is not available
+const calculateStreaks = (contributions) => {
+	if (!contributions || contributions.length === 0) {
+		return {
+			longestStreak: { days: 0, start: '', end: '' },
+			currentStreak: { days: 0, start: '', end: '' },
+		};
+	}
+
+	// Format date helper
+	const formatDate = (dateStr) => {
+		if (!dateStr) return '';
+		const date = new Date(dateStr);
+		return `${date.toLocaleString('default', { month: 'long' })} ${date.getDate()}`;
+	};
+
+	// Reverse array so the most recent days come first
+	const sortedContributions = [...contributions].reverse();
+	let currentStreak = { days: 0, start: '', end: '' };
+	let longestStreak = { days: 0, start: '', end: '' };
+	let tempStreak = { days: 0, start: '', end: '' };
+
+	// Calculate current streak (from most recent day until first zero)
+	let streakActive = false;
+	for (let i = 0; i < sortedContributions.length; i++) {
+		const { date, count } = sortedContributions[i];
+		if (count > 0) {
+			if (!streakActive) {
+				streakActive = true;
+				currentStreak.start = date;
+				currentStreak.days = 1;
+			} else {
+				currentStreak.days++;
+			}
+			currentStreak.end = date;
+		} else if (streakActive) {
+			break;
+		}
+	}
+
+	// Calculate longest streak
+	streakActive = false;
+	sortedContributions.forEach(({ date, count }) => {
+		if (count > 0) {
+			if (!streakActive) {
+				streakActive = true;
+				tempStreak = { days: 1, start: date, end: date };
+			} else {
+				tempStreak.days++;
+				tempStreak.end = date;
+			}
+			if (tempStreak.days > longestStreak.days) {
+				longestStreak = { ...tempStreak };
+			}
+		} else {
+			streakActive = false;
+			tempStreak = { days: 0, start: '', end: '' };
+		}
+	});
+
+	return {
+		longestStreak: {
+			days: longestStreak.days,
+			start: formatDate(longestStreak.start),
+			end: formatDate(longestStreak.end),
+		},
+		currentStreak: {
+			days: currentStreak.days,
+			start: formatDate(currentStreak.start),
+			end: formatDate(currentStreak.end),
+		},
+	};
+};
+
 // Main component with static props support
 const GitHubContributions = ({ initialData, username = 'Lycan-Xx' }) => {
 	const [calendarRef, calendarInView] = useInView({
@@ -153,158 +160,213 @@ const GitHubContributions = ({ initialData, username = 'Lycan-Xx' }) => {
 		currentStreak: { days: 0, start: '', end: '' },
 		contributions: [],
 	});
-
 	const [isLoading, setIsLoading] = useState(!initialData);
+	const [error, setError] = useState(null);
 	const { getCache, setCache } = useCache(`github-contributions-${username}`, 86400000); // 24 hour cache
 
-	// Create worker instance only when needed
-	const getWorker = () => {
-		if (typeof window !== 'undefined' && window.Worker) {
-			// Update worker path to use the correct public path
-			return new Worker('/personal-portfolio/streakWorker.js');
-		}
-		return null;
-	};
+	// Determine API URL based on environment
+	const apiBaseUrl = typeof window !== 'undefined'
+		? window.location.hostname === 'localhost'
+			? 'http://localhost:5000'
+			: '/api' // Use relative path in production
+		: 'http://localhost:5000'; // Fallback for SSR
 
-	// Fetch contribution data
+	// Function to fetch contribution data
 	const fetchContributionData = async () => {
 		try {
+			// Check cache first
 			const cached = getCache();
 			if (cached) {
+				console.log("Using cached GitHub data");
 				setContributionData(cached);
+				setIsLoading(false);
 				return;
 			}
 
+			console.log("Fetching fresh GitHub data");
 			setIsLoading(true);
-			// Update the API URL to match your server
-			const response = await fetch(`http://localhost:5000/api/github-contributions/${username}`);
+
+			const apiUrl = `${apiBaseUrl}/api/github-contributions/${username}`;
+			console.log(`Fetching from: ${apiUrl}`);
+
+			const response = await fetch(apiUrl);
 			if (!response.ok) {
-				throw new Error('Failed to fetch GitHub data');
+				throw new Error(`Failed to fetch GitHub data: ${response.status}`);
 			}
 
 			const data = await response.json();
-			// Process the contributions data
-			const contributions = data.contributions;
 
-			const worker = getWorker();
-			if (worker) {
-				worker.postMessage({ contributions });
-				worker.onmessage = (e) => {
-					const streaks = e.data;
-					const processedData = {
-						...streaks,
-						totalContributions: data.total,
-						contributions,
+			// Process data directly if worker is not available
+			const streaks = calculateStreaks(data.contributions);
+			const processedData = {
+				...streaks,
+				totalContributions: data.total,
+				contributions: data.contributions,
+			};
+
+			try {
+				if (typeof window !== 'undefined' && window.Worker) {
+					// Use Vite's URL import syntax to load the worker as a module
+					const worker = new Worker(new URL('/streakWorker.js', import.meta.url), {
+						type: 'module',
+					});
+					console.log(`Attempting to load worker from: ${worker}`);
+					worker.postMessage({ contributions: data.contributions });
+
+					worker.onmessage = (e) => {
+						const workerStreaks = e.data;
+						const workerData = {
+							...workerStreaks,
+							totalContributions: data.total,
+							contributions: data.contributions,
+						};
+						setContributionData(workerData);
+						setCache(workerData);
+						worker.terminate();
 					};
+
+					// Set timeout to fall back to direct calculation if worker doesn't respond
+					setTimeout(() => {
+						worker.terminate();
+					}, 3000);
+				} else {
 					setContributionData(processedData);
 					setCache(processedData);
-				};
+				}
+			} catch (workerError) {
+				console.warn('Worker failed, using direct calculation:', workerError);
+				setContributionData(processedData);
+				setCache(processedData);
 			}
+
+
 		} catch (error) {
 			console.error('Error fetching GitHub contribution data:', error);
+			setError(error.message);
 		} finally {
 			setIsLoading(false);
 		}
 	};
 
+	// Fetch data on mount if there's no initialData
 	useEffect(() => {
-		if (!initialData && calendarInView) {
+		if (!initialData) {
 			fetchContributionData();
+		} else {
+			setIsLoading(false);
 		}
-	}, [calendarInView]);
+		// We intentionally run this only once on mount
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [initialData]);
+
+	// Memoize stats based on contributionData
+	const memoizedStats = useMemo(() => ({
+		total: contributionData.totalContributions || 0,
+		longest: contributionData.longestStreak || { days: 0, start: '', end: '' },
+		current: contributionData.currentStreak || { days: 0, start: '', end: '' }
+	}), [contributionData]);
+
+	const LoadingState = () => (
+		<div className="glass-card p-8 animate-pulse">
+			<div className="h-4 bg-gray-700 rounded w-1/3 mb-6 mx-auto" />
+			<div className="h-32 bg-gray-800 rounded-lg w-full mb-6" />
+			<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+				{[...Array(3)].map((_, i) => (
+					<div key={i} className="h-24 bg-gray-800 rounded-lg" />
+				))}
+			</div>
+		</div>
+	);
+
+	const ErrorState = () => (
+		<div className="glass-card p-8">
+			<h2 className="text-2xl font-bold text-white mb-6 text-center">
+				GitHub Contributions
+			</h2>
+			<div className="bg-red-900 bg-opacity-20 border border-red-800 rounded-lg p-4 mb-6">
+				<p className="text-red-300">Failed to load GitHub contribution data</p>
+				<p className="text-sm text-red-400">{error || "Unknown error"}</p>
+			</div>
+			<button
+				onClick={() => {
+					setError(null);
+					fetchContributionData();
+				}}
+				className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md text-white mx-auto block"
+			>
+				Try Again
+			</button>
+		</div>
+	);
+
+	if (isLoading) {
+		return <LoadingState />;
+	}
+
+	if (error) {
+		return <ErrorState />;
+	}
 
 	return (
-		<motion.div
-			ref={calendarRef}
-			initial={{ opacity: 0, y: 30 }}
-			animate={calendarInView ? { opacity: 1, y: 0 } : {}}
-			transition={{ duration: 0.6 }}
-			className="max-w-4xl mx-auto mt-16 font-semibold font-mono text-secondary"
-		>
-			<div className="glass-card p-8">
-				<h2 className="text-2xl font-bold text-white mb-6 text-center">
-					GitHub Contributions
-				</h2>
+		<GitHubErrorBoundary>
+			<motion.div
+				ref={calendarRef}
+				initial={{ opacity: 0, y: 30 }}
+				animate={calendarInView ? { opacity: 1, y: 0 } : {}}
+				transition={{ duration: 0.6 }}
+				className="max-w-4xl mx-auto mt-16 font-semibold font-mono text-secondary"
+			>
+				<div className="glass-card p-8">
+					<h2 className="text-2xl font-bold text-white mb-6 text-center">
+						GitHub Contributions
+					</h2>
 
-				{calendarInView && (
-					<div className="github-calendar-container">
-						<Suspense fallback={<CalendarPlaceholder />}>
-							<GitHubCalendar
-								username={username}
-								colorScheme="dark"
-								blockSize={12}
-								blockMargin={5}
-								fontSize={16}
-								showWeekdayLabels={true}
-								style={{
-									margin: '0 auto',
-									maxWidth: '100%',
-								}}
-							/>
-						</Suspense>
+					{calendarInView && (
+						<div className="github-calendar-container">
+							<Suspense fallback={<CalendarPlaceholder />}>
+								<GitHubCalendar
+									username={username}
+									colorScheme="dark"
+									blockSize={12}
+									blockMargin={5}
+									fontSize={16}
+									showWeekdayLabels={true}
+									style={{
+										margin: '0 auto',
+										maxWidth: '100%',
+									}}
+								/>
+							</Suspense>
+						</div>
+					)}
+
+					{/* Stats boxes */}
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 text-cyan-400 text-center">
+						<StatsBox
+							title="Total contributions in the last year"
+							value={`${memoizedStats.total} total`}
+							subtitle="Past Year"
+							delay={0.1}
+						/>
+
+						<StatsBox
+							title="Longest streak"
+							value={`${memoizedStats.longest.days} days`}
+							subtitle={`${memoizedStats.longest.start} — ${memoizedStats.longest.end}`}
+							delay={0.2}
+						/>
+
+						<StatsBox
+							title="Current streak"
+							value={`${memoizedStats.current.days} day${memoizedStats.current.days !== 1 ? 's' : ''}`}
+							subtitle={`${memoizedStats.current.end} - ${memoizedStats.current.start}`}
+							delay={0.3}
+						/>
 					</div>
-				)}
-
-				{/* Stats boxes */}
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 text-cyan-400 text-center">
-					<StatsBox
-						title="Total contributions in the last year"
-						value={`${contributionData.totalContributions} total`}
-						subtitle="Past Year"
-						delay={0.1}
-					/>
-
-					<StatsBox
-						title="Longest streak"
-						value={`${contributionData.longestStreak.days} days`}
-						subtitle={`${contributionData.longestStreak.start} — ${contributionData.longestStreak.end}`}
-						delay={0.2}
-					/>
-
-					<StatsBox
-						title="Current streak"
-						value={`${contributionData.currentStreak.days} day${contributionData.currentStreak.days !== 1 ? 's' : ''}`}
-						subtitle={`${contributionData.currentStreak.end} - ${contributionData.currentStreak.start}`}
-						delay={0.3}
-					/>
 				</div>
-			</div>
-		</motion.div>
+			</motion.div>
+		</GitHubErrorBoundary>
 	);
 };
-
-// Static generation support for Next.js
-export async function getStaticProps() {
-	try {
-		// This would run at build time in Next.js
-		const response = await fetch(`http://localhost:5000/api/github-contributions/Lycan-Xx`);
-		const data = await response.json();
-
-		// Calculate streaks server-side
-		// Import your calculation function or duplicate it here
-		const { calculateStreaks } = require('./streakWorker');
-		const streaks = calculateStreaks(data.contributions);
-
-		return {
-			props: {
-				initialData: {
-					totalContributions: data.total,
-					...streaks,
-					contributions: data.contributions,
-				}
-			},
-			// Revalidate every 24 hours
-			revalidate: 86400
-		};
-	} catch (error) {
-		console.error('Error pre-fetching GitHub data:', error);
-		return {
-			props: {
-				initialData: null
-			},
-			revalidate: 3600 // Try again in an hour if failed
-		};
-	}
-}
 
 export default GitHubContributions;

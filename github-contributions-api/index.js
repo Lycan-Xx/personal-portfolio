@@ -68,17 +68,14 @@ app.get('/api/github-contributions/:username', async (req, res) => {
 
 	try {
 		const data = await queryGitHub(CONTRIBUTIONS_QUERY, { login: username });
-		if (data.errors) {
-			console.log('GitHub API errors:', data.errors);
-			return res.status(400).json({ error: data.errors });
+
+		if (!data.data?.user) {
+			return res.status(404).json({
+				error: 'User not found',
+				message: `GitHub user ${username} not found`
+			});
 		}
 
-		if (!data.data || !data.data.user) {
-			console.log('GitHub API data is missing or invalid');
-			return res.status(500).json({ error: 'Internal server error' });
-		}
-
-		// Process the fetched data to create a flat array of daily contributions
 		const calendar = data.data.user.contributionsCollection.contributionCalendar;
 		let contributions = [];
 
@@ -91,7 +88,6 @@ app.get('/api/github-contributions/:username', async (req, res) => {
 			});
 		});
 
-		// Build a simplified response structure
 		const responseData = {
 			total: calendar.totalContributions,
 			contributions,
@@ -99,8 +95,11 @@ app.get('/api/github-contributions/:username', async (req, res) => {
 
 		res.json(responseData);
 	} catch (error) {
-		console.error('Error fetching GitHub contribution data:', error);
-		res.status(500).json({ error: 'Internal server error', message: error.message });
+		console.error('Error:', error);
+		res.status(500).json({
+			error: 'Internal server error',
+			message: error.message
+		});
 	}
 });
 
