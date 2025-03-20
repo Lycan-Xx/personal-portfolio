@@ -8,7 +8,7 @@
 		"frontend": "cd frontend && npm run dev",
 		"backend": "cd functions && node index.js",
 		"dev": "concurrently \"npm run frontend\" \"npm run backend\"",
-		"build": "cd frontend && npm run build",
+		"build": "cd frontend && npm install && npm run build",
 		"start": "cd functions && npm start",
 		"deploy": "cd frontend && npm run deploy",
 		"postbuild": "cp -r frontend/dist backend/"
@@ -20,7 +20,7 @@
 		"concurrently": "^8.2.2"
 	},
 	"engines": {
-		"node": ">=16.0.0",
+		"node": ">=18.0.0",
 		"npm": ">=8.0.0"
 	}
 }
