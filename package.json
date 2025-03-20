@@ -4,12 +4,12 @@
 	"description": "Personal Portfolio with GitHub Contributions API",
 	"main": "index.js",
 	"scripts": {
-		"install-all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+		"install-all": "npm install && cd frontend && npm install && cd ../functions && npm install",
 		"frontend": "cd frontend && npm run dev",
-		"backend": "cd backend && node index.js",
+		"backend": "cd functions && node index.js",
 		"dev": "concurrently \"npm run frontend\" \"npm run backend\"",
 		"build": "cd frontend && npm run build",
-		"start": "cd backend && npm start",
+		"start": "cd functions && npm start",
 		"deploy": "cd frontend && npm run deploy",
 		"postbuild": "cp -r frontend/dist backend/"
 	},
@@ -18,5 +18,9 @@
 	"license": "ISC",
 	"dependencies": {
 		"concurrently": "^8.2.2"
+	},
+	"engines": {
+		"node": ">=16.0.0",
+		"npm": ">=8.0.0"
 	}
 }
