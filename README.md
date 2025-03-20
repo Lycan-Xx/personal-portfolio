@@ -84,3 +84,8 @@ THE LOGIC
 configur and setup emailjs for mail delivery
 A blog summary component that wll have my top 3 recent blogs (medium)
 
+
+
+## Things to try
+
+surge for the frontend and glitch for the backend

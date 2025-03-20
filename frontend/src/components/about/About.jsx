@@ -23,33 +23,34 @@ const skills = [
 		icon: <FaCode className="text-4xl text-cyan-400" />,
 		title: "Web Development",
 		description:
-			"Crafting blazing fast web apps—debugging is optional, laughter is guaranteed!",
+			"Crafting blazing fast web-apps, debugging is optional, functionality is guaranteed!",
 	},
 	{
 		icon: <FaLinux className="text-4xl text-cyan-400" />,
 		title: "Linux Administration",
 		description:
-			"Taming unruly servers with terminal magic and a pinch of geek humor!",
+			"Taming unruly distros with terminal magic and a pinch of stackoverflow humor!",
 	},
 	{
 		icon: <FaShieldAlt className="text-4xl text-cyan-400" />,
 		title: "Security Auditing",
 		description:
-			"Hunting down vulnerabilities like a cyber detective with a side of puns!",
+			"Hunting down and testing vulnerabilities whenever i get the chance like a cyber detective 'always on watch'",
 	},
 	{
 		icon: <SlChemistry className="text-4xl text-cyan-400" />,
 		title: "Chemist",
 		description:
-			"Mixing up chemical concoctions that might fizz, pop, and occasionally even sparkle—safety goggles on!",
+			"Mixing up chemical concoctions that might heat up, change color, and occasionally even making mistakes 'safety first'",
 	},
 	{
 		icon: <FaWrench className="text-4xl text-cyan-400" />,
-		title: "Computer Repair",
+		title: "Computer Repair Technician",
 		description:
-			"Reviving your tech with a toolbox of duct tape, witty banter, and a dash of magic!",
+			"Reviving your piece of hardware and norturing it to life, (Always upgrade and repair, but new only when absolutely necessary)",
 	},
 ];
+
 
 const techStack = [
 	{ icon: <SiReact />, name: "React" },
