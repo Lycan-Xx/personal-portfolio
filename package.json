@@ -6,7 +6,6 @@
 	"scripts": {
 		"frontend": "cd frontend && npm run dev",
 		"backend": "cd functions && node index.js",
-		// "dev": "concurrently \"npm run frontend\" \"npm run backend\"",
 		"dev": "npm run frontend",
 		"build": "cd frontend && npm install && npm run build",
 		"start": "cd functions && npm start",
