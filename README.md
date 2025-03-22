@@ -93,9 +93,10 @@ Your app is ready to be deployed!
 
 ## Inspirations 
 
-Mark tan
+Mark Christian Tan - https://github.com/taniyow
 Bloggify - https://github.com/Bloggify/github-calendar
 grubersjoe - https://github.com/grubersjoe/react-github-calendar
+JoHoop  - https://github.com/JoHoop
 
 ## Setting up github contributions graph
 

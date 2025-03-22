@@ -2,9 +2,9 @@
 	"name": "react-portfolio",
 	"version": "0.1.0",
 	"homepage": "https://personal-portfolio-39g.pages.dev",
-	"description": "A clean and customizable ReactJS portfolio template for fellow developers. Credits to Jo Lienhoop!",
+	"description": "A clean and customizable ReactJS portfolio template for fellow developers. Credits to Mark Tan!",
 	"repository": "https://github.com/Lycan-Xx/personal-portfolio",
-	"author": "Mark Tan markcmtan@gmail.com",
+	"author": "Mohammad Sani Bello msbello514@gmail.com",
 	"license": "MIT",
 	"scripts": {
 		"dev": "vite",
