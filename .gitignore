@@ -12,7 +12,6 @@ dist
 dist-ssr
 *.local
 .env
-functions/
 
 # Editor directories and files
 .vscode/*
@@ -29,4 +28,3 @@ functions/
 
 .env
 github-contributions-api/.env
-functions
