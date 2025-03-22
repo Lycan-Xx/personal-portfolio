@@ -1,7 +1,7 @@
 {
 	"name": "react-portfolio",
 	"version": "0.1.0",
-	"homepage": "https://Lycan-Xx.github.io/personal-portfolio",
+	"homepage": "https://portfolio.msbello514.workers.dev/",
 	"description": "A clean and customizable ReactJS portfolio template for fellow developers. Credits to Jo Lienhoop!",
 	"repository": "https://github.com/Lycan-Xx/personal-portfolio",
 	"author": "Mark Tan markcmtan@gmail.com",
@@ -10,8 +10,6 @@
 		"dev": "vite",
 		"build": "vite build",
 		"preview": "vite preview",
-		"predeploy": "npm run build",
-		"deploy": "gh-pages -d dist",
 		"analyze": "vite build --mode analyze"
 	},
 	"dependencies": {
@@ -40,7 +38,6 @@
 	"devDependencies": {
 		"@vitejs/plugin-react": "^4.2.1",
 		"autoprefixer": "^10.4.21",
-		"gh-pages": "^6.3.0",
 		"postcss": "^8.5.3",
 		"rollup-plugin-visualizer": "^5.14.0",
 		"tailwindcss": "^3.3.3",
