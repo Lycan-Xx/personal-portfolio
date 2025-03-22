@@ -29,3 +29,4 @@ functions/
 
 .env
 github-contributions-api/.env
+functions

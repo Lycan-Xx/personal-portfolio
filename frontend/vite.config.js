@@ -11,7 +11,6 @@ export default defineConfig({
 	],
 	server: {
 		port: 3000,
-		open: true,
 		proxy: {
 			'/api': {
 				target: 'http://localhost:5000',
@@ -20,7 +19,16 @@ export default defineConfig({
 			}
 		}
 	},
-	base: '/personal-portfolio/',
+	base: '/',
+	build: {
+		outDir: 'dist',
+		assetsDir: 'assets',
+		rollupOptions: {
+			output: {
+				manualChunks: undefined
+			}
+		}
+	},
 	resolve: {
 		extensions: ['.js', '.jsx']
 	}
