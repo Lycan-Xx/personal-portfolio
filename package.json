@@ -4,10 +4,10 @@
 	"description": "Personal Portfolio with GitHub Contributions API",
 	"main": "index.js",
 	"scripts": {
-		"install-all": "npm install && cd frontend && npm install && cd ../functions && npm install",
 		"frontend": "cd frontend && npm run dev",
 		"backend": "cd functions && node index.js",
-		"dev": "concurrently \"npm run frontend\" \"npm run backend\"",
+		// "dev": "concurrently \"npm run frontend\" \"npm run backend\"",
+		"dev": "npm run frontend",
 		"build": "cd frontend && npm install && npm run build",
 		"start": "cd functions && npm start",
 		"deploy": "cd frontend && npm run deploy",
