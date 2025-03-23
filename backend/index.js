@@ -14,8 +14,8 @@ const PORT = process.env.PORT || 5000;
 // Add CORS middleware
 app.use(cors());
 
-// Serve static files from the dist directory
-app.use(express.static(path.join(__dirname, 'dist')));
+// Serve static files AFTER API routes
+app.use('/api', express.json()); // Add this line
 
 // Helper function to query GitHub GraphQL API
 const queryGitHub = async (query, variables = {}) => {
@@ -111,7 +111,10 @@ app.get('/api/github-contributions/:username', async (req, res) => {
 	}
 });
 
-// Handle SPA routing - return index.html for all routes
+// Serve static files from the dist directory
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// Handle SPA routing - must be after API routes
 app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });

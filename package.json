@@ -11,7 +11,7 @@
 		"build": "cd frontend && npm run build",
 		"start": "cd backend && node index.js",
 		"deploy": "cd frontend && npm run deploy",
-		"postbuild": "cp -r frontend/dist backend/"
+		"postbuild": "rm -rf backend/dist && cp -r frontend/dist backend/"
 	},
 	"keywords": [],
 	"author": "",

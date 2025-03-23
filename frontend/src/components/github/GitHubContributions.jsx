@@ -168,8 +168,8 @@ const GitHubContributions = ({ initialData, username = 'Lycan-Xx' }) => {
 	const apiBaseUrl = typeof window !== 'undefined'
 		? window.location.hostname === 'localhost'
 			? 'http://localhost:5000'
-			: '/api' // Use relative path in production
-		: 'http://localhost:5000'; // Fallback for SSR
+			: '' // Use empty string for production to make requests relative to current domain
+		: '';
 
 	// Function to fetch contribution data
 	const fetchContributionData = async () => {
@@ -190,56 +190,61 @@ const GitHubContributions = ({ initialData, username = 'Lycan-Xx' }) => {
 			console.log(`Fetching from: ${apiUrl}`);
 
 			const response = await fetch(apiUrl);
-			if (!response.ok) {
-				throw new Error(`Failed to fetch GitHub data: ${response.status}`);
-			}
-
-			const data = await response.json();
-
-			// Process data directly if worker is not available
-			const streaks = calculateStreaks(data.contributions);
-			const processedData = {
-				...streaks,
-				totalContributions: data.total,
-				contributions: data.contributions,
-			};
+			const responseText = await response.text(); // Get raw response text first
 
 			try {
-				if (typeof window !== 'undefined' && window.Worker) {
-					// Use Vite's URL import syntax to load the worker as a module
-					const worker = new Worker(new URL('/streakWorker.js', import.meta.url), {
-						type: 'module',
-					});
-					console.log(`Attempting to load worker from: ${worker}`);
-					worker.postMessage({ contributions: data.contributions });
+				const data = JSON.parse(responseText); // Parse it manually
+				if (!response.ok) {
+					throw new Error(`API error: ${data.message || response.statusText}`);
+				}
 
-					worker.onmessage = (e) => {
-						const workerStreaks = e.data;
-						const workerData = {
-							...workerStreaks,
-							totalContributions: data.total,
-							contributions: data.contributions,
+				// Process data directly if worker is not available
+				const streaks = calculateStreaks(data.contributions);
+				const processedData = {
+					...streaks,
+					totalContributions: data.total,
+					contributions: data.contributions,
+				};
+
+				try {
+					if (typeof window !== 'undefined' && window.Worker) {
+						// Use Vite's URL import syntax to load the worker as a module
+						const worker = new Worker(new URL('/streakWorker.js', import.meta.url), {
+							type: 'module',
+						});
+						console.log(`Attempting to load worker from: ${worker}`);
+						worker.postMessage({ contributions: data.contributions });
+
+						worker.onmessage = (e) => {
+							const workerStreaks = e.data;
+							const workerData = {
+								...workerStreaks,
+								totalContributions: data.total,
+								contributions: data.contributions,
+							};
+							setContributionData(workerData);
+							setCache(workerData);
+							worker.terminate();
 						};
-						setContributionData(workerData);
-						setCache(workerData);
-						worker.terminate();
-					};
 
-					// Set timeout to fall back to direct calculation if worker doesn't respond
-					setTimeout(() => {
-						worker.terminate();
-					}, 3000);
-				} else {
+						// Set timeout to fall back to direct calculation if worker doesn't respond
+						setTimeout(() => {
+							worker.terminate();
+						}, 3000);
+					} else {
+						setContributionData(processedData);
+						setCache(processedData);
+					}
+				} catch (workerError) {
+					console.warn('Worker failed, using direct calculation:', workerError);
 					setContributionData(processedData);
 					setCache(processedData);
 				}
-			} catch (workerError) {
-				console.warn('Worker failed, using direct calculation:', workerError);
-				setContributionData(processedData);
-				setCache(processedData);
+			} catch (parseError) {
+				console.error('Response parsing error:', parseError);
+				console.error('Raw response:', responseText);
+				throw new Error(`Failed to parse API response: ${parseError.message}`);
 			}
-
-
 		} catch (error) {
 			console.error('Error fetching GitHub contribution data:', error);
 			setError(error.message);
