@@ -20,7 +20,6 @@ export default defineConfig({
 			}
 		}
 	},
-	base: '/personal-portfolio/',
 	resolve: {
 		extensions: ['.js', '.jsx']
 	}
