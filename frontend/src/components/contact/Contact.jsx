@@ -1,17 +1,24 @@
-import React, { useRef, useState } from "react";
-import { motion } from "framer-motion";
+import React, { useRef, useState, useEffect } from "react";
 import emailjs from "@emailjs/browser";
 import Swal from "sweetalert2";
 
 const Contact = () => {
 	const form = useRef();
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [isHighPerformance, setIsHighPerformance] = useState(false);
+
+	useEffect(() => {
+		// Check device performance
+		const checkPerformance = () => {
+			const highEnd = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			setIsHighPerformance(highEnd);
+		};
+		checkPerformance();
+	}, []);
 
 	const sendEmail = async (e) => {
 		e.preventDefault();
 		setIsSubmitting(true);
-
-		// hello
 
 		try {
 			await emailjs.sendForm(
@@ -55,27 +62,17 @@ const Contact = () => {
 			<div className="max-w-7xl mx-auto">
 				{/* Section Heading */}
 				<div className="text-start mb-12">
-					<motion.h1
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.6 }}
-						className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white to-gray-900 bg-clip-text text-transparent mb-4"
+					<h1
+						className={`text-5xl md:text-6xl font-bold bg-gradient-to-r from-white to-gray-900 bg-clip-text text-transparent mb-4 ${isHighPerformance ? 'slide-up' : ''}`}
 					>
 						Contact me
-					</motion.h1>
+					</h1>
 				</div>
 
 				{/* Main Content */}
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-
-
 					{/* Contact Information */}
-					<motion.div
-						initial={{ opacity: 0, x: 50 }}
-						animate={{ opacity: 1, x: 0 }}
-						transition={{ duration: 0.6, delay: 0.2 }}
-						className="glass-card p-8 text-left"
-					>
+					<div className={`glass-card p-8 text-left ${isHighPerformance ? 'slide-in-right delay-200' : ''}`}>
 						<h2 className="text-2xl font-bold text-white mb-6">Let's Connect </h2>
 						<p className="text-lg text-gray-300 mb-6">
 							Reach out if you have a project idea, want to collaborate, or just say hello. I'm excited to hear your thoughts and explore how we might create something exceptional together.</p>
@@ -89,21 +86,12 @@ const Contact = () => {
 								Adamawa, Nigeria
 							</p>
 						</div>
-					</motion.div>
-
-
-
+					</div>
 
 					{/* Contact Form */}
-					<motion.div
-						initial={{ opacity: 0, x: -50 }}
-						animate={{ opacity: 1, x: 0 }}
-						transition={{ duration: 0.6 }}
-						className="glass-card p-8"
-					>
+					<div className={`glass-card p-8 ${isHighPerformance ? 'slide-in-left' : ''}`}>
 						<form ref={form} onSubmit={sendEmail} className="space-y-6">
 							<div>
-
 								<input
 									type="text"
 									name="name"
@@ -115,7 +103,6 @@ const Contact = () => {
 							</div>
 
 							<div>
-
 								<input
 									type="email"
 									name="email"
@@ -127,7 +114,6 @@ const Contact = () => {
 							</div>
 
 							<div>
-
 								<textarea
 									name="message"
 									id="message"
@@ -172,8 +158,7 @@ const Contact = () => {
 								)}
 							</button>
 						</form>
-					</motion.div>
-
+					</div>
 				</div>
 			</div>
 		</section>
