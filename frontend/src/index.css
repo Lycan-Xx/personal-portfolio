@@ -26,6 +26,10 @@
 	body {
 		@apply bg-[var(--color-background)] text-gray-100 font-sans antialiased;
 	}
+
+  html, body {
+    @apply overflow-x-hidden max-w-[100vw];
+  }
 }
 
 @layer components {
@@ -43,6 +47,10 @@
 
 	.animated-gradient {
 		@apply absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-purple-500/20 to-pink-500/20 animate-gradient blur-3xl opacity-30;
+	}
+
+	.today-card {
+		@apply w-full max-w-[350px] sm:max-w-[400px] md:max-w-[450px];
 	}
 }
 

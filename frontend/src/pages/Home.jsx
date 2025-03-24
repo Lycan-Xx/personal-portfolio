@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: '80px',
     position: 'relative',
     overflow: 'hidden',
+    maxWidth: '100vw',
     '@media (max-width: 768px)': {
       paddingTop: '60px',
     }
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     right: '2rem',
     zIndex: 999,
     '@media (max-width: 768px)': {
-      top: '120px',
+      top: '120px', // Increased gap from Today card
       right: '1rem',
       transform: 'scale(0.9)',
     }
@@ -36,9 +37,11 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     maxWidth: '1200px',
     margin: '0 auto',
-    padding: '0 1rem',
+    padding: '0 0.5rem',
+    overflow: 'hidden',
     '@media (max-width: 768px)': {
-      padding: '0 0.5rem',
+      padding: '0 0.25rem',
+      maxWidth: '100vw',
     }
   }
 }));

@@ -29,21 +29,64 @@ module.exports = {
 				'box-bounce-1': 'box-bounce-1 1.5s infinite',
 				'box-bounce-2': 'box-bounce-2 1.5s infinite',
 				'box-bounce-3': 'box-bounce-3 1.5s infinite',
-				'slide-up': 'slideUp 0.6s ease-out forwards',
-				'slide-in': 'slideIn 0.6s ease-out forwards',
+			},
+			keyframes: {
+				gradient: {
+					'0%, 100%': { backgroundPosition: '0% 50%' },
+					'50%': { backgroundPosition: '100% 50%' },
+				},
+				float: {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-20px)' },
+				},
+				pulse: {
+					'0%, 100%': { transform: 'scale(1)', opacity: '1' },
+					'50%': { transform: 'scale(1.1)', opacity: '0.8' },
+				},
+				'text-reveal': {
+					'0%': { transform: 'translateY(100%)', opacity: '0' },
+					'100%': { transform: 'translateY(0)', opacity: '1' },
+				},
+				'box-bounce-1': {
+					'0%, 70%, 100%': {
+						transform: 'translateY(0) rotate(0deg)',
+						boxShadow: '0 15px 35px rgba(32, 201, 226, 0.1)'
+					},
+					'30%': {
+						transform: 'translateY(-30px) rotate(45deg)',
+						boxShadow: '0 25px 45px rgba(32, 201, 226, 0.3)'
+					},
+				},
+				'box-bounce-2': {
+					'0%, 30%, 100%': {
+						transform: 'translateY(0) rotate(0deg)',
+						boxShadow: '0 15px 35px rgba(32, 201, 226, 0.1)'
+					},
+					'60%': {
+						transform: 'translateY(-30px) rotate(45deg)',
+						boxShadow: '0 25px 45px rgba(32, 201, 226, 0.3)'
+					},
+				},
+				'box-bounce-3': {
+					'0%, 60%, 100%': {
+						transform: 'translateY(0) rotate(0deg)',
+						boxShadow: '0 15px 35px rgba(32, 201, 226, 0.1)'
+					},
+					'90%': {
+						transform: 'translateY(-30px) rotate(45deg)',
+						boxShadow: '0 25px 45px rgba(32, 201, 226, 0.3)'
+					},
+				},
+			},
+			backdropBlur: {
+				xs: '2px',
 			},
 			screens: {
-				'xs': '375px',
-				'sm': '640px',
-				'md': '768px',
-				'lg': '1024px',
-				'xl': '1280px',
-				'2xl': '1536px',
+				'xs': '320px',
 			},
-			spacing: {
-				'18': '4.5rem',
-				'22': '5.5rem',
-			}
+			maxWidth: {
+				'screen-safe': '95vw',
+			},
 		},
 	},
 	plugins: [],

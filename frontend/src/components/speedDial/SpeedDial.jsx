@@ -36,38 +36,68 @@ const profiles = [
   }
 ];
 
-
 const SpeedDial = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isMobile, setIsMobile] = useState(false);
+  const [activeTooltip, setActiveTooltip] = useState(null);
 
-  // Check if the screen is mobile on resize
+  // Check if the screen is mobile
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Toggle popup on mobile, hover on desktop
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isOpen && !event.target.closest('.speed-dial-container')) {
+        setIsOpen(false);
+        setActiveTooltip(null);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('click', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isOpen]);
+
   const handleToggle = () => {
+    setIsOpen(!isOpen);
+    setActiveTooltip(null);
+  };
+
+  const handleSocialClick = (url) => {
+    window.open(url, '_blank');
     if (isMobile) {
-      setIsOpen(prev => !prev);
+      setIsOpen(false);
+      setActiveTooltip(null);
     }
   };
 
   return (
-    <div className="fixed bottom-6 left-6 z-50">
+    <div className="fixed bottom-6 left-6 z-50 speed-dial-container">
       <motion.div
         className="relative"
         {...(!isMobile && {
           onHoverStart: () => setIsOpen(true),
-          onHoverEnd: () => setIsOpen(false),
+          onHoverEnd: () => {
+            setIsOpen(false);
+            setActiveTooltip(null);
+          },
         })}
       >
         {/* Main Toggle Button */}
         <motion.button
           onClick={handleToggle}
-          className="glass-button group flex items-center gap-3  backdrop-blur-lg px-3 py-2 rounded-xl shadow-lg md:w-auto w-12 h-12 md:h-auto overflow-hidden"
+          className="glass-button group flex items-center gap-3 backdrop-blur-lg px-3 py-2 rounded-xl shadow-lg md:w-auto w-12 h-12 md:h-auto overflow-hidden"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -99,37 +129,44 @@ const SpeedDial = () => {
               exit={{ opacity: 0, y: 10 }}
               className={`absolute ${
                 isMobile
-                  ? "bottom-full right-[-0.75rem] transform -translate-x-1/2 mb-2 flex flex-col items-center"
+                  ? "bottom-full mb-2"
                   : "bottom-full left-0 mb-4"
-              } shadow-lg overflow-hidden`}
+              } min-w-[180px]`}
             >
-              <div className="p-2 flex flex-col gap-2">
+              <div className="p-2 flex flex-col gap-2 glass-card rounded-xl">
                 {profiles.map((profile) => (
-                  <motion.a
+                  <motion.button
                     key={profile.network}
-                    href={profile.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="relative backdrop-blur-[2rem] glass-button group flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-black/5 transition-colors duration-200"
+                    onClick={() => handleSocialClick(profile.url)}
+                    onHoverStart={() => setActiveTooltip(profile.network)}
+                    onHoverEnd={() => setActiveTooltip(null)}
+                    onTouchStart={() => setActiveTooltip(profile.network)}
+                    className="relative glass-button group flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-black/5 transition-colors duration-200 w-full"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    {/* Use text-secondary for all icons */}
                     <profile.icon 
                       size={20}
                       className="text-secondary"
                     />
-                    {/* Desktop label */}
                     <span className="font-mono text-sm hidden md:inline">
                       {profile.network}
                     </span>
-                    {/* Mobile Tooltip (Now properly positioned & visible) */}
-                    {isMobile && (
-                      <span className="absolute -top-8 left-1/4 transform -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded z-50 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {profile.network}
-                      </span>
-                    )}
-                  </motion.a>
+                    
+                    {/* Mobile Tooltip */}
+                    <AnimatePresence>
+                      {isMobile && activeTooltip === profile.network && (
+                        <motion.div
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -10 }}
+                          className="absolute right-full mr-2 top-1/2 transform -translate-y-1/2 bg-black/90 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-50"
+                        >
+                          {profile.network}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.button>
                 ))}
               </div>
             </motion.div>

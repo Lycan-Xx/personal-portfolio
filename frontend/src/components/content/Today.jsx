@@ -69,7 +69,7 @@ export const Today = () => {
   const dateParts = formattedDate.split(" ");
 
   return (
-    <div className="glass-card w-full max-w-[350px] sm:max-w-[400px] p-4 sm:p-6 mx-auto opacity-0 translate-y-5 animate-fade-in-up">
+    <div className="today-card glass-card p-4 sm:p-6 w-[95vw] sm:w-[400px] mx-auto opacity-0 translate-y-5 animate-fade-in-up mt-24 md:mt-0">
       <div className="space-y-3 sm:space-y-4">
         <h3 className="text-xl sm:text-2xl font-bold text-cyan-400">Current Time</h3>
         <div className="text-3xl sm:text-4xl font-bold text-white font-mono tracking-wider">
