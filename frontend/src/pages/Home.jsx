@@ -5,8 +5,6 @@ import AnimatedBackground from '../components/background/AnimatedBackground';
 import { ThemeToggle } from '../components/theme/ThemeToggle';
 import { Resume } from '../components/resume/Resume';
 import SpeedDial from '../components/speedDial/SpeedDial';
-import About from '../components/about/About';
-import Contact from '../components/contact/Contact';
 
 const useStyles = makeStyles((theme) => ({
   root: {
