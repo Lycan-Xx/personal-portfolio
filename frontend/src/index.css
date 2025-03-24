@@ -131,6 +131,20 @@
 	}
 }
 
+@keyframes slideUp {
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes slideIn {
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
 .animate-fade-in-up {
 	animation: fadeInUp 0.6s ease forwards;
 }
@@ -143,13 +157,33 @@ section {
 	scroll-margin-top: 100px;
 }
 
+@layer utilities {
+	.transition-custom {
+		@apply transition-all duration-300 ease-in-out;
+	}
 
+	.slide-up {
+		@apply opacity-0 translate-y-4;
+		animation: slideUp 0.6s ease-out forwards;
+	}
 
+	.slide-in-left {
+		@apply opacity-0 -translate-x-4;
+		animation: slideIn 0.6s ease-out forwards;
+	}
 
+	.slide-in-right {
+		@apply opacity-0 translate-x-4;
+		animation: slideIn 0.6s ease-out forwards;
+	}
+}
 
-
-
-
+/* Add performance class for high-end devices */
+@media (prefers-reduced-motion: no-preference) {
+	.enable-animations {
+		@apply transition-custom;
+	}
+}
 
 /* ----------- Github contribution calender styles  ------------ */
 

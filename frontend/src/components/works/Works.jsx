@@ -45,19 +45,13 @@ const projects = [
 	}
 ];
 
-const ProjectCard = ({ project, index }) => {
-	const [ref, inView] = useInView({
-		triggerOnce: true,
-		threshold: 0.2
-	});
-
+const ProjectCard = ({ project, index, isVisible, isHighPerformance }) => {
 	return (
-		<motion.div
-			ref={ref}
-			initial={{ opacity: 0, y: 50 }}
-			animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-			transition={{ duration: 0.6, delay: index * 0.2 }}
-			className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1rem)]"
+		<div
+			className={`w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1rem)]
+        ${isHighPerformance ? 'transition-custom opacity-0 translate-y-4' : ''}
+        ${isVisible && isHighPerformance ? 'opacity-100 translate-y-0' : ''}`}
+			style={{ transitionDelay: `${index * 0.1}s` }}
 		>
 			<div className="glass-card overflow-hidden group card-hover">
 				<div className="relative h-48 md:h-64 overflow-hidden">
@@ -111,7 +105,7 @@ const ProjectCard = ({ project, index }) => {
 					</motion.a>
 				</div>
 			</div>
-		</motion.div >
+		</div>
 	);
 };
 

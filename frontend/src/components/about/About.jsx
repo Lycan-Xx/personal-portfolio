@@ -1,56 +1,43 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
+import React, { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
+import GitHubContributions from '../github/GitHubContributions';
+import Resume from '../../settings/resume.json';
 import { FaCode, FaLinux, FaShieldAlt, FaWrench } from "react-icons/fa";
 import { SlChemistry } from "react-icons/sl";
 import {
-	SiReact,
-	SiJavascript,
-	SiHtml5,
-	SiCss3,
-	SiTailwindcss,
-	SiMongodb,
-	SiSupabase,
-	SiRender,
-	SiCloudinary,
-	SiGithub,
+	SiReact, SiJavascript, SiHtml5, SiCss3, SiTailwindcss,
+	SiMongodb, SiSupabase, SiRender, SiCloudinary, SiGithub
 } from "react-icons/si";
 import { VscTerminalBash } from "react-icons/vsc";
-import GitHubContributions from '../github/GitHubContributions';
 
 const skills = [
 	{
 		icon: <FaCode className="text-4xl text-cyan-400" />,
 		title: "Web Development",
-		description:
-			"Crafting blazing fast web-apps, debugging is optional, functionality is guaranteed!",
+		description: "Crafting blazing fast web-apps, debugging is optional, functionality is guaranteed!"
 	},
 	{
 		icon: <FaLinux className="text-4xl text-cyan-400" />,
 		title: "Linux Administration",
-		description:
-			"Taming unruly distros with terminal magic and a pinch of stackoverflow humor!",
+		description: "Taming unruly distros with terminal magic and a pinch of stackoverflow humor!"
 	},
 	{
 		icon: <FaShieldAlt className="text-4xl text-cyan-400" />,
 		title: "Security Auditing",
-		description:
-			"Hunting down and testing vulnerabilities whenever i get the chance like a cyber detective 'always on watch'",
+		description: "Hunting down and testing vulnerabilities whenever i get the chance like a cyber detective 'always on watch'"
 	},
 	{
 		icon: <SlChemistry className="text-4xl text-cyan-400" />,
 		title: "Chemist",
-		description:
-			"Mixing up chemical concoctions that might heat up, change color, and occasionally even making mistakes 'safety first'",
+		description: "Mixing up chemical concoctions that might heat up, change color, and occasionally even making mistakes 'safety first'"
 	},
 	{
 		icon: <FaWrench className="text-4xl text-cyan-400" />,
 		title: "Computer Repair Technician",
-		description:
-			"Reviving your piece of hardware and norturing it to life, (Always upgrade and repair, but new only when absolutely necessary)",
+		description: "Reviving your piece of hardware and norturing it to life, (Always upgrade and repair, but new only when absolutely necessary)"
 	},
 ];
-
 
 const techStack = [
 	{ icon: <SiReact />, name: "React" },
@@ -66,41 +53,52 @@ const techStack = [
 	{ icon: <VscTerminalBash />, name: "Bash" },
 ];
 
-const SkillCard = ({ skill, index }) => {
-	const [ref, inView] = useInView({
-		threshold: 0.2,
-		triggerOnce: true,
-	});
-
+const SkillCard = ({ skill, index, isVisible, isHighPerformance }) => {
 	return (
-		<motion.div
-			ref={ref}
-			initial={{ opacity: 0, y: 30 }}
-			animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-			transition={{ duration: 0.6, delay: index * 0.2 }}
-			className="glass-card p-6 flex flex-col items-center text-center transition-shadow duration-300 hover:shadow-2xl"
+		<div
+			className={`glass-card p-6 flex flex-col items-center text-center transition-shadow duration-300 hover:shadow-2xl 
+        ${isHighPerformance ? 'transition-custom opacity-0 translate-y-4' : ''}
+        ${isVisible && isHighPerformance ? 'opacity-100 translate-y-0' : ''}`}
+			style={{ transitionDelay: `${index * 0.1}s` }}
 		>
 			{skill.icon}
 			<h3 className="mt-4 text-xl font-bold text-white">{skill.title}</h3>
 			<p className="mt-2 text-gray-300 text-sm">{skill.description}</p>
-		</motion.div>
+		</div>
 	);
 };
 
 const About = () => {
+	const [isHighPerformance, setIsHighPerformance] = useState(false);
+	const [isVisible, setIsVisible] = useState(false);
+	const sectionRef = useRef(null);
+
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			([entry]) => setIsVisible(entry.isIntersecting),
+			{ threshold: 0.1 }
+		);
+
+		if (sectionRef.current) {
+			observer.observe(sectionRef.current);
+		}
+
+		setIsHighPerformance(!window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+		return () => observer.disconnect();
+	}, []);
+
 	const [bioRef, bioInView] = useInView({ threshold: 0.2, triggerOnce: true });
 	const [techRef, techInView] = useInView({ threshold: 0.2, triggerOnce: true });
 
-	// Simulated resume data
-	const Resume = { basics: { name: "Mohammad (Sani) Bello" } };
+	// Resume data
 	const names = Resume.basics.name.split(" ");
 	const FirstName = names[0];
 	const LastName = names[names.length - 1];
 
 	return (
-		<section id="about" className="relative min-h-screen py-20 px-4 md:px-8">
-			<div className="max-w-7xl mx-auto" style={{ fontFamily: "ChocoCooky" }}
-			>
+		<section ref={sectionRef} id="about" className="relative min-h-screen py-20 px-4 md:px-8">
+			<div className="max-w-7xl mx-auto" style={{ fontFamily: "ChocoCooky" }}>
 				<header className="mb-8">
 					<motion.h1
 						initial="hidden"
@@ -158,7 +156,13 @@ const About = () => {
 						transition={{ duration: 0.6 }}
 					>
 						{skills.map((skill, index) => (
-							<SkillCard key={index} skill={skill} index={index} />
+							<SkillCard
+								key={index}
+								skill={skill}
+								index={index}
+								isVisible={isVisible}
+								isHighPerformance={isHighPerformance}
+							/>
 						))}
 					</motion.div>
 				</div>
