@@ -124,26 +124,21 @@ const SpeedDial = () => {
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              className={`absolute ${
-                isMobile
-                  ? "bottom-full mb-2"
-                  : "bottom-full left-0 mb-4"
-              } min-w-[180px]`}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0 }}
+              className="absolute bottom-full mb-2 right-0 bg-black/20 backdrop-blur-sm rounded-lg p-2 w-fit"
             >
-              <div className="p-2 flex flex-col gap-2 glass-card rounded-xl">
+              <div className="flex flex-col gap-2">
                 {profiles.map((profile) => (
                   <motion.button
                     key={profile.network}
-                    onClick={() => handleSocialClick(profile.url)}
-                    onHoverStart={() => setActiveTooltip(profile.network)}
-                    onHoverEnd={() => setActiveTooltip(null)}
-                    onTouchStart={() => setActiveTooltip(profile.network)}
-                    className="relative glass-button group flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-black/5 transition-colors duration-200 w-full"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="relative flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-white/10"
+                    onClick={() => window.open(profile.url, '_blank')}
+                    onMouseEnter={() => setActiveTooltip(profile.network)}
+                    onMouseLeave={() => setActiveTooltip(null)}
                   >
                     <profile.icon 
                       size={20}
@@ -157,10 +152,10 @@ const SpeedDial = () => {
                     <AnimatePresence>
                       {isMobile && activeTooltip === profile.network && (
                         <motion.div
-                          initial={{ opacity: 0, x: -10 }}
+                          initial={{ opacity: 0, x: 10 }}
                           animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -10 }}
-                          className="absolute right-full mr-2 top-1/2 transform -translate-y-1/2 bg-black/90 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-50"
+                          exit={{ opacity: 0, x: 10 }}
+                          className="absolute left-full ml-2 top-1/2 transform -translate-y-1/2 bg-black/90 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-50"
                         >
                           {profile.network}
                         </motion.div>
