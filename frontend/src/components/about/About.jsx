@@ -35,7 +35,7 @@ const skills = [
 	{
 		icon: <FaWrench className="text-4xl text-cyan-400" />,
 		title: "Computer Repair Technician",
-		description: "Reviving your piece of hardware and norturing it to life, (Always upgrade and repair, but new only when absolutely necessary)"
+		description: "Reviving your piece of hardware and norturing it to life, (Always upgrade and repair, buy new only when absolutely necessary)"
 	},
 ];
 
