@@ -117,7 +117,7 @@ export const Works = () => {
 
 	return (
 		<section id="works" className="relative min-h-screen py-20 px-4 md:px-8 z-20">
-			<div className="container mx-auto relative">
+			<div className="max-w-7xl mx-auto">
 				<div className="max-w-7xl mx-auto bg-dark-DEFAULT/95 rounded-3xl p-8 relative overflow-hidden">
 					{/* Content */}
 					<motion.div
