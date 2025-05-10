@@ -1,159 +1,324 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import projects from "./projects.json";
+import { FaGithub } from "react-icons/fa";
 
-const projects = [
-	{
-		id: 1,
-		title: "My Personal Portfolio",
-		description: "Designed and developed a ReactJS portfolio with fancy 3D animations using Three.js for the background element.",
-		image: "https://picsum.photos/seed/portfolio/800/600",
-		tags: ["React", "Three.js", "Framer Motion", "Tailwind CSS"],
-		link: "#"
-	},
-	{
-		id: 2,
-		title: "Mailcreak newsletter manager",
-		description: "A web app designed to streamline newsletter creation, subscriber management, and compile performance tracking. Built with React, Tailwind CSS. Planning on setting up the backend that manages the system.",
-		image: "https://picsum.photos/seed/veritru/800/600",
-		tags: ["Javascript", "React", "TailwindCSS", "Node.js"],
-		link: "https://lycan-xx.github.io/Mailcreak/"
-	},
-	{
-		id: 3,
-		title: "eVault Landing Page",
-		description: "Logistics and Forwarding website built using ReactJS to design and develop its front-end.",
-		image: "https://picsum.photos/seed/lofo/800/600",
-		tags: ["React", "Redux", "Material-UI", "Firebase"],
-		link: "https://evault.com.ng"
-	},
-	{
-		id: 4,
-		title: "ABKHD online market place",
-		description: "A website portfolio project for the Startup Dev Team built using MEVN stack to demonstrate the CRUD capabilities of the tech stack.",
-		image: "https://picsum.photos/seed/startup/800/600",
-		tags: ["Vue.js", "MongoDB", "Express", "Node.js"],
-		link: "#"
-	},
-	{
-		id: 5,
-		title: "LaCalle Cafe",
-		description: "A website project for the La Calle Cafe business built using Wordpress and PHP with integrated SEO tools.",
-		image: "https://picsum.photos/seed/lacalle/800/600",
-		tags: ["WordPress", "PHP", "SEO", "MySQL"],
-		link: "#"
-	}
-];
+// Helper to truncate description to 15 words
+const truncateDescription = (desc) => {
+  const words = desc.split(" ");
+  if (words.length <= 15) return desc;
+  return (
+    <>
+      {words.slice(0, 15).join(" ")}
+      <span className="text-cyan-400">   ........ continue reading</span>
+    </>
+  );
+};
 
-const ProjectCard = ({ project, index, isVisible, isHighPerformance }) => {
-	return (
-		<div
-			className={`w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1rem)]
-        ${isHighPerformance ? 'transition-custom opacity-0 translate-y-4' : ''}
-        ${isVisible && isHighPerformance ? 'opacity-100 translate-y-0' : ''}`}
-			style={{ transitionDelay: `${index * 0.1}s` }}
-		>
-			<div className="glass-card overflow-hidden group card-hover">
-				<div className="relative h-48 md:h-64 overflow-hidden">
-					<img
-						src={project.image}
-						alt={project.title}
-						className="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110"
-					/>
-					<div className="absolute inset-0 bg-gradient-to-t from-dark-DEFAULT via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-				</div>
+const ProjectCard = ({ project, index, inView, onClick }) => {
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
 
-				<div className="p-6 space-y-4">
-					<h3 className="text-xl font-sans font-bold text-white group-hover:text-cyan-400 transition-colors">
-						{project.title}
-					</h3>
+  return (
+    <motion.div
+      variants={cardVariants}
+      initial="hidden"
+      animate={inView ? "visible" : "hidden"}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      onClick={() => onClick(project)}
+      className="w-full mb-8"
+    >
+      <div className="group h-full bg-gray-800/40 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg border border-cyan-400/10 hover:border-cyan-400/40 transition-all duration-300 cursor-pointer hover:translate-x-2 hover:shadow-cyan-400/10 hover:shadow-lg">
+        <div className="flex flex-col md:flex-row">
+          {/* Image container - left side on md+ screens */}
+          <div className="relative h-64 md:h-auto md:w-2/5 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent to-gray-900/70 z-10"></div>
+            <img
+              src={project.images && project.images.length > 0 ? project.images[0] : project.image}
+              alt={project.title}
+              className="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105"
+            />
+          </div>
+          
+          {/* Content container - right side on md+ screens */}
+          <div className="p-6 md:p-8 md:w-3/5 flex flex-col justify-between">
+            <div>
+              <h3 className="text-2xl font-sans font-bold text-white group-hover:text-cyan-400 transition-colors mb-4">
+                {project.title}
+              </h3>
+              
+              <div className="flex flex-wrap gap-2 mb-4">
+                {project.tags.slice(0, 4).map((tag, i) => (
+                  <span
+                    key={i}
+                    className="px-3 py-1 text-xs font-medium font-mono text-cyan-400 bg-cyan-400/10 rounded-full"
+                  >
+                    {tag}
+                  </span>
+                ))}
+                {project.tags.length > 4 && (
+                  <span className="px-3 py-1 text-xs font-medium font-mono text-cyan-400 bg-cyan-400/10 rounded-full">
+                    +{project.tags.length - 4}
+                  </span>
+                )}
+              </div>
+              
+              <p className="text-gray-300 text-sm line-clamp-3 mb-6" style={{ fontFamily: "ChocoCooky" }}>
+                {truncateDescription(project.description)}
+              </p>
+            </div>
+            
+            <motion.div
+              whileHover={{ x: 5 }}
+              className="inline-flex items-center font-sans text-sm font-medium text-cyan-400 hover:text-cyan-300 transition-colors"
+            >
+              Explore Project
+              <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 
-					<p className="text-gray-400 text-sm line-clamp-3" style={{ fontFamily: "ChocoCooky" }}>
-						{project.description}
-					</p>
+// Modal image slider with underscore indicators
+const ProjectModal = ({ project, isOpen, onClose }) => {
+  const [currentImg, setCurrentImg] = useState(0);
 
-					<div className="flex flex-wrap gap-2">
-						{project.tags.map((tag, i) => (
-							<span
-								key={i}
-								className="px-3 py-1 text-xs font-medium font-mono text-cyan-400 bg-cyan-400/10 rounded-full"
-							>
-								{tag}
-							</span>
-						))}
-					</div>
+  React.useEffect(() => {
+    if (isOpen) setCurrentImg(0);
+  }, [isOpen, project]);
 
-					<motion.a
-						href={project.link}
-						whileHover={{ x: 5 }}
-						className="inline-flex items-center font-sans text-sm font-medium text-cyan-400 hover:text-cyan-300 transition-colors"
-					>
-						View Project
-						<svg
-							className="ml-2 w-4 h-4"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth="2"
-								d="M17 8l4 4m0 0l-4 4m4-4H3"
-							/>
-						</svg>
-					</motion.a>
-				</div>
-			</div>
-		</div>
-	);
+  if (!project) return null;
+
+  const images = project.images && project.images.length > 0 ? project.images : [project.image];
+
+  const modalVariants = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: { opacity: 1, scale: 1 },
+  };
+
+  const overlayVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+  };
+
+  const handlePrev = (e) => {
+    e.stopPropagation();
+    setCurrentImg((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const handleNext = (e) => {
+    e.stopPropagation();
+    setCurrentImg((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  return (
+    <motion.div
+      className={`fixed inset-0 z-50 flex items-center justify-center ${!isOpen && 'pointer-events-none'}`}
+      initial="hidden"
+      animate={isOpen ? "visible" : "hidden"}
+      variants={overlayVariants}
+      transition={{ duration: 0.2 }}
+    >
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={onClose}></div>
+      <motion.div
+        className="relative bg-gray-800/80 backdrop-blur-md border border-cyan-400/20 rounded-xl w-11/12 max-w-3xl max-h-[90vh] overflow-y-auto"
+        variants={modalVariants}
+        transition={{ duration: 0.3, delay: 0.1 }}
+        onClick={e => e.stopPropagation()}
+      >
+        {/* X exit button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-white z-10 p-2 hover:bg-white/10 rounded-full transition-colors text-2xl font-bold"
+          aria-label="Close modal"
+        >
+          ×
+        </button>
+        {/* Image slider */}
+        <div className="relative h-64 sm:h-80 overflow-hidden flex items-center justify-center">
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent z-10"></div>
+          <img
+            src={images[currentImg]}
+            alt={project.title}
+            className="w-full h-full object-cover"
+          />
+          {images.length > 1 && (
+            <>
+              {/* Prev/Next buttons */}
+              <button
+                onClick={handlePrev}
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-cyan-400/30 text-white rounded-full p-2 z-20"
+                aria-label="Previous image"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button
+                onClick={handleNext}
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-cyan-400/30 text-white rounded-full p-2 z-20"
+                aria-label="Next image"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+              {/* Underscore indicators */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+                {images.map((_, idx) => (
+                  <span
+                    key={idx}
+                    className={`block h-1 rounded transition-all duration-300 ${idx === currentImg ? "w-8 bg-cyan-400" : "w-4 bg-gray-400/40"}`}
+                  ></span>
+                ))}
+              </div>
+            </>
+          )}
+          <div className="absolute bottom-0 left-0 p-6 z-20">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white">{project.title}</h2>
+          </div>
+        </div>
+        <div className="p-6 space-y-6">
+          <p className="text-gray-300" style={{ fontFamily: "ChocoCooky" }}>{project.description}</p>
+          <div>
+            <h3 className="text-lg font-medium text-white mb-3">Technologies</h3>
+            <div className="flex flex-wrap gap-2">
+              {project.tags.map((tag, i) => (
+                <span
+                  key={i}
+                  className="px-3 py-1 text-xs font-medium font-mono text-cyan-400 bg-cyan-400/10 rounded-full"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-4 items-center">
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center px-6 py-3 bg-cyan-400/20 hover:bg-cyan-400/30 text-cyan-400 font-medium rounded-lg transition-colors"
+            >
+              View Live Project
+              <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
+            {project.repo && (
+              <a
+                href={project.repo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-4 py-3 bg-gray-900 hover:bg-gray-800 text-cyan-400 border border-cyan-400/30 hover:border-cyan-400 rounded-lg transition-colors"
+                title="View GitHub Repository"
+              >
+                <FaGithub className="w-5 h-5 mr-2" />
+                <span className="font-medium">GitHub Repo</span>
+              </a>
+            )}
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
 };
 
 export const Works = () => {
-	const [ref, inView] = useInView({
-		triggerOnce: true,
-		threshold: 0.2
-	});
+  const [ref, inView] = useInView({
+    triggerOnce: false, // Changed to false to animate cards as user scrolls
+    threshold: 0.1,
+  });
+  
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  
+  const handleCardClick = (project) => {
+    setSelectedProject(project);
+    setModalOpen(true);
+  };
+  
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedProject(null); // <-- Add this line
+  };
 
-	return (
-		<section id="works" className="relative min-h-screen py-20 px-4 md:px-8 z-20">
-			<div className="max-w-7xl mx-auto">
-				<div className="max-w-7xl mx-auto bg-dark-DEFAULT/95 rounded-3xl p-8 relative overflow-hidden">
-					{/* Content */}
-					<motion.div
-						ref={ref}
-						initial={{ opacity: 0, y: 20 }}
-						animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-						transition={{ duration: 0.6 }}
-						className="mb-16 relative z-10 text-start"
-						style={{ fontFamily: "ChocoCooky" }}
-					>
-						<h2 className="section-heading">
-							Featured Projects
-						</h2>
-						<p className="text-gray-400 max-w-2xl mx-auto mt-8 text-2xl">
-							Here are some of the projects I've worked on and i'am proud of. Each project is unique and purpose driven to solve a problem.
-						</p>
-
-						<p className="text-gray-400 max-w-2xl mx-auto mt-8 text-2xl">
-							They also demonstrate different aspects of my skills and expertise.
-						</p>
-					</motion.div>
-
-					{/* Projects Grid */}
-					<div className="flex flex-wrap justify-center gap-8 relative z-10">
-						{projects.map((project, index) => (
-							<ProjectCard key={project.id} project={project} index={index} />
-						))}
-					</div>
-
-					{/* Background Elements */}
-					<div className="absolute inset-0 -z-10">
-						<div className="absolute inset-0 bg-gradient-radial from-cyan-500/10 via-cyan-500/5 to-transparent rounded-3xl" />
-						<div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--color-background)_70%)] rounded-3xl" />
-					</div>
-				</div>
-			</div>
-		</section>
-	);
+  return (
+    <section ref={ref} id="works" className="relative min-h-screen py-20 px-4 md:px-8 z-20">
+      <div className="max-w-6xl mx-auto relative">
+        {/* Glassmorphism container */}
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-xl rounded-3xl border-[0.2rem] border-cyan-500 shadow-lg shadow-cyan-400/5"></div>
+        
+        <div className="relative p-6 md:p-10 z-10">
+          {/* Animated header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.6 }}
+            className="mb-16 text-start"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-white relative inline-block pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-1/2 after:h-1 after:bg-cyan-400" style={{ fontFamily: 'ChocoCooky' }}>
+              Featured Projects
+            </h2>
+            <p className="text-slate-100 max-w-2xl mt-8 text-lg md:text-xl" style={{ fontFamily: 'ChocoCooky' }}>
+              Here are some of the projects I've worked on and I'm proud of. Each project is unique and purpose-driven to solve a problem.
+            </p>
+            <p className="text-slate-100 max-w-2xl mt-4 text-lg md:text-xl" style={{ fontFamily: 'ChocoCooky' }}>
+              They also demonstrate different aspects of my skills and expertise.
+            </p>
+          </motion.div>
+          
+          {/* Project Cards - now in a vertical list */}
+          <div className="space-y-4">
+            {projects.map((project, index) => (
+              <ProjectCard 
+                key={project.id} 
+                project={project} 
+                index={index} 
+                inView={inView}
+                onClick={handleCardClick}
+              />
+            ))}
+          </div>
+          
+          {/* Project detail modal */}
+          <ProjectModal 
+            project={selectedProject}
+            isOpen={modalOpen}
+            onClose={closeModal}
+          />
+          
+          {/* Decorative elements */}
+          <div className="absolute top-1/4 right-10 w-24 h-24 rounded-full bg-cyan-400/10 blur-2xl"></div>
+          <div className="absolute bottom-1/4 left-10 w-32 h-32 rounded-full bg-cyan-400/5 blur-3xl"></div>
+        </div>
+        
+        
+        {/* Background pattern */}
+        <div className="absolute inset-0 -z-10 overflow-hidden rounded-3xl">
+          <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M40 0 L0 0 0 40" stroke="rgba(66,188,188,0.2)" strokeWidth="0.5" />
+              </pattern>
+              <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="rgba(66,188,188,0.1)" />
+                <stop offset="100%" stopColor="rgba(0,0,0,0)" />
+              </linearGradient>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)" />
+            <rect width="100%" height="100%" fill="url(#grad)" />
+          </svg>
+        </div>
+      </div>
+    </section>
+  );
 };

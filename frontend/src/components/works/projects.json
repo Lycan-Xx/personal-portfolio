@@ -1,0 +1,72 @@
+[
+    {
+      "id": 1,
+      "title": "My Personal Portfolio",
+      "description": "Designed and developed a ReactJS portfolio with fancy 3D animations using Three.js for the background element.",
+      "image": "https://picsum.photos/seed/portfolio/800/600",
+      "images": [
+        "https://picsum.photos/seed/portfolio/800/600",
+        "https://picsum.photos/seed/portfolio2/800/600",
+        "https://picsum.photos/seed/portfolio3/800/600"
+      ],
+      "tags": ["React", "Three.js", "Framer Motion", "Tailwind CSS"],
+      "link": "#",
+      "repo": "https://github.com/lycan-xx12/portfolio"
+    },
+    {
+      "id": 2,
+      "title": "Mailcreak newsletter manager",
+      "description": "A web app designed to streamline newsletter creation, subscriber management, and compile performance tracking. Built with React, Tailwind CSS. Planning on setting up the backend that manages the system.",
+      "image": "https://picsum.photos/seed/veritru/800/600",
+      "images": [
+        "https://picsum.photos/seed/veritru/800/600",
+        "https://picsum.photos/seed/veritru2/800/600",
+        "https://picsum.photos/seed/veritru3/800/600"
+      ],
+      "tags": ["Javascript", "React", "TailwindCSS", "Node.js"],
+      "link": "https://lycan-xx.github.io/Mailcreak/",
+      "repo": "https://github.com/lycan-xx12/Mailcreak"
+    },
+    {
+      "id": 3,
+      "title": "eVault Landing Page",
+      "description": "Logistics and Forwarding website built using ReactJS to design and develop its front-end.",
+      "image": "https://picsum.photos/seed/lofo/800/600",
+      "images": [
+        "https://picsum.photos/seed/lofo/800/600",
+        "https://picsum.photos/seed/lofo2/800/600",
+        "https://picsum.photos/seed/lofo3/800/600"
+      ],
+      "tags": ["React", "Redux", "Material-UI", "Firebase"],
+      "link": "https://evault.com.ng",
+      "repo": "https://github.com/lycan-xx12/evault"
+    },
+    {
+      "id": 4,
+      "title": "ABKHD online market place",
+      "description": "A website portfolio project for the Startup Dev Team built using MEVN stack to demonstrate the CRUD capabilities of the tech stack.",
+      "image": "https://picsum.photos/seed/startup/800/600",
+      "images": [
+        "https://picsum.photos/seed/startup/800/600",
+        "https://picsum.photos/seed/startup2/800/600",
+        "https://picsum.photos/seed/startup3/800/600"
+      ],
+      "tags": ["Vue.js", "MongoDB", "Express", "Node.js"],
+      "link": "#",
+      "repo": "https://github.com/lycan-xx12/abkhd"
+    },
+    {
+      "id": 5,
+      "title": "LaCalle Cafe",
+      "description": "A website project for the La Calle Cafe business built using Wordpress and PHP with integrated SEO tools.",
+      "image": "https://picsum.photos/seed/lacalle/800/600",
+      "images": [
+        "https://picsum.photos/seed/lacalle/800/600",
+        "https://picsum.photos/seed/lacalle2/800/600",
+        "https://picsum.photos/seed/lacalle3/800/600"
+      ],
+      "tags": ["WordPress", "PHP", "SEO", "MySQL"],
+      "link": "#",
+      "repo": "https://github.com/lycan-xx12/lacalle"
+    }
+]
