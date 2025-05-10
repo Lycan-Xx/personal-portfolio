@@ -34,12 +34,16 @@ const ProjectCard = ({ project, index, inView, onClick }) => {
       <div className="group h-full bg-gray-800/40 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg border border-cyan-400/10 hover:border-cyan-400/40 transition-all duration-300 cursor-pointer hover:translate-x-2 hover:shadow-cyan-400/10 hover:shadow-lg">
         <div className="flex flex-col md:flex-row">
           {/* Image container - left side on md+ screens */}
-          <div className="relative h-64 md:h-auto md:w-2/5 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent to-gray-900/70 z-10"></div>
+          <div className="relative h-[25rem] md:h-[25rem] md:w-2/5 flex items-center justify-center overflow-hidden bg-black">
             <img
               src={project.images && project.images.length > 0 ? project.images[0] : project.image}
               alt={project.title}
-              className="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105"
+              className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+              onError={(e) => {
+                e.target.onerror = null; // Prevent infinite loop
+                e.target.src = 'https://placehold.co/800x600/1f2937/cccccc?text=Image+Not+Found';
+              }}
+              style={{ maxHeight: '100%', maxWidth: '100%' }}
             />
           </div>
           
@@ -92,7 +96,16 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
   const [currentImg, setCurrentImg] = useState(0);
 
   React.useEffect(() => {
-    if (isOpen) setCurrentImg(0);
+    if (isOpen) {
+      setCurrentImg(0);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
   }, [isOpen, project]);
 
   if (!project) return null;
@@ -121,34 +134,39 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
 
   return (
     <motion.div
-      className={`fixed inset-0 z-50 flex items-center justify-center ${!isOpen && 'pointer-events-none'}`}
+      className={`fixed inset-0 z-50 flex items-center justify-center ${isOpen ? '' : 'pointer-events-none'}`}
       initial="hidden"
       animate={isOpen ? "visible" : "hidden"}
       variants={overlayVariants}
       transition={{ duration: 0.2 }}
     >
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={onClose}></div>
+      {/* Click-to-close backdrop */}
+      <div
+        className="absolute inset-0 bg-black/70 backdrop-blur-md z-10"
+        onClick={onClose}
+      ></div>
       <motion.div
-        className="relative bg-gray-800/80 backdrop-blur-md border border-cyan-400/20 rounded-xl w-11/12 max-w-3xl max-h-[90vh] overflow-y-auto"
+        className="relative z-20 bg-gray-800/80 backdrop-blur-md border border-cyan-400/20 rounded-xl w-11/12 max-w-3xl max-h-[90vh] overflow-y-auto"
         variants={modalVariants}
         transition={{ duration: 0.3, delay: 0.1 }}
         onClick={e => e.stopPropagation()}
       >
-        {/* X exit button */}
+        {/* X Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white z-10 p-2 hover:bg-white/10 rounded-full transition-colors text-2xl font-bold"
+          className="absolute top-4 right-4 text-gray-400 hover:text-white z-30 p-2 hover:bg-white/10 rounded-full transition-colors text-2xl font-bold"
           aria-label="Close modal"
         >
           ×
         </button>
         {/* Image slider */}
-        <div className="relative h-64 sm:h-80 overflow-hidden flex items-center justify-center">
+        <div className="relative flex items-center justify-center w-full bg-black" style={{ minHeight: '300px', maxHeight: '70vh' }}>
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent z-10"></div>
           <img
             src={images[currentImg]}
             alt={project.title}
-            className="w-full h-full object-cover"
+            className="max-h-[65vh] w-auto max-w-full object-contain mx-auto z-20"
+            style={{ display: 'block', background: '#111', margin: '0 auto' }}
           />
           {images.length > 1 && (
             <>
@@ -253,7 +271,7 @@ export const Works = () => {
 
   return (
     <section ref={ref} id="works" className="relative min-h-screen py-20 px-4 md:px-8 z-20">
-      <div className="max-w-6xl mx-auto relative">
+      <div className="max-w-[86rem] mx-auto relative">
         {/* Glassmorphism container */}
         <div className="absolute inset-0 bg-black/40 backdrop-blur-xl rounded-3xl border-[0.2rem] border-cyan-500 shadow-lg shadow-cyan-400/5"></div>
         
@@ -265,6 +283,10 @@ export const Works = () => {
             transition={{ duration: 0.6 }}
             className="mb-16 text-start"
           >
+
+                    {/* Header  Text*/}
+
+
             <h2 className="text-3xl md:text-4xl font-bold text-white relative inline-block pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-1/2 after:h-1 after:bg-cyan-400" style={{ fontFamily: 'ChocoCooky' }}>
               Featured Projects
             </h2>

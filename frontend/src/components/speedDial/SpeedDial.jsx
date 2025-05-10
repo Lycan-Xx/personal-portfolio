@@ -97,7 +97,7 @@ const SpeedDial = () => {
         {/* Main Toggle Button */}
         <motion.button
           onClick={handleToggle}
-          className="glass-button group flex items-center gap-3 backdrop-blur-lg px-3 py-2 rounded-xl shadow-lg md:w-auto w-12 h-12 md:h-auto overflow-hidden"
+          className="glass-button group flex items-center gap-3 backdrop-blur-xl px-3 py-2 rounded-xl shadow-lg md:w-auto w-12 h-12 md:h-auto overflow-hidden"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >

@@ -38,7 +38,7 @@
 	}
 
 	.glass-button {
-		@apply px-6 py-3 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 rounded-xl text-cyan-400 font-medium transition-all duration-300 hover:border-cyan-500/40 hover:scale-105 active:scale-95;
+		@apply px-6 py-3 bg-cyan-600/50 hover:bg-cyan-500/20 border border-cyan-500/20 rounded-xl text-cyan-400 font-medium transition-all duration-300 hover:border-cyan-500/40 hover:scale-105 active:scale-95;
 	}
 
 	.section-heading {

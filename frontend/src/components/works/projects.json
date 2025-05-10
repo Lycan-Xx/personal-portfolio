@@ -1,27 +1,14 @@
 [
-    {
-      "id": 1,
-      "title": "My Personal Portfolio",
-      "description": "Designed and developed a ReactJS portfolio with fancy 3D animations using Three.js for the background element.",
-      "image": "https://picsum.photos/seed/portfolio/800/600",
-      "images": [
-        "https://picsum.photos/seed/portfolio/800/600",
-        "https://picsum.photos/seed/portfolio2/800/600",
-        "https://picsum.photos/seed/portfolio3/800/600"
-      ],
-      "tags": ["React", "Three.js", "Framer Motion", "Tailwind CSS"],
-      "link": "#",
-      "repo": "https://github.com/lycan-xx12/portfolio"
-    },
+
     {
       "id": 2,
       "title": "Mailcreak newsletter manager",
       "description": "A web app designed to streamline newsletter creation, subscriber management, and compile performance tracking. Built with React, Tailwind CSS. Planning on setting up the backend that manages the system.",
-      "image": "https://picsum.photos/seed/veritru/800/600",
+      "image": "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891728/mailcreak_2_hzdknh.png",
       "images": [
-        "https://picsum.photos/seed/veritru/800/600",
-        "https://picsum.photos/seed/veritru2/800/600",
-        "https://picsum.photos/seed/veritru3/800/600"
+        "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891728/mailcreak_2_hzdknh.png",
+        "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891729/mailcreak_3_ctfems.png",
+        "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891727/mailcreak_1_iwx0db.png"
       ],
       "tags": ["Javascript", "React", "TailwindCSS", "Node.js"],
       "link": "https://lycan-xx.github.io/Mailcreak/",
@@ -31,11 +18,10 @@
       "id": 3,
       "title": "eVault Landing Page",
       "description": "Logistics and Forwarding website built using ReactJS to design and develop its front-end.",
-      "image": "https://picsum.photos/seed/lofo/800/600",
+      "image": "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891725/evault_2_kybs9j.png",
       "images": [
-        "https://picsum.photos/seed/lofo/800/600",
-        "https://picsum.photos/seed/lofo2/800/600",
-        "https://picsum.photos/seed/lofo3/800/600"
+        "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891725/evault_2_kybs9j.png",
+        "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891724/evault_1_h0ikbv.png"
       ],
       "tags": ["React", "Redux", "Material-UI", "Firebase"],
       "link": "https://evault.com.ng",
@@ -45,11 +31,11 @@
       "id": 4,
       "title": "ABKHD online market place",
       "description": "A website portfolio project for the Startup Dev Team built using MEVN stack to demonstrate the CRUD capabilities of the tech stack.",
-      "image": "https://picsum.photos/seed/startup/800/600",
+      "image": "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891724/abkhd_2_nuhtkg.png",
       "images": [
-        "https://picsum.photos/seed/startup/800/600",
-        "https://picsum.photos/seed/startup2/800/600",
-        "https://picsum.photos/seed/startup3/800/600"
+        "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891724/abkhd_2_nuhtkg.png",
+        "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891724/abkhd_3_bckqqm.png",
+        "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891723/abkhd_1_dwzx97.png"
       ],
       "tags": ["Vue.js", "MongoDB", "Express", "Node.js"],
       "link": "#",
@@ -68,5 +54,36 @@
       "tags": ["WordPress", "PHP", "SEO", "MySQL"],
       "link": "#",
       "repo": "https://github.com/lycan-xx12/lacalle"
+    },
+    {
+      "id": 6,
+      "title": "My Personal Portfolio",
+      "description": "Designed and developed a ReactJS portfolio with fancy 3D animations using Three.js for the background element.",
+      "image": "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746897182/personal_1_rqyhxq.png",
+      "images": [
+        "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746897182/personal_1_rqyhxq.png",
+        "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746897181/personal_2_g5zmaw.png",
+        "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746897183/personal_3_aspcxq.png"
+      ],
+      "tags": ["React", "Three.js", "TailwindCSS", "Framer Motion"],
+      "link": "https://lycan-xx12.github.io/portfolio",
+      "repo": "https://github.com/lycan-xx12/portfolio"
+    },
+    {
+      "id": 7,
+      "title": "Green Cart",
+      "description": "An online store mobile app for purchasing healthy natural products built with React Native, JavaScript TSX, previewed with Expo Go.",
+      "image": "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/e_improve,w_300,h_600,c_thumb,g_auto/v1746896858/greencart_2_yfe7x5.jpg",
+      "images": [
+        "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746896856/greencart_4_xt4zxf.jpg",
+        "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746896858/greencart_2_yfe7x5.jpg",
+        "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746896857/greencart_6_euwejc.jpg",
+        "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746896858/greencart_1_lpfctm.jpg"
+      ],
+      "tags": ["React Native", "TypeScript", "Expo", "Redux"],
+      "link": "https://expo.dev/@lycan-xx12/green-cart",
+      "repo": "https://github.com/lycan-xx12/green-cart"
     }
 ]
+
+

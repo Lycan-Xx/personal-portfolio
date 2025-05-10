@@ -1,4 +1,5 @@
 import React, { lazy, Suspense } from "react";
+import { motion } from "framer-motion";
 import { CustomThemeProvider } from "../components/theme/ThemeProvider";
 import { CssBaseline } from "@mui/material";
 import { Home } from "../pages/Home";
@@ -32,6 +33,16 @@ export const App = () => {
 						</Suspense>
 					</div>
 				</main>
+				
+				{/* Footer text */}
+				<motion.div
+					initial={{ opacity: 1 }}
+					animate={{ opacity: 2 }}
+					transition={{ duration: 0.5 }}
+					className="fixed bottom-4 right-4 text-lg text-gray-400/60 hover:text-cyan-400 transition-colors duration-300 font-mono z-50"
+				>
+					Lycan-Xx says hi... 👾
+				</motion.div>
 			</CustomThemeProvider>
 		</LoadingScreen>
 	);
