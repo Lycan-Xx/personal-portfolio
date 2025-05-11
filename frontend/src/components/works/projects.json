@@ -12,7 +12,7 @@
       ],
       "tags": ["Javascript", "React", "TailwindCSS", "Node.js"],
       "link": "https://lycan-xx.github.io/Mailcreak/",
-      "repo": "https://github.com/lycan-xx12/Mailcreak"
+      "repo": "https://github.com/Lycan-Xx/Mailcreak"
     },
     {
       "id": 3,
@@ -24,8 +24,7 @@
         "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891724/evault_1_h0ikbv.png"
       ],
       "tags": ["React", "Redux", "Material-UI", "Firebase"],
-      "link": "https://evault.com.ng",
-      "repo": "https://github.com/lycan-xx12/evault"
+      "link": "https://evault.com.ng"
     },
     {
       "id": 4,
@@ -38,8 +37,7 @@
         "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891723/abkhd_1_dwzx97.png"
       ],
       "tags": ["Vue.js", "MongoDB", "Express", "Node.js"],
-      "link": "#",
-      "repo": "https://github.com/lycan-xx12/abkhd"
+      "link": "https://abkhd-online-store.onrender.com/"
     },
     {
       "id": 5,
@@ -66,8 +64,8 @@
         "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746897183/personal_3_aspcxq.png"
       ],
       "tags": ["React", "Three.js", "TailwindCSS", "Framer Motion"],
-      "link": "https://lycan-xx12.github.io/portfolio",
-      "repo": "https://github.com/lycan-xx12/portfolio"
+      "link": "https://whoami-tczj.onrender.com/",
+      "repo": "https://github.com/Lycan-Xx/personal-portfolio"
     },
     {
       "id": 7,
@@ -81,8 +79,8 @@
         "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746896858/greencart_1_lpfctm.jpg"
       ],
       "tags": ["React Native", "TypeScript", "Expo", "Redux"],
-      "link": "https://expo.dev/@lycan-xx12/green-cart",
-      "repo": "https://github.com/lycan-xx12/green-cart"
+      "link": "https://expo.dev/preview/update?message=%20This%20is%20the%20third%20official%20build%20but%20the%20first%20stable%2C%20hopefully%20without%20any%20errors&updateRuntimeVersion=1.0.0&createdAt=2025-05-11T08%3A25%3A36.608Z&slug=exp&projectId=3db94a47-b125-4768-bc23-ee62e023fce3&group=a5f3b4a8-2676-42aa-91ed-46fc52657d5d",
+      "repo": "https://github.com/Lycan-Xx/natural-wellness-e-commerce"
     }
 ]
 
