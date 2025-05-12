@@ -81,6 +81,20 @@
       "tags": ["React Native", "TypeScript", "Expo", "Redux"],
       "link": "https://expo.dev/preview/update?message=Made%20some%20changes%20to%20the%20authcontext%20to%20forcefully%20redirect%20unauthorized%20users%20to%20the%20welcome%20screen.%20also%20fixed%20some%20dependncy%20&updateRuntimeVersion=1.0.0&createdAt=2025-05-11T13%3A37%3A31.141Z&slug=green-cart&projectId=3db94a47-b125-4768-bc23-ee62e023fce3&group=9c1f1c27-653e-44f3-8a50-3b76a22db450",
       "repo": "https://github.com/Lycan-Xx/natural-wellness-e-commerce"
+    },
+        {
+      "id": 8,
+      "title": "Resume Forge",
+      "description": "A resume builder web app that allows users to create and download resumes in PDF format. Built with React, Tailwind CSS, and Node.js.",
+      "image": "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1747077276/resume_1_cokt6g.png",
+      "images": [
+        "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1747077276/resume_1_cokt6g.png",
+        "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1747077276/resume_1_httvvd.jpg",
+        "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1747077273/resume_2_ptgkrh.png"
+      ],
+      "tags": ["React", "Javascript", "TailwindCSS", "React Router"],
+      "link": "https://resume-forge-pdf.netlify.app/",
+      "repo": "https://github.com/Lycan-Xx/Resume-Builder-PDF-generate"
     }
 ]
 
