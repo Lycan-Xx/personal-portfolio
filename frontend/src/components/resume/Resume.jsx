@@ -31,7 +31,7 @@ const ResumeIcon = () => {
 export const Resume = () => {
   return (
     <a
-      href="https://www.learningcontainer.com/wp-content/uploads/2019/09/sample-pdf-file.pdf"
+      href="https://drive.google.com/uc?export=download&id=15j1G81uZtpHV9GRse5SMczuZM6NPPS_a"
       target="_blank"
       rel="noopener noreferrer"
       className="glass-button group flex items-center gap-3"
