@@ -31,7 +31,7 @@ const ResumeIcon = () => {
 export const Resume = () => {
   return (
     <a
-      href="https://drive.google.com/uc?export=download&id=15j1G81uZtpHV9GRse5SMczuZM6NPPS_a"
+      href="https://drive.google.com/uc?export=download&id=1q3Q-PJyEOcyvaUXmNk7jgSW5CgFG0hdD"
       target="_blank"
       rel="noopener noreferrer"
       className="glass-button group flex items-center gap-3"
