@@ -128,6 +128,14 @@ export const Contact = () => {
                 <span className="text-cyan-400">Location:</span>
                 Adamawa, Nigeria
               </p>
+
+<p className="flex items-center gap-2">
+  <a href="https://wa.me/your_phone_number" target="_blank" rel="noopener noreferrer" className="text-cyan-400">
+    WhatsApp: +2347062284169
+  </a>
+</p>
+
+		    
             </div>
           </motion.div>
 
