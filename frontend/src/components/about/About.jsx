@@ -96,10 +96,10 @@ const About = () => {
   const last = names[names.length - 1];
 
   return (
-    <section ref={ref} id="about" className="relative min-h-screen py-20 px-4 md:px-8 z-20">
-      <div className="max-w-[86rem] mx-auto relative">
+    <section ref={ref} id="about" className="relative min-h-screen py-16 sm:py-20 px-0 md:px-4 z-20">
+      <div className="w-full max-w-[86rem] mx-auto relative">
         {/* Glassmorphism container */}
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-xl rounded-3xl border-[0.2rem] border-cyan-500 shadow-lg shadow-cyan-400/5"></div>
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-xl rounded-none md:rounded-3xl shadow-lg shadow-cyan-400/5"></div>
         <div className="relative p-6 md:p-10 z-10" style={{ fontFamily: 'ChocoCooky' }}>
 
         {/* Header  Text*/}

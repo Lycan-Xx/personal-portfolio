@@ -27,8 +27,14 @@
 		@apply bg-[var(--color-background)] text-gray-100 font-sans antialiased;
 	}
 
-  html, body {
-    @apply overflow-x-hidden max-w-[100vw];
+  html {
+    @apply overflow-x-hidden scroll-smooth;
+    scroll-behavior: smooth;
+    height: 100%;
+  }
+  
+  body {
+    @apply overflow-x-hidden max-w-[100vw] min-h-screen;
   }
 }
 
@@ -162,7 +168,15 @@
 }
 
 section {
-	scroll-margin-top: 100px;
+	scroll-margin-top: 80px;
+	scroll-snap-align: start;
+	scroll-snap-stop: always;
+}
+
+@media (max-width: 768px) {
+	section {
+		scroll-margin-top: 60px;
+	}
 }
 
 @layer utilities {
@@ -220,7 +234,8 @@ section {
 	background: rgba(30, 41, 59, 0.7);
 	backdrop-filter: blur(10px);
 	border-radius: 10px;
-	border: 1px solid rgba(255, 255, 255, 0.1);
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+	border: 1px solid rgba(66, 188, 188, 0.1);
 }
 
 
@@ -232,6 +247,6 @@ section {
 @font-face {
 	font-family: ChocoCooky;
 	font-style: normal;
-	font-weight: normal;
+	font-weight: normale;
 	src: url('./assets/fonts/Chococooky.woff') format('woff');
 }
