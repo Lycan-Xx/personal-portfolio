@@ -113,6 +113,16 @@
 	animation: pulse 3s ease-in-out infinite;
 }
 
+/* Masonry layout support */
+.masonry-grid {
+	column-fill: balance;
+}
+
+.masonry-item {
+	break-inside: avoid;
+	page-break-inside: avoid;
+}
+
 .text-glow {
 	text-shadow: 0 0 10px var(--color-primary);
 }
