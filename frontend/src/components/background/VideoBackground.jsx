@@ -7,9 +7,21 @@ const VideoBackground = () => {
 	const [hasError, setHasError] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
 	const [videoSrc, setVideoSrc] = useState(null);
+	const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
 
 	// Set up intersection observer to detect when component is in viewport
 	useEffect(() => {
+		// Check if user prefers reduced data usage
+		const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+		const isSlowConnection = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
+		const isSaveData = connection && connection.saveData;
+		
+		// Don't load video on slow connections or save-data mode
+		if (isSlowConnection || isSaveData) {
+			console.log('Skipping video load due to connection constraints');
+			return;
+		}
+		
 		const options = {
 			root: null, // viewport
 			rootMargin: '0px',
@@ -20,7 +32,7 @@ const VideoBackground = () => {
 			entries.forEach(entry => {
 				// When component enters viewport
 				if (entry.isIntersecting) {
-					setIsVisible(true);
+					setShouldLoadVideo(true);
 					// Once we've detected visibility, we can disconnect the observer
 					observer.disconnect();
 				}
@@ -38,12 +50,13 @@ const VideoBackground = () => {
 		};
 	}, []);
 
-	// Only set the video source when the component is visible
+	// Only set the video source when we should load it
 	useEffect(() => {
-		if (isVisible) {
+		if (shouldLoadVideo) {
+			setIsVisible(true);
 			setVideoSrc("https://res.cloudinary.com/cloudinary-lycan-xx/video/upload/v1742216068/video_compressed-for-testing_fkyn7j.mp4");
 		}
-	}, [isVisible]);
+	}, [shouldLoadVideo]);
 
 	// Handle video loading and events
 	useEffect(() => {
@@ -96,7 +109,7 @@ const VideoBackground = () => {
 					loop
 					muted
 					playsInline
-					preload="auto"
+					preload="metadata"
 				>
 					<source 
 						src={videoSrc}

@@ -4,7 +4,7 @@ import { useInView } from "react-intersection-observer";
 import projects from "./projects.json";
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
 
-const ProjectCard = ({ project, index, inView }) => {
+const ProjectCard = ({ project, index, inView, style }) => {
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
@@ -16,16 +16,19 @@ const ProjectCard = ({ project, index, inView }) => {
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="w-full break-inside-avoid mb-8"
+      className="absolute w-full transition-all duration-300 ease-out"
+      style={style}
     >
-      <div className="group h-full bg-gray-800/40 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg border border-cyan-400/10 hover:border-cyan-400/40 transition-all duration-300 hover:translate-y-[-2px] hover:shadow-cyan-400/10 hover:shadow-lg flex flex-col">
+      <div className="group bg-gray-800/40 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg border border-cyan-400/10 hover:border-cyan-400/40 transition-all duration-300 hover:translate-y-[-2px] hover:shadow-cyan-400/10 hover:shadow-lg flex flex-col">
         
         {/* Image container */}
-        <div className="relative w-full flex items-center justify-center overflow-hidden bg-black">
+        <div className="relative w-full flex items-center justify-center overflow-hidden bg-black aspect-video">
           <img
             src={project.images && project.images.length > 0 ? project.images[0] : project.image}
             alt={project.title}
-            className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105 max-h-[300px]"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+            decoding="async"
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = 'https://placehold.co/800x600/1f2937/cccccc?text=Image+Not+Found';
@@ -33,7 +36,7 @@ const ProjectCard = ({ project, index, inView }) => {
           />
         </div>
         
-        {/* Content container - grows to fill available space */}
+        {/* Content container */}
         <div className="p-4 sm:p-6 flex flex-col flex-grow">
           <div className="flex-grow">
             <h3 className="text-xl sm:text-2xl font-sans font-bold text-white group-hover:text-cyan-400 transition-colors mb-3 sm:mb-4">
@@ -56,12 +59,12 @@ const ProjectCard = ({ project, index, inView }) => {
               )}
             </div>
             
-            <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-4 sm:mb-6" style={{ fontFamily: "ChocoCooky" }}>
+            <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 line-clamp-3" style={{ fontFamily: "ChocoCooky" }}>
               {project.description}
             </p>
           </div>
           
-          {/* Action buttons - pushed to bottom */}
+          {/* Action buttons */}
           <div className="mt-auto flex flex-col sm:flex-row gap-3 sm:gap-4">
             <a
               href={project.link}
@@ -90,11 +93,73 @@ const ProjectCard = ({ project, index, inView }) => {
   );
 };
 
+// Custom hook for masonry layout
+const useMasonryLayout = (projects, containerWidth, inView) => {
+  const [layout, setLayout] = React.useState([]);
+  const [containerHeight, setContainerHeight] = React.useState(0);
+  
+  React.useEffect(() => {
+    if (!inView || !containerWidth) return;
+    
+    const calculateLayout = () => {
+      const columns = containerWidth >= 1024 ? 3 : containerWidth >= 768 ? 2 : 1;
+      const columnWidth = Math.floor((containerWidth - (columns - 1) * 32) / columns);
+      const columnHeights = new Array(columns).fill(0);
+      const newLayout = [];
+      
+      projects.forEach((project, index) => {
+        // Estimate card height based on content
+        const baseHeight = 400; // Base card height
+        const descriptionLines = Math.ceil(project.description.length / 80);
+        const estimatedHeight = baseHeight + (descriptionLines * 20);
+        
+        // Find shortest column
+        const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
+        const x = shortestColumnIndex * (columnWidth + 32);
+        const y = columnHeights[shortestColumnIndex];
+        
+        newLayout.push({
+          x,
+          y,
+          width: columnWidth,
+          height: estimatedHeight,
+        });
+        
+        columnHeights[shortestColumnIndex] += estimatedHeight + 32; // Add gap
+      });
+      
+      setLayout(newLayout);
+      setContainerHeight(Math.max(...columnHeights));
+    };
+    
+    calculateLayout();
+  }, [projects, containerWidth, inView]);
+  
+  return { layout, containerHeight };
+};
+
 export const Works = () => {
   const [ref, inView] = useInView({
     triggerOnce: false,
     threshold: 0.1,
   });
+  
+  const [containerRef, setContainerRef] = React.useState(null);
+  const [containerWidth, setContainerWidth] = React.useState(0);
+  
+  React.useEffect(() => {
+    if (!containerRef) return;
+    
+    const updateWidth = () => {
+      setContainerWidth(containerRef.offsetWidth);
+    };
+    
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+  }, [containerRef]);
+  
+  const { layout, containerHeight } = useMasonryLayout(projects, containerWidth, inView);
 
   return (
     <section ref={ref} id="works" className="relative min-h-screen py-16 sm:py-20 px-0 md:px-4 z-20">
@@ -121,14 +186,22 @@ export const Works = () => {
             </p>
           </motion.div>
           
-          {/* Masonry Grid Layout */}
-          <div className="columns-1 md:columns-2 lg:columns-3 gap-6 sm:gap-8 space-y-0">
+          {/* Improved Masonry Layout */}
+          <div 
+            ref={setContainerRef}
+            className="relative w-full"
+            style={{ height: containerHeight }}
+          >
             {projects.map((project, index) => (
               <ProjectCard 
                 key={project.id} 
                 project={project} 
                 index={index} 
                 inView={inView}
+                style={layout[index] ? {
+                  transform: `translate(${layout[index].x}px, ${layout[index].y}px)`,
+                  width: layout[index].width,
+                } : {}}
               />
             ))}
           </div>

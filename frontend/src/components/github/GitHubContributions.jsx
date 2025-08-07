@@ -6,7 +6,7 @@ import { useInView } from 'react-intersection-observer';
 const GitHubCalendar = lazy(() => import('react-github-calendar'));
 
 // Cache helper with expiration time
-const useCache = (key, ttl = 3600000) => { // Default TTL: 1 hour
+const useCache = (key, ttl = 86400000) => { // Default TTL: 24 hours
 	const getCache = () => {
 		try {
 			const cached = localStorage.getItem(key);

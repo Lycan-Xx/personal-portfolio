@@ -6,6 +6,13 @@ const LoadingScreen = ({ children }) => {
     const [loadingProgress, setLoadingProgress] = useState(0);
 
     useEffect(() => {
+        // Check if user has visited before (skip loading for returning users)
+        const hasVisited = localStorage.getItem('portfolio-visited');
+        if (hasVisited) {
+            setLoading(false);
+            return;
+        }
+        
         // Simulate loading progress
         const progressInterval = setInterval(() => {
             setLoadingProgress(prev => {
@@ -23,10 +30,12 @@ const LoadingScreen = ({ children }) => {
                 
                 setContentLoaded(true);
                 setLoadingProgress(100); // Set to 100% when done
+                localStorage.setItem('portfolio-visited', 'true');
             } catch (error) {
                 console.error("Error preloading assets:", error);
                 setContentLoaded(true); // Continue anyway
                 setLoadingProgress(100);
+                localStorage.setItem('portfolio-visited', 'true');
             }
         };
 
