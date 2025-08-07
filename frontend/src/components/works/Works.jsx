@@ -93,29 +93,50 @@ const ProjectCard = ({ project, index, inView, style }) => {
   );
 };
 
-// Custom hook for masonry layout
+// Improved masonry layout hook with better height calculation
 const useMasonryLayout = (projects, containerWidth, inView) => {
   const [layout, setLayout] = React.useState([]);
   const [containerHeight, setContainerHeight] = React.useState(0);
   
   React.useEffect(() => {
-    if (!inView || !containerWidth) return;
+    if (!inView || !containerWidth || projects.length === 0) return;
     
     const calculateLayout = () => {
+      // Responsive columns
       const columns = containerWidth >= 1024 ? 3 : containerWidth >= 768 ? 2 : 1;
-      const columnWidth = Math.floor((containerWidth - (columns - 1) * 32) / columns);
+      const gap = 32; // Gap between cards
+      const columnWidth = Math.floor((containerWidth - (columns - 1) * gap) / columns);
+      
+      // Initialize column heights
       const columnHeights = new Array(columns).fill(0);
       const newLayout = [];
       
       projects.forEach((project, index) => {
-        // Estimate card height based on content
-        const baseHeight = 400; // Base card height
-        const descriptionLines = Math.ceil(project.description.length / 80);
-        const estimatedHeight = baseHeight + (descriptionLines * 20);
+        // More accurate height estimation based on content
+        let estimatedHeight = 280; // Base height for image (aspect-video)
         
-        // Find shortest column
+        // Add height for content
+        estimatedHeight += 96; // Padding (p-4 sm:p-6)
+        estimatedHeight += 60; // Title height
+        estimatedHeight += Math.min(project.tags.length, 4) * 28 + 16; // Tags height
+        
+        // Description height (more accurate calculation)
+        const descriptionLength = project.description?.length || 0;
+        const estimatedLines = Math.ceil(descriptionLength / 50); // ~50 chars per line
+        estimatedHeight += Math.min(estimatedLines, 3) * 24 + 24; // line-clamp-3
+        
+        // Buttons height
+        estimatedHeight += 60; // Button container
+        
+        // Add some random variation for more natural masonry effect
+        const variation = Math.random() * 40 - 20; // -20 to +20px
+        estimatedHeight += variation;
+        
+        // Find the shortest column
         const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
-        const x = shortestColumnIndex * (columnWidth + 32);
+        
+        // Calculate position
+        const x = shortestColumnIndex * (columnWidth + gap);
         const y = columnHeights[shortestColumnIndex];
         
         newLayout.push({
@@ -125,14 +146,18 @@ const useMasonryLayout = (projects, containerWidth, inView) => {
           height: estimatedHeight,
         });
         
-        columnHeights[shortestColumnIndex] += estimatedHeight + 32; // Add gap
+        // Update column height
+        columnHeights[shortestColumnIndex] += estimatedHeight + gap;
       });
       
       setLayout(newLayout);
-      setContainerHeight(Math.max(...columnHeights));
+      setContainerHeight(Math.max(...columnHeights) + gap);
     };
     
-    calculateLayout();
+    // Add a small delay to ensure proper calculation
+    const timeoutId = setTimeout(calculateLayout, 100);
+    return () => clearTimeout(timeoutId);
+    
   }, [projects, containerWidth, inView]);
   
   return { layout, containerHeight };
@@ -151,15 +176,36 @@ export const Works = () => {
     if (!containerRef) return;
     
     const updateWidth = () => {
-      setContainerWidth(containerRef.offsetWidth);
+      const rect = containerRef.getBoundingClientRect();
+      setContainerWidth(rect.width);
     };
     
+    // Initial width calculation
     updateWidth();
-    window.addEventListener('resize', updateWidth);
-    return () => window.removeEventListener('resize', updateWidth);
+    
+    // Debounced resize handler
+    let timeoutId;
+    const debouncedResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(updateWidth, 150);
+    };
+    
+    window.addEventListener('resize', debouncedResize);
+    return () => {
+      window.removeEventListener('resize', debouncedResize);
+      clearTimeout(timeoutId);
+    };
   }, [containerRef]);
   
   const { layout, containerHeight } = useMasonryLayout(projects, containerWidth, inView);
+
+  // Debug logging
+  React.useEffect(() => {
+    console.log('Container width:', containerWidth);
+    console.log('Layout:', layout);
+    console.log('Container height:', containerHeight);
+    console.log('Projects length:', projects.length);
+  }, [containerWidth, layout, containerHeight]);
 
   return (
     <section ref={ref} id="works" className="relative min-h-screen py-16 sm:py-20 px-0 md:px-4 z-20">
@@ -186,24 +232,57 @@ export const Works = () => {
             </p>
           </motion.div>
           
-          {/* Improved Masonry Layout */}
+          {/* Debug info (remove in production) */}
+          <div className="mb-4 p-2 bg-gray-800 rounded text-xs text-gray-300">
+            <div>Container Width: {containerWidth}px</div>
+            <div>Container Height: {containerHeight}px</div>
+            <div>Projects: {projects.length}</div>
+            <div>Layout Items: {layout.length}</div>
+          </div>
+          
+          {/* Masonry Layout Container */}
           <div 
             ref={setContainerRef}
             className="relative w-full"
-            style={{ height: containerHeight }}
+            style={{ 
+              height: containerHeight > 0 ? `${containerHeight}px` : 'auto',
+              minHeight: '400px' // Ensure minimum height
+            }}
           >
-            {projects.map((project, index) => (
-              <ProjectCard 
-                key={project.id} 
-                project={project} 
-                index={index} 
-                inView={inView}
-                style={layout[index] ? {
-                  transform: `translate(${layout[index].x}px, ${layout[index].y}px)`,
-                  width: layout[index].width,
-                } : {}}
-              />
-            ))}
+            {projects.map((project, index) => {
+              const itemLayout = layout[index];
+              
+              // Debug each item's position
+              if (itemLayout) {
+                console.log(`Project ${index}:`, {
+                  title: project.title,
+                  x: itemLayout.x,
+                  y: itemLayout.y,
+                  width: itemLayout.width
+                });
+              }
+              
+              return (
+                <ProjectCard 
+                  key={project.id || index} 
+                  project={project} 
+                  index={index} 
+                  inView={inView}
+                  style={itemLayout ? {
+                    transform: `translate3d(${itemLayout.x}px, ${itemLayout.y}px, 0)`,
+                    width: `${itemLayout.width}px`,
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                  } : {
+                    position: 'absolute',
+                    top: `${index * 50}px`, // Fallback stacking
+                    left: 0,
+                    width: '100%',
+                  }}
+                />
+              );
+            })}
           </div>
           
           {/* Decorative elements */}
