@@ -102,10 +102,27 @@ const useMasonryLayout = (projects, containerWidth, inView) => {
     if (!inView || !containerWidth || projects.length === 0) return;
     
     const calculateLayout = () => {
-      // Responsive columns
-      const columns = containerWidth >= 1024 ? 3 : containerWidth >= 768 ? 2 : 1;
+      // More aggressive responsive columns - force multiple columns earlier
+      let columns;
+      if (containerWidth >= 1200) {
+        columns = 3;
+      } else if (containerWidth >= 800) {
+        columns = 2;
+      } else if (containerWidth >= 600) {
+        columns = 2; // Force 2 columns even on smaller screens
+      } else {
+        columns = 1;
+      }
+      
       const gap = 32; // Gap between cards
       const columnWidth = Math.floor((containerWidth - (columns - 1) * gap) / columns);
+      
+      console.log('Masonry Debug:', {
+        containerWidth,
+        columns,
+        columnWidth,
+        gap
+      });
       
       // Initialize column heights
       const columnHeights = new Array(columns).fill(0);
@@ -118,7 +135,7 @@ const useMasonryLayout = (projects, containerWidth, inView) => {
         // Add height for content
         estimatedHeight += 96; // Padding (p-4 sm:p-6)
         estimatedHeight += 60; // Title height
-        estimatedHeight += Math.min(project.tags.length, 4) * 28 + 16; // Tags height
+        estimatedHeight += Math.min(project.tags?.length || 0, 4) * 28 + 16; // Tags height
         
         // Description height (more accurate calculation)
         const descriptionLength = project.description?.length || 0;
@@ -128,8 +145,9 @@ const useMasonryLayout = (projects, containerWidth, inView) => {
         // Buttons height
         estimatedHeight += 60; // Button container
         
-        // Add some random variation for more natural masonry effect
-        const variation = Math.random() * 40 - 20; // -20 to +20px
+        // Add some random variation for more natural masonry effect (but consistent per item)
+        const seed = project.title?.length || index; // Use title length as seed for consistency
+        const variation = (seed % 40) - 20; // -20 to +20px but consistent
         estimatedHeight += variation;
         
         // Find the shortest column
@@ -138,6 +156,15 @@ const useMasonryLayout = (projects, containerWidth, inView) => {
         // Calculate position
         const x = shortestColumnIndex * (columnWidth + gap);
         const y = columnHeights[shortestColumnIndex];
+        
+        console.log(`Item ${index} (${project.title}):`, {
+          shortestColumnIndex,
+          x,
+          y,
+          columnWidth,
+          estimatedHeight,
+          columnHeights: [...columnHeights]
+        });
         
         newLayout.push({
           x,
@@ -149,6 +176,8 @@ const useMasonryLayout = (projects, containerWidth, inView) => {
         // Update column height
         columnHeights[shortestColumnIndex] += estimatedHeight + gap;
       });
+      
+      console.log('Final column heights:', columnHeights);
       
       setLayout(newLayout);
       setContainerHeight(Math.max(...columnHeights) + gap);
