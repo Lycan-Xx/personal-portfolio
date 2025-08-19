@@ -1,13 +1,96 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import projects from "./projects.json";
-import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
+import { FaGithub, FaExternalLinkAlt, FaClock, FaCodeBranch } from "react-icons/fa";
 
-const ProjectCard = ({ project, index, inView, style }) => {
+// Mock projects data - replace with your actual import
+const projects = [
+  {
+    id: 1,
+    title: "Cybernetagod",
+    description: "A futuristic cyberpunk-themed web application with advanced animations and interactive elements.",
+    tags: ["React", "Three.js", "WebGL", "TypeScript"],
+    image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop",
+    link: "#",
+    repo: "#",
+    lastUpdated: "2024-08-15T14:30:00Z"
+  },
+  {
+    id: 2,
+    title: "Somasog",
+    description: "Advanced data visualization platform for complex datasets with real-time analytics.",
+    tags: ["Vue.js", "D3.js", "Python", "FastAPI"],
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
+    link: "#",
+    repo: "#",
+    lastUpdated: "2024-08-10T09:15:00Z"
+  },
+  {
+    id: 3,
+    title: "Socixium",
+    description: "Social networking platform with AI-powered content recommendations and real-time messaging.",
+    tags: ["React Native", "Node.js", "MongoDB", "Socket.io"],
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
+    link: "#",
+    repo: "#",
+    lastUpdated: "2024-08-05T16:45:00Z"
+  },
+  {
+    id: 4,
+    title: "Cinxto",
+    description: "Machine learning platform for predictive analytics with intuitive dashboard interface.",
+    tags: ["Python", "TensorFlow", "React", "PostgreSQL"],
+    image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&h=600&fit=crop",
+    link: "#",
+    repo: "#",
+    lastUpdated: "2024-07-28T11:20:00Z"
+  },
+  {
+    id: 5,
+    title: "NeuralFlow",
+    description: "Deep learning framework for computer vision applications with pre-trained models.",
+    tags: ["PyTorch", "OpenCV", "FastAPI", "Docker"],
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop",
+    link: "#",
+    repo: "#",
+    lastUpdated: "2024-07-20T13:10:00Z"
+  },
+  {
+    id: 6,
+    title: "CloudSync",
+    description: "Multi-cloud storage synchronization tool with encryption and version control.",
+    tags: ["Go", "AWS", "Azure", "Kubernetes"],
+    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop",
+    link: "#",
+    repo: "#",
+    lastUpdated: "2024-07-15T08:30:00Z"
+  }
+];
+
+const ProjectCard = ({ project, index, inView, style, branchSide }) => {
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now - date);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 1) return "1 day ago";
+    if (diffDays < 30) return `${diffDays} days ago`;
+    if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
+    return `${Math.floor(diffDays / 365)} years ago`;
+  };
+
   const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
+    hidden: { 
+      opacity: 0, 
+      x: branchSide === 'left' ? -50 : 50,
+      scale: 0.9 
+    },
+    visible: { 
+      opacity: 1, 
+      x: 0,
+      scale: 1 
+    },
   };
 
   return (
@@ -15,77 +98,102 @@ const ProjectCard = ({ project, index, inView, style }) => {
       variants={cardVariants}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="absolute w-full transition-all duration-300 ease-out"
+      transition={{ 
+        duration: 0.6, 
+        delay: index * 0.15,
+        type: "spring",
+        stiffness: 100 
+      }}
+      className="absolute"
       style={style}
     >
-      <div className="group bg-gray-800/40 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg border border-cyan-400/10 hover:border-cyan-400/40 transition-all duration-300 hover:translate-y-[-2px] hover:shadow-cyan-400/10 hover:shadow-lg flex flex-col">
-        
-        {/* Image container */}
-        <div className="relative w-full flex items-center justify-center overflow-hidden bg-black aspect-video">
-          <img
-            src={project.images && project.images.length > 0 ? project.images[0] : project.image}
-            alt={project.title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
-            decoding="async"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = 'https://placehold.co/800x600/1f2937/cccccc?text=Image+Not+Found';
-            }}
-          />
+      <div className={`group relative w-80 ${branchSide === 'left' ? 'ml-auto' : ''}`}>
+        {/* Date/Time Badge */}
+        <div className={`absolute -top-3 ${branchSide === 'left' ? 'left-4' : 'right-4'} z-20`}>
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-cyan-400/20 backdrop-blur-sm rounded-full border border-cyan-400/30">
+            <FaClock className="w-3 h-3 text-cyan-400" />
+            <span className="text-xs font-mono text-cyan-300">
+              {formatDate(project.lastUpdated)}
+            </span>
+          </div>
         </div>
-        
-        {/* Content container */}
-        <div className="p-4 sm:p-6 flex flex-col flex-grow">
-          <div className="flex-grow">
-            <h3 className="text-xl sm:text-2xl font-sans font-bold text-white group-hover:text-cyan-400 transition-colors mb-3 sm:mb-4">
+
+        {/* Main Card */}
+        <div className="bg-gray-900/80 backdrop-blur-md rounded-2xl overflow-hidden border border-gray-700/50 hover:border-cyan-400/50 transition-all duration-300 hover:translate-y-[-4px] hover:shadow-2xl hover:shadow-cyan-400/10 group-hover:bg-gray-900/90">
+          
+          {/* Project Image */}
+          <div className="relative w-full h-48 overflow-hidden">
+            <img
+              src={project.image}
+              alt={project.title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"
+              onError={(e) => {
+                e.target.src = 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop';
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent" />
+            
+            {/* Floating Tag Count */}
+            <div className="absolute top-4 left-4">
+              <div className="flex items-center gap-1 px-2 py-1 bg-black/60 backdrop-blur-sm rounded-lg">
+                <FaCodeBranch className="w-3 h-3 text-cyan-400" />
+                <span className="text-xs font-mono text-cyan-300">
+                  {project.tags.length} tech
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Card Content */}
+          <div className="p-6">
+            <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors mb-3 font-mono">
               {project.title}
             </h3>
             
-            <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
-              {project.tags.slice(0, 4).map((tag, i) => (
+            <p className="text-gray-300 text-sm leading-relaxed mb-4 line-clamp-3">
+              {project.description}
+            </p>
+            
+            {/* Technology Tags */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {project.tags.slice(0, 3).map((tag, i) => (
                 <span
                   key={i}
-                  className="px-2 sm:px-3 py-1 text-xs font-medium font-mono text-cyan-400 bg-cyan-400/10 rounded-full"
+                  className="px-3 py-1 text-xs font-mono font-medium text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 rounded-md hover:bg-cyan-400/20 transition-colors"
                 >
                   {tag}
                 </span>
               ))}
-              {project.tags.length > 4 && (
-                <span className="px-2 sm:px-3 py-1 text-xs font-medium font-mono text-cyan-400 bg-cyan-400/10 rounded-full">
-                  +{project.tags.length - 4}
+              {project.tags.length > 3 && (
+                <span className="px-3 py-1 text-xs font-mono font-medium text-gray-400 bg-gray-800/50 border border-gray-600/30 rounded-md">
+                  +{project.tags.length - 3}
                 </span>
               )}
             </div>
             
-            <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 line-clamp-3" style={{ fontFamily: "ChocoCooky" }}>
-              {project.description}
-            </p>
-          </div>
-          
-          {/* Action buttons */}
-          <div className="mt-auto flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <a
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-4 sm:px-6 py-3 bg-cyan-400/20 hover:bg-cyan-400/30 text-cyan-400 font-medium rounded-lg transition-colors min-h-[44px] text-sm sm:text-base"
-            >
-              <FaExternalLinkAlt className="mr-2 w-4 h-4" />
-              View Live
-            </a>
-            {project.repo && (
+            {/* Action Buttons */}
+            <div className="flex gap-3">
               <a
-                href={project.repo}
+                href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-4 sm:px-6 py-3 bg-gray-900 hover:bg-gray-800 text-cyan-400 border border-cyan-400/30 hover:border-cyan-400 rounded-lg transition-colors min-h-[44px] text-sm sm:text-base"
+                className="flex-1 flex items-center justify-center px-4 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-white font-medium rounded-lg transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-cyan-400/25"
               >
-                <FaGithub className="mr-2 w-4 h-4" />
-                GitHub
+                <FaExternalLinkAlt className="mr-2 w-3 h-3" />
+                <span className="text-sm">Live Demo</span>
               </a>
-            )}
+              {project.repo && (
+                <a
+                  href={project.repo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center px-4 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white border border-gray-600 hover:border-gray-500 rounded-lg transition-all duration-200"
+                >
+                  <FaGithub className="w-4 h-4" />
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -93,103 +201,51 @@ const ProjectCard = ({ project, index, inView, style }) => {
   );
 };
 
-// Improved masonry layout hook with better height calculation
-const useMasonryLayout = (projects, containerWidth, inView) => {
-  const [layout, setLayout] = React.useState([]);
-  const [containerHeight, setContainerHeight] = React.useState(0);
+// Git branch path generator
+const generateBranchPath = (projects, containerHeight) => {
+  const branchSpacing = containerHeight / (projects.length + 1);
+  const centerX = 400; // Center line position
+  const branchLength = 200; // Length of horizontal branches
   
-  React.useEffect(() => {
-    if (!inView || !containerWidth || projects.length === 0) return;
+  let path = `M ${centerX} 0`; // Start from top center
+  
+  projects.forEach((_, index) => {
+    const y = (index + 1) * branchSpacing;
+    const isLeft = index % 2 === 0;
+    const branchX = isLeft ? centerX - branchLength : centerX + branchLength;
     
-    const calculateLayout = () => {
-      // More aggressive responsive columns - force multiple columns earlier
-      let columns;
-      if (containerWidth >= 1200) {
-        columns = 3;
-      } else if (containerWidth >= 800) {
-        columns = 2;
-      } else if (containerWidth >= 600) {
-        columns = 2; // Force 2 columns even on smaller screens
-      } else {
-        columns = 1;
-      }
-      
-      const gap = 32; // Gap between cards
-      const columnWidth = Math.floor((containerWidth - (columns - 1) * gap) / columns);
-      
-      console.log('Masonry Debug:', {
-        containerWidth,
-        columns,
-        columnWidth,
-        gap
-      });
-      
-      // Initialize column heights
-      const columnHeights = new Array(columns).fill(0);
-      const newLayout = [];
-      
-      projects.forEach((project, index) => {
-        // More accurate height estimation based on content
-        let estimatedHeight = 280; // Base height for image (aspect-video)
-        
-        // Add height for content
-        estimatedHeight += 96; // Padding (p-4 sm:p-6)
-        estimatedHeight += 60; // Title height
-        estimatedHeight += Math.min(project.tags?.length || 0, 4) * 28 + 16; // Tags height
-        
-        // Description height (more accurate calculation)
-        const descriptionLength = project.description?.length || 0;
-        const estimatedLines = Math.ceil(descriptionLength / 50); // ~50 chars per line
-        estimatedHeight += Math.min(estimatedLines, 3) * 24 + 24; // line-clamp-3
-        
-        // Buttons height
-        estimatedHeight += 60; // Button container
-        
-        // Add some random variation for more natural masonry effect (but consistent per item)
-        const seed = project.title?.length || index; // Use title length as seed for consistency
-        const variation = (seed % 40) - 20; // -20 to +20px but consistent
-        estimatedHeight += variation;
-        
-        // Find the shortest column
-        const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
-        
-        // Calculate position
-        const x = shortestColumnIndex * (columnWidth + gap);
-        const y = columnHeights[shortestColumnIndex];
-        
-        console.log(`Item ${index} (${project.title}):`, {
-          shortestColumnIndex,
-          x,
-          y,
-          columnWidth,
-          estimatedHeight,
-          columnHeights: [...columnHeights]
-        });
-        
-        newLayout.push({
-          x,
-          y,
-          width: columnWidth,
-          height: estimatedHeight,
-        });
-        
-        // Update column height
-        columnHeights[shortestColumnIndex] += estimatedHeight + gap;
-      });
-      
-      console.log('Final column heights:', columnHeights);
-      
-      setLayout(newLayout);
-      setContainerHeight(Math.max(...columnHeights) + gap);
+    // Draw to branch point
+    path += ` L ${centerX} ${y}`;
+    // Draw branch
+    path += ` L ${branchX} ${y}`;
+    // Return to center for next branch
+    if (index < projects.length - 1) {
+      path += ` M ${centerX} ${y}`;
+    }
+  });
+  
+  return path;
+};
+
+// Calculate project positions along branches
+const calculateProjectPositions = (projects, containerHeight, containerWidth) => {
+  const branchSpacing = containerHeight / (projects.length + 1);
+  const centerX = containerWidth / 2;
+  const branchLength = 280;
+  
+  return projects.map((project, index) => {
+    const y = (index + 1) * branchSpacing - 120; // Offset for card height
+    const isLeft = index % 2 === 0;
+    const x = isLeft 
+      ? centerX - branchLength - 320 // Card width + gap
+      : centerX + branchLength;
+    
+    return {
+      x,
+      y,
+      branchSide: isLeft ? 'left' : 'right'
     };
-    
-    // Add a small delay to ensure proper calculation
-    const timeoutId = setTimeout(calculateLayout, 100);
-    return () => clearTimeout(timeoutId);
-    
-  }, [projects, containerWidth, inView]);
-  
-  return { layout, containerHeight };
+  });
 };
 
 export const Works = () => {
@@ -199,24 +255,26 @@ export const Works = () => {
   });
   
   const [containerRef, setContainerRef] = React.useState(null);
-  const [containerWidth, setContainerWidth] = React.useState(0);
+  const [containerDimensions, setContainerDimensions] = React.useState({ width: 0, height: 0 });
   
   React.useEffect(() => {
     if (!containerRef) return;
     
-    const updateWidth = () => {
+    const updateDimensions = () => {
       const rect = containerRef.getBoundingClientRect();
-      setContainerWidth(rect.width);
+      const calculatedHeight = Math.max(projects.length * 300 + 200, 800);
+      setContainerDimensions({
+        width: rect.width,
+        height: calculatedHeight
+      });
     };
     
-    // Initial width calculation
-    updateWidth();
+    updateDimensions();
     
-    // Debounced resize handler
     let timeoutId;
     const debouncedResize = () => {
       clearTimeout(timeoutId);
-      timeoutId = setTimeout(updateWidth, 150);
+      timeoutId = setTimeout(updateDimensions, 150);
     };
     
     window.addEventListener('resize', debouncedResize);
@@ -226,115 +284,204 @@ export const Works = () => {
     };
   }, [containerRef]);
   
-  const { layout, containerHeight } = useMasonryLayout(projects, containerWidth, inView);
-
-  // Debug logging
-  React.useEffect(() => {
-    console.log('Container width:', containerWidth);
-    console.log('Layout:', layout);
-    console.log('Container height:', containerHeight);
-    console.log('Projects length:', projects.length);
-  }, [containerWidth, layout, containerHeight]);
+  const projectPositions = React.useMemo(() => 
+    calculateProjectPositions(projects, containerDimensions.height, containerDimensions.width),
+    [containerDimensions]
+  );
+  
+  const branchPath = React.useMemo(() => 
+    generateBranchPath(projects, containerDimensions.height),
+    [containerDimensions.height]
+  );
 
   return (
-    <section ref={ref} id="works" className="relative min-h-screen py-16 sm:py-20 px-0 md:px-4 z-20">
-      <div className="w-full max-w-[86rem] mx-auto relative">
-        {/* Glassmorphism container */}
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-xl rounded-none md:rounded-3xl shadow-lg shadow-cyan-400/5"></div>
+    <section ref={ref} id="works" className="relative min-h-screen py-16 sm:py-20 px-4 z-20 bg-slate-950">
+      <div className="w-full max-w-7xl mx-auto relative">
         
-        <div className="relative p-6 md:p-10 z-10">
-          {/* Animated header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6 }}
-            className="mb-16 text-start"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-white relative inline-block pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-1/2 after:h-1 after:bg-cyan-400" style={{ fontFamily: 'ChocoCooky' }}>
-              Featured Projects
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-20"
+        >
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <FaCodeBranch className="text-cyan-400 text-2xl" />
+            <h2 className="text-4xl md:text-5xl font-bold text-white font-mono">
+              git log --projects
             </h2>
-            <p className="text-slate-100 max-w-2xl mt-8 text-lg md:text-xl" style={{ fontFamily: 'ChocoCooky' }}>
-              Here are some of the projects I've worked on and I'm proud of. Each project is unique and purpose-driven to solve a problem.
-            </p>
-            <p className="text-slate-100 max-w-2xl mt-4 text-lg md:text-xl" style={{ fontFamily: 'ChocoCooky' }}>
-              They also demonstrate different aspects of my skills and expertise.
-            </p>
-          </motion.div>
-          
-          {/* Debug info (remove in production) */}
-          <div className="mb-4 p-2 bg-gray-800 rounded text-xs text-gray-300">
-            <div>Container Width: {containerWidth}px</div>
-            <div>Container Height: {containerHeight}px</div>
-            <div>Projects: {projects.length}</div>
-            <div>Layout Items: {layout.length}</div>
           </div>
+          <p className="text-gray-300 max-w-2xl mx-auto text-lg leading-relaxed">
+            A timeline of my development journey. Each branch represents a unique solution, 
+            crafted with passion and precision.
+          </p>
+        </motion.div>
+
+        {/* Git Branch Visualization Container */}
+        <div 
+          ref={setContainerRef}
+          className="relative w-full overflow-hidden"
+          style={{ 
+            height: containerDimensions.height > 0 ? `${containerDimensions.height}px` : '800px'
+          }}
+        >
           
-          {/* Masonry Layout Container */}
-          <div 
-            ref={setContainerRef}
-            className="relative w-full"
-            style={{ 
-              height: containerHeight > 0 ? `${containerHeight}px` : 'auto',
-              minHeight: '400px' // Ensure minimum height
-            }}
+          {/* Animated Git Branch Lines */}
+          <svg 
+            className="absolute inset-0 w-full h-full z-10 pointer-events-none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            {projects.map((project, index) => {
-              const itemLayout = layout[index];
+            <defs>
+              <linearGradient id="branchGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.8" />
+                <stop offset="50%" stopColor="#06b6d4" stopOpacity="0.6" />
+                <stop offset="100%" stopColor="#0891b2" stopOpacity="0.4" />
+              </linearGradient>
               
-              // Debug each item's position
-              if (itemLayout) {
-                console.log(`Project ${index}:`, {
-                  title: project.title,
-                  x: itemLayout.x,
-                  y: itemLayout.y,
-                  width: itemLayout.width
-                });
-              }
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                <feMerge> 
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            
+            {/* Main branch line */}
+            <motion.path
+              d={branchPath}
+              stroke="url(#branchGradient)"
+              strokeWidth="3"
+              fill="none"
+              filter="url(#glow)"
+              initial={{ pathLength: 0 }}
+              animate={inView ? { pathLength: 1 } : { pathLength: 0 }}
+              transition={{ duration: 2, ease: "easeInOut" }}
+            />
+            
+            {/* Branch commit dots */}
+            {projectPositions.map((pos, index) => {
+              const centerX = containerDimensions.width / 2;
+              const branchLength = 280;
+              const dotX = pos.branchSide === 'left' 
+                ? centerX - branchLength 
+                : centerX + branchLength;
+              const dotY = pos.y + 120; // Center of card
               
               return (
-                <ProjectCard 
-                  key={project.id || index} 
-                  project={project} 
-                  index={index} 
-                  inView={inView}
-                  style={itemLayout ? {
-                    transform: `translate3d(${itemLayout.x}px, ${itemLayout.y}px, 0)`,
-                    width: `${itemLayout.width}px`,
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                  } : {
-                    position: 'absolute',
-                    top: `${index * 50}px`, // Fallback stacking
-                    left: 0,
-                    width: '100%',
+                <motion.circle
+                  key={index}
+                  cx={dotX}
+                  cy={dotY}
+                  r="8"
+                  fill="#22d3ee"
+                  stroke="#0f172a"
+                  strokeWidth="3"
+                  filter="url(#glow)"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={inView ? { 
+                    scale: 1, 
+                    opacity: 1,
+                  } : { 
+                    scale: 0, 
+                    opacity: 0 
+                  }}
+                  transition={{ 
+                    duration: 0.4, 
+                    delay: index * 0.15 + 1,
+                    type: "spring",
+                    stiffness: 200
+                  }}
+                  className="drop-shadow-lg"
+                />
+              );
+            })}
+            
+            {/* Main branch dots */}
+            {projectPositions.map((pos, index) => {
+              const centerX = containerDimensions.width / 2;
+              const dotY = pos.y + 120;
+              
+              return (
+                <motion.circle
+                  key={`main-${index}`}
+                  cx={centerX}
+                  cy={dotY}
+                  r="6"
+                  fill="#1e293b"
+                  stroke="#22d3ee"
+                  strokeWidth="2"
+                  initial={{ scale: 0 }}
+                  animate={inView ? { scale: 1 } : { scale: 0 }}
+                  transition={{ 
+                    duration: 0.3, 
+                    delay: index * 0.15 + 0.5 
                   }}
                 />
               );
             })}
-          </div>
-          
-          {/* Decorative elements */}
-          <div className="absolute top-1/4 right-10 w-24 h-24 rounded-full bg-cyan-400/10 blur-2xl"></div>
-          <div className="absolute bottom-1/4 left-10 w-32 h-32 rounded-full bg-cyan-400/5 blur-3xl"></div>
-        </div>
-        
-        {/* Background pattern */}
-        <div className="absolute inset-0 -z-10 overflow-hidden rounded-3xl">
-          <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M40 0 L0 0 0 40" stroke="rgba(66,188,188,0.2)" strokeWidth="0.5" />
-              </pattern>
-              <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="rgba(66,188,188,0.1)" />
-                <stop offset="100%" stopColor="rgba(0,0,0,0)" />
-              </linearGradient>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid)" />
-            <rect width="100%" height="100%" fill="url(#grad)" />
           </svg>
+
+          {/* Project Cards */}
+          {projects.map((project, index) => {
+            const position = projectPositions[index];
+            if (!position) return null;
+            
+            return (
+              <ProjectCard 
+                key={project.id} 
+                project={project} 
+                index={index} 
+                inView={inView}
+                branchSide={position.branchSide}
+                style={{
+                  left: `${position.x}px`,
+                  top: `${position.y}px`,
+                }}
+              />
+            );
+          })}
+          
+          {/* Background gradient effects */}
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-cyan-400/20 via-cyan-400/10 to-transparent blur-sm"></div>
+          
+          {/* Floating particles */}
+          {[...Array(6)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 bg-cyan-400/30 rounded-full"
+              style={{
+                left: `${20 + i * 15}%`,
+                top: `${10 + i * 12}%`,
+              }}
+              animate={{
+                y: [0, -20, 0],
+                opacity: [0.3, 0.8, 0.3],
+              }}
+              transition={{
+                duration: 3,
+                delay: i * 0.5,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+          ))}
         </div>
+
+        {/* Terminal-style footer */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 1 }}
+          className="mt-16 text-center"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900/60 backdrop-blur-sm rounded-lg border border-gray-700/50">
+            <span className="text-green-400 font-mono text-sm">$</span>
+            <span className="text-gray-300 font-mono text-sm">
+              git status: {projects.length} commits ahead
+            </span>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
