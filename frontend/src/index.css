@@ -128,7 +128,7 @@
 }
 
 .card-hover {
-	@apply transition-all duration-300 hover:translate-y-[-5px] hover:shadow-2xl;
+	@apply transition-all duration-300 hover:translate-y-[-8px] hover:shadow-2xl hover:shadow-cyan-400/20;
 }
 
 /* Text truncation utility */
@@ -139,6 +139,54 @@
 	overflow: hidden;
 }
 
+/* Enhanced status badge animations */
+@keyframes statusPulse {
+	0%, 100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+	50% {
+		opacity: 0.8;
+		transform: scale(1.05);
+	}
+}
+
+.status-active {
+	animation: statusPulse 2s ease-in-out infinite;
+}
+
+/* Enhanced branch line animations */
+@keyframes branchGlow {
+	0%, 100% {
+		filter: drop-shadow(0 0 2px var(--color-primary));
+	}
+	50% {
+		filter: drop-shadow(0 0 8px var(--color-primary));
+	}
+}
+
+.branch-line-glow {
+	animation: branchGlow 3s ease-in-out infinite;
+}
+
+/* Improved responsive design */
+@media (max-width: 768px) {
+	.git-branch-container {
+		padding: 0 1rem;
+	}
+	
+	.project-card-mobile {
+		width: calc(100vw - 2rem);
+		max-width: 350px;
+	}
+}
+
+@media (max-width: 480px) {
+	.project-card-mobile {
+		width: calc(100vw - 1rem);
+		max-width: 300px;
+	}
+}
 @keyframes fadeInUp {
 	from {
 		opacity: 0;
