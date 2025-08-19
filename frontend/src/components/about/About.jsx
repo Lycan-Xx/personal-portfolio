@@ -125,7 +125,7 @@ const About = () => {
             initial={{ opacity: 0, x: -30 }}
             animate={bioInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6 }}
-            className="glass-card p-8"
+            className="glass-card p-6"
           >
             <h3 className="text-2xl font-bold text-cyan-400 mb-4">
               A Little Bit About Myself

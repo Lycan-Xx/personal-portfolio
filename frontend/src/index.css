@@ -385,3 +385,13 @@ section {
     }
   }
 }
+
+
+@layer utilities {
+  .pl-72 { padding-left: 18rem; }
+  .pr-72 { padding-right: 18rem; }
+  .w-72 { width: 18rem; }
+  .right-72 { right: 18rem; }
+  .left-72 { left: 18rem; }
+}
+
