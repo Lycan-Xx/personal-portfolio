@@ -4,6 +4,10 @@ import { useInView } from "react-intersection-observer";
 import projects from "./projects.json";
 import { FaGithub, FaExternalLinkAlt, FaClock, FaCodeBranch } from "react-icons/fa";
 
+// --- ProjectCard + position generator updates ---
+// replace the original ProjectCard, calculateProjectPositions, generateBranchPath
+// in your Works file with the code below.
+
 const ProjectCard = ({ project, index, inView, style, branchSide }) => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -50,7 +54,7 @@ const ProjectCard = ({ project, index, inView, style, branchSide }) => {
     hidden: { 
       opacity: 0, 
       x: branchSide === 'left' ? -30 : 30,
-      scale: 0.95 
+      scale: 0.97 
     },
     visible: { 
       opacity: 1, 
@@ -66,17 +70,17 @@ const ProjectCard = ({ project, index, inView, style, branchSide }) => {
       animate={inView ? "visible" : "hidden"}
       transition={{ 
         duration: 0.6, 
-        delay: index * 0.2,
+        delay: index * 0.14,
         type: "spring",
-        stiffness: 100 
+        stiffness: 90 
       }}
       className="absolute z-20"
       style={style}
     >
-      <div className={`group relative w-full sm:w-80 max-w-sm ${branchSide === 'left' ? 'ml-auto' : ''}`}>
-        {/* Date/Time Badge */}
-        <div className={`absolute -top-3 ${branchSide === 'left' ? 'left-4' : 'right-4'} z-30`}>
-          <div className="flex items-center gap-2 px-3 py-1.5 glass-card">
+      <div className={`group relative works-card ${branchSide === 'left' ? 'ml-auto' : ''}`}>
+        {/* Date/Time Badge (top-left/right) */}
+        <div className={`absolute -top-4 z-30 ${branchSide === 'left' ? 'left-6' : 'right-6'}`}>
+          <div className="flex items-center gap-2 px-3 py-1.5 glass-card works-badge">
             <FaClock className="w-3 h-3 text-[var(--color-primary)]" />
             <span className="text-xs font-mono text-[var(--color-primary)]">
               {formatDate(project.lastUpdated || new Date().toISOString())}
@@ -84,106 +88,124 @@ const ProjectCard = ({ project, index, inView, style, branchSide }) => {
           </div>
         </div>
 
-        {/* Status Badge */}
-        <div className={`absolute -top-3 ${branchSide === 'left' ? 'right-4' : 'left-4'} z-30`}>
-          <div className={`flex items-center gap-2 px-3 py-1.5 ${statusConfig.bgColor} ${statusConfig.borderColor} border backdrop-blur-sm rounded-lg`}>
+        {/* Status Badge (top-right/left) */}
+        <div className={`absolute -top-4 z-30 ${branchSide === 'left' ? 'right-6' : 'left-6'}`}>
+          <div className={`flex items-center gap-2 px-3 py-1.5 ${statusConfig.bgColor} ${statusConfig.borderColor} border backdrop-blur-sm rounded-lg works-badge`}>
             <span className={`text-xs ${statusConfig.color}`}>{statusConfig.icon}</span>
             <span className={`text-xs font-mono ${statusConfig.color}`}>
               {statusConfig.label}
             </span>
           </div>
         </div>
-        {/* Main Card */}
-        <div className="glass-card card-hover group-hover:border-[var(--color-primary)]/40 group-hover:shadow-[var(--color-primary)]/20 transition-all duration-300">
-          
-          {/* Project Image */}
-          <div className="relative w-full h-48 overflow-hidden rounded-t-2xl">
-            <img
-              src={project.images?.[0] || project.image || 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop'}
-              alt={project.title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              loading="lazy"
-              onError={(e) => {
-                e.target.src = 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop';
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-background)]/80 via-transparent to-transparent" />
-            
-            {/* Floating Tech Count */}
-            <div className="absolute top-4 left-4">
-              <div className="flex items-center gap-1 px-2 py-1 bg-black/60 backdrop-blur-sm rounded-lg border border-[var(--color-primary)]/20">
-                <FaCodeBranch className="w-3 h-3 text-[var(--color-primary)]" />
-                <span className="text-xs font-mono text-[var(--color-primary)]">
-                  {project.tags?.length || 0}
-                </span>
+
+        {/* Main card (wide, two-column layout) */}
+        <div className="glass-card card-hover transition-all duration-300 overflow-hidden rounded-2xl">
+          <div className="md:flex">
+            {/* Left: Image + content */}
+            <div className="md:flex-1">
+              {/* Image */}
+              <div className="relative w-full h-44 md:h-56 overflow-hidden">
+                <img
+                  src={project.images?.[0] || project.image || 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop'}
+                  alt={project.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                  onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop'; }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-background)]/75 via-transparent to-transparent" />
+                {/* Tech Count Floating */}
+                <div className="absolute top-4 left-4">
+                  <div className="flex items-center gap-1 px-2 py-1 bg-black/50 backdrop-blur-sm rounded-lg border border-[var(--color-primary)]/20">
+                    <FaCodeBranch className="w-3 h-3 text-[var(--color-primary)]" />
+                    <span className="text-xs font-mono text-[var(--color-primary)]">
+                      {project.tags?.length || 0}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Description & tags */}
+              <div className="p-6">
+                <h3 className="text-2xl font-bold text-white group-hover:text-[var(--color-primary)] transition-colors mb-2" style={{ fontFamily: 'ChocoCooky' }}>
+                  {project.title}
+                </h3>
+
+                <p className="text-gray-300 text-sm leading-relaxed mb-4 line-clamp-3" style={{ fontFamily: 'ChocoCooky' }}>
+                  {project.description}
+                </p>
+
+                <div className="flex flex-wrap gap-2">
+                  {(project.tags || []).slice(0, 4).map((tag, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1 text-xs font-mono font-medium text-[var(--color-primary)] bg-[var(--color-primary)]/8 border border-[var(--color-primary)]/20 rounded-md"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                  {(project.tags?.length || 0) > 4 && (
+                    <span className="px-3 py-1 text-xs font-mono font-medium text-gray-400 bg-gray-800/50 border border-gray-600/30 rounded-md">
+                      +{project.tags.length - 4}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Right: vertical action column */}
+            <div className="md:w-[220px] flex flex-col justify-between p-5 works-actions">
+              <div className="space-y-3">
+                {/* Big link + repo */}
+                <a
+                  href={project.link || '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="works-link-btn flex items-center justify-center gap-2"
+                >
+                  <FaExternalLinkAlt className="w-4 h-4" />
+                  <span className="font-medium">Live demo</span>
+                </a>
+
+                {project.repo ? (
+                  <a
+                    href={project.repo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="works-link-btn flex items-center justify-center gap-2"
+                  >
+                    <FaGithub className="w-4 h-4" />
+                    <span className="font-medium">Github link</span>
+                  </a>
+                ) : (
+                  <div className="text-xs text-gray-400 italic">No repo link provided</div>
+                )}
+              </div>
+
+              {/* bottom small metadata area */}
+              <div className="text-right">
+                <div className="text-xs text-gray-400 font-mono mb-2">
+                  Updated: {formatDate(project.lastUpdated || new Date().toISOString())}
+                </div>
+                <div className="text-xs text-gray-400 font-mono">
+                  {project.link ? 'Live available' : 'Local / private'}
+                </div>
               </div>
             </div>
           </div>
-
-          {/* Card Content */}
-          <div className="p-6">
-            <h3 className="text-xl font-bold text-white group-hover:text-[var(--color-primary)] transition-colors mb-3" style={{ fontFamily: 'ChocoCooky' }}>
-              {project.title}
-            </h3>
-            
-            <p className="text-gray-300 text-sm leading-relaxed mb-4 line-clamp-3" style={{ fontFamily: 'ChocoCooky' }}>
-              {project.description}
-            </p>
-            
-            {/* Technology Tags */}
-            <div className="flex flex-wrap gap-2 mb-6">
-              {(project.tags || []).slice(0, 3).map((tag, i) => (
-                <span
-                  key={i}
-                  className="px-3 py-1 text-xs font-mono font-medium text-[var(--color-primary)] bg-[var(--color-primary)]/10 border border-[var(--color-primary)]/20 rounded-md hover:bg-[var(--color-primary)]/20 transition-colors"
-                >
-                  {tag}
-                </span>
-              ))}
-              {(project.tags?.length || 0) > 3 && (
-                <span className="px-3 py-1 text-xs font-mono font-medium text-gray-400 bg-gray-800/50 border border-gray-600/30 rounded-md">
-                  +{project.tags.length - 3}
-                </span>
-              )}
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex gap-3">
-              <a
-                href={project.link || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 glass-button flex items-center justify-center"
-              >
-                <FaExternalLinkAlt className="mr-2 w-3 h-3" />
-                <span className="text-sm">Live Demo</span>
-              </a>
-              {project.repo && (
-                <a
-                  href={project.repo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center px-4 py-2.5 bg-gray-800/60 hover:bg-gray-700/60 text-gray-300 hover:text-white border border-gray-600/50 hover:border-[var(--color-primary)]/50 rounded-xl transition-all duration-200 backdrop-blur-sm"
-                >
-                  <FaGithub className="w-4 h-4" />
-                </a>
-              )}
-            </div>
-          </div>
         </div>
-      </div>
+      </div> {/* works-card */}
     </motion.div>
   );
 };
 
-// Calculate project positions with proper centering
+// Calculate project positions with wider card width so they align nicely
 const calculateProjectPositions = (projects, containerHeight, containerWidth) => {
   if (!containerWidth || !containerHeight) return [];
   
-  const cardWidth = Math.min(320, containerWidth * 0.4); // Responsive card width
-  const verticalSpacing = 350; // Increased spacing between cards
-  const horizontalOffset = Math.max(200, containerWidth * 0.15); // Responsive horizontal offset
-  const startY = 100; // Start offset from top
+  const cardWidth = Math.min(760, Math.floor(containerWidth * 0.75)); // wider card width
+  const verticalSpacing = 320; // spacing between cards
+  const horizontalOffset = Math.max(160, Math.floor(containerWidth * 0.18)); // offset from center to each side
+  const startY = 80; // Start offset from top
   
   return projects.map((project, index) => {
     const y = startY + (index * verticalSpacing);
@@ -202,33 +224,29 @@ const calculateProjectPositions = (projects, containerHeight, containerWidth) =>
   });
 };
 
-// Generate enhanced SVG path for git-style branches with angled connectors
+// Generate enhanced SVG path for git-style branches (use adjusted offsets)
 const generateBranchPath = (projects, containerHeight, containerWidth) => {
   if (!containerWidth || projects.length === 0) return "";
   
   const centerX = containerWidth / 2;
-  const verticalSpacing = 350;
-  const horizontalOffset = Math.max(200, containerWidth * 0.15);
-  const startY = 100;
+  const verticalSpacing = 320;
+  const horizontalOffset = Math.max(160, Math.floor(containerWidth * 0.18));
+  const startY = 80;
   const branchOffset = 60; // Distance for angled connector
   
   let path = `M ${centerX} 0`; // Start from top center
   
   projects.forEach((_, index) => {
-    const y = startY + (index * verticalSpacing) + 120; // Center of card
+    const y = startY + (index * verticalSpacing) + 112; // center-ish of card
     const isLeft = index % 2 === 0;
     const branchEndX = isLeft ? centerX - horizontalOffset : centerX + horizontalOffset;
     
-    // Draw vertical line to branch point with angled connector
     path += ` L ${centerX} ${y}`;
-    
-    // Create angled connector: vertical up, horizontal, then vertical down
     const branchStartY = y - branchOffset;
     path += ` L ${centerX} ${branchStartY}`;
     path += ` L ${branchEndX} ${branchStartY}`;
     path += ` L ${branchEndX} ${y}`;
     
-    // Return to center for next branch
     if (index < projects.length - 1) {
       path += ` M ${centerX} ${branchStartY}`;
     }
@@ -236,6 +254,7 @@ const generateBranchPath = (projects, containerHeight, containerWidth) => {
   
   return path;
 };
+
 
 export const Works = () => {
   const [ref, inView] = useInView({
