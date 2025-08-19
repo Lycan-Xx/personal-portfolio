@@ -320,57 +320,50 @@ section {
 
 /* ---------- Works-specific styles (append to indev.css) ---------- */
 @layer components {
-  .works-card {
-    /* primary width control for the wide card - responsive */
-    width: min(880px, calc(100% - 48px));
-    max-width: 95vw;
+  /* Git branch timeline styles */
+  .git-timeline-card {
+    @apply glass-card transition-all duration-300 hover:shadow-xl hover:shadow-cyan-400/10;
+    max-width: 400px;
   }
 
-  /* right-side actions column styling and separator */
-  .works-actions {
-    background: linear-gradient(180deg, rgba(30,41,59,0.02), rgba(30,41,59,0.04));
-    border-left: 1px solid rgba(66,188,188,0.06); /* subtle cyan separator */
-    backdrop-filter: blur(4px);
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
+  .git-branch-connector {
+    @apply absolute top-1/2 w-8 h-0.5 bg-gradient-to-r from-cyan-400/60 to-cyan-400/20;
   }
 
-/* safer: use @apply for utilities but set border-color via plain CSS (no arbitrary class in @apply) */
-.works-link-btn {
-  /* tailwind utility mix */
-  @apply w-full px-4 py-3 rounded-xl bg-[var(--color-card)] border text-[var(--color-primary)] font-medium inline-flex justify-center transition-all duration-200;
-  /* explicit border color using rgba of --color-primary (#42bcbc -> rgb(66,188,188)) */
-  border-color: rgba(66, 188, 188, 0.14);
-}
-.works-link-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(66,188,188,0.08);
-  background: rgba(66,188,188,0.03);
-}
-
-
-  /* small reusable badge used for date/status */
-  .works-badge {
-    @apply text-xs;
-    border-radius: 10px;
-    box-shadow: 0 4px 18px rgba(2,6,23,0.35);
+  .git-commit-dot {
+    @apply absolute top-1/2 w-4 h-4 bg-cyan-400 rounded-full border-4 border-gray-900 transform -translate-x-1/2 -translate-y-1/2 z-20;
   }
 
-  /* keep images from overflowing on small screens */
+  .git-main-branch {
+    @apply absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-400/80 via-cyan-400/60 to-cyan-400/40 transform -translate-x-1/2;
+  }
+
+  .git-branch-glow {
+    @apply absolute inset-0 w-1 bg-cyan-400/20 blur-sm transform -translate-x-1/4;
+  }
+
+  /* Status badges */
+  .status-completed {
+    @apply bg-green-400/10 border-green-400/30 text-green-400;
+  }
+
+  .status-active {
+    @apply bg-blue-400/10 border-blue-400/30 text-blue-400;
+  }
+
+  .status-in-progress {
+    @apply bg-yellow-400/10 border-yellow-400/30 text-yellow-400;
+  }
+
+  /* Responsive adjustments */
   @media (max-width: 768px) {
-    .works-card {
-      width: calc(100vw - 24px);
+    .git-timeline-card {
       max-width: 100%;
+      margin: 0 1rem;
     }
 
-    .works-actions {
-      border-left: none;
-      border-top: 1px solid rgba(255,255,255,0.03);
-      padding-top: 12px;
-    }
-
-    .works-link-btn {
-      @apply rounded-lg px-3 py-2 text-sm;
+    .git-branch-connector {
+      @apply w-6;
     }
   }
 }
