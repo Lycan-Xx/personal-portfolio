@@ -245,7 +245,6 @@ export const Works = () => {
       ref={ref} 
       id="works" 
       className="relative min-h-screen py-16 sm:py-20 px-4 z-20"
-      style={{ backgroundColor: 'var(--color-background)' }}
     >
       <div className="w-full max-w-[86rem] mx-auto relative">
         
