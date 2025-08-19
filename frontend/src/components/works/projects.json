@@ -11,7 +11,8 @@
     ],
     "tags": ["Javascript", "React", "TailwindCSS", "Node.js"],
     "link": "https://lycan-xx.github.io/Mailcreak/",
-    "repo": "https://github.com/Lycan-Xx/Mailcreak"
+    "repo": "https://github.com/Lycan-Xx/Mailcreak",
+    "status": "completed"
   },
   {
     "id": 3,
@@ -23,7 +24,8 @@
       "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891724/evault_1_h0ikbv.png"
     ],
     "tags": ["React", "Redux", "Material-UI", "Firebase"],
-    "link": "https://evault.com.ng"
+    "link": "https://evault.com.ng",
+    "status": "active"
   },
   {
     "id": 4,
@@ -36,7 +38,8 @@
       "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891723/abkhd_1_dwzx97.png"
     ],
     "tags": ["Vue.js", "MongoDB", "Express", "Node.js"],
-    "link": "https://abkhd-online-store.onrender.com/"
+    "link": "https://abkhd-online-store.onrender.com/",
+    "status": "completed"
   },
   {
     "id": 5,
@@ -48,7 +51,8 @@
       "https://picsum.photos/seed/lacalle2/800/600",
       "https://picsum.photos/seed/lacalle3/800/600"
     ],
-    "tags": ["WordPress", "PHP", "SEO", "MySQL"]
+    "tags": ["WordPress", "PHP", "SEO", "MySQL"],
+    "status": "completed"
   },
   {
     "id": 6,
@@ -62,7 +66,8 @@
     ],
     "tags": ["React", "Three.js", "TailwindCSS", "Framer Motion"],
     "link": "https://whoami-tczj.onrender.com/",
-    "repo": "https://github.com/Lycan-Xx/personal-portfolio"
+    "repo": "https://github.com/Lycan-Xx/personal-portfolio",
+    "status": "active"
   },
   {
     "id": 7,
@@ -77,7 +82,8 @@
     ],
     "tags": ["React Native", "TypeScript", "Expo", "Redux"],
     "link": "https://expo.dev/preview/update?message=Made%20some%20changes%20to%20the%20authcontext%20to%20forcefully%20redirect%20unauthorized%20users%20to%20the%20welcome%20screen.%20also%20fixed%20some%20dependncy%20&updateRuntimeVersion=1.0.0&createdAt=2025-05-11T13%3A37%3A31.141Z&slug=green-cart&projectId=3db94a47-b125-4768-bc23-ee62e023fce3&group=9c1f1c27-653e-44f3-8a50-3b76a22db450",
-    "repo": "https://github.com/Lycan-Xx/natural-wellness-e-commerce"
+    "repo": "https://github.com/Lycan-Xx/natural-wellness-e-commerce",
+    "status": "completed"
   },
   {
     "id": 8,
@@ -91,6 +97,7 @@
     ],
     "tags": ["React", "Javascript", "TailwindCSS", "React Router"],
     "link": "https://resume-forge-pdf.netlify.app/",
-    "repo": "https://github.com/Lycan-Xx/Resume-Builder-PDF-generate"
+    "repo": "https://github.com/Lycan-Xx/Resume-Builder-PDF-generate",
+    "status": "in-progress"
   }
 ]

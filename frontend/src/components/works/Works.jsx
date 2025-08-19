@@ -17,6 +17,35 @@ const ProjectCard = ({ project, index, inView, style, branchSide }) => {
     return `${Math.floor(diffDays / 365)} years ago`;
   };
 
+  const getStatusConfig = (status) => {
+    const configs = {
+      'completed': {
+        color: 'text-green-400',
+        bgColor: 'bg-green-400/10',
+        borderColor: 'border-green-400/30',
+        icon: '✓',
+        label: 'Completed'
+      },
+      'active': {
+        color: 'text-blue-400',
+        bgColor: 'bg-blue-400/10',
+        borderColor: 'border-blue-400/30',
+        icon: '●',
+        label: 'Active'
+      },
+      'in-progress': {
+        color: 'text-yellow-400',
+        bgColor: 'bg-yellow-400/10',
+        borderColor: 'border-yellow-400/30',
+        icon: '⚡',
+        label: 'In Progress'
+      }
+    };
+    return configs[status] || configs['completed'];
+  };
+
+  const statusConfig = getStatusConfig(project.status);
+
   const cardVariants = {
     hidden: { 
       opacity: 0, 
@@ -44,7 +73,7 @@ const ProjectCard = ({ project, index, inView, style, branchSide }) => {
       className="absolute z-20"
       style={style}
     >
-      <div className={`group relative w-80 ${branchSide === 'left' ? 'ml-auto' : ''}`}>
+      <div className={`group relative w-full sm:w-80 max-w-sm ${branchSide === 'left' ? 'ml-auto' : ''}`}>
         {/* Date/Time Badge */}
         <div className={`absolute -top-3 ${branchSide === 'left' ? 'left-4' : 'right-4'} z-30`}>
           <div className="flex items-center gap-2 px-3 py-1.5 glass-card">
@@ -55,8 +84,17 @@ const ProjectCard = ({ project, index, inView, style, branchSide }) => {
           </div>
         </div>
 
+        {/* Status Badge */}
+        <div className={`absolute -top-3 ${branchSide === 'left' ? 'right-4' : 'left-4'} z-30`}>
+          <div className={`flex items-center gap-2 px-3 py-1.5 ${statusConfig.bgColor} ${statusConfig.borderColor} border backdrop-blur-sm rounded-lg`}>
+            <span className={`text-xs ${statusConfig.color}`}>{statusConfig.icon}</span>
+            <span className={`text-xs font-mono ${statusConfig.color}`}>
+              {statusConfig.label}
+            </span>
+          </div>
+        </div>
         {/* Main Card */}
-        <div className="glass-card card-hover group-hover:border-[var(--color-primary)]/40 group-hover:shadow-[var(--color-primary)]/10">
+        <div className="glass-card card-hover group-hover:border-[var(--color-primary)]/40 group-hover:shadow-[var(--color-primary)]/20 transition-all duration-300">
           
           {/* Project Image */}
           <div className="relative w-full h-48 overflow-hidden rounded-t-2xl">
@@ -142,9 +180,9 @@ const ProjectCard = ({ project, index, inView, style, branchSide }) => {
 const calculateProjectPositions = (projects, containerHeight, containerWidth) => {
   if (!containerWidth || !containerHeight) return [];
   
-  const cardWidth = 320; // 80 * 4 = 320px
+  const cardWidth = Math.min(320, containerWidth * 0.4); // Responsive card width
   const verticalSpacing = 350; // Increased spacing between cards
-  const horizontalOffset = 250; // Distance from center line
+  const horizontalOffset = Math.max(200, containerWidth * 0.15); // Responsive horizontal offset
   const startY = 100; // Start offset from top
   
   return projects.map((project, index) => {
@@ -164,14 +202,15 @@ const calculateProjectPositions = (projects, containerHeight, containerWidth) =>
   });
 };
 
-// Generate SVG path for git-style branches
+// Generate enhanced SVG path for git-style branches with angled connectors
 const generateBranchPath = (projects, containerHeight, containerWidth) => {
   if (!containerWidth || projects.length === 0) return "";
   
   const centerX = containerWidth / 2;
   const verticalSpacing = 350;
-  const horizontalOffset = 200;
+  const horizontalOffset = Math.max(200, containerWidth * 0.15);
   const startY = 100;
+  const branchOffset = 60; // Distance for angled connector
   
   let path = `M ${centerX} 0`; // Start from top center
   
@@ -180,13 +219,18 @@ const generateBranchPath = (projects, containerHeight, containerWidth) => {
     const isLeft = index % 2 === 0;
     const branchEndX = isLeft ? centerX - horizontalOffset : centerX + horizontalOffset;
     
-    // Draw vertical line to branch point
+    // Draw vertical line to branch point with angled connector
     path += ` L ${centerX} ${y}`;
-    // Draw horizontal branch
+    
+    // Create angled connector: vertical up, horizontal, then vertical down
+    const branchStartY = y - branchOffset;
+    path += ` L ${centerX} ${branchStartY}`;
+    path += ` L ${branchEndX} ${branchStartY}`;
     path += ` L ${branchEndX} ${y}`;
+    
     // Return to center for next branch
     if (index < projects.length - 1) {
-      path += ` M ${centerX} ${y}`;
+      path += ` M ${centerX} ${branchStartY}`;
     }
   });
   
