@@ -367,3 +367,21 @@ section {
     }
   }
 }
+
+@layer components {
+  /* Contact socials small tweaks */
+  .contact-socials h4 {
+    font-size: 0.95rem;
+  }
+
+  .contact-socials .social-action {
+    @apply p-2 rounded-md hover:bg-white/5 transition;
+  }
+
+  /* Make sure the 'Copied' badge doesn't shift layout on small screens */
+  @media (max-width: 640px) {
+    .contact-socials .grid {
+      gap: 0.5rem;
+    }
+  }
+}

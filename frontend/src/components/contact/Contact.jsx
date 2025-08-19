@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import emailjs from "@emailjs/browser";
 import Swal from "sweetalert2";
+import SocialLinks from '../socials/SocialLinks'; // adjust path to where you put the file
+
 
 export const Contact = () => {
   const formRef = useRef();
@@ -118,25 +120,31 @@ export const Contact = () => {
               Reach out if you have an idea, collaboration, or just want to chat. I’m excited to explore how we can build something great together.
             </p>
             <div className="space-y-4 text-gray-300">
-              <p className="flex items-center gap-2">
-                <span className="text-cyan-400">Email:</span>
-                <a href="mailto:msbello514@gmail.com" className="hover:underline">
-                  msbello514@gmail.com
-                </a>
-              </p>
-              <p className="flex items-center gap-2">
-                <span className="text-cyan-400">Location:</span>
-                Adamawa, Nigeria
-              </p>
+  <p className="flex items-center gap-2">
+    <span className="text-cyan-400">Email:</span>
+    <a href="mailto:msbello514@gmail.com" className="hover:underline">
+      msbello514@gmail.com
+    </a>
+  </p>
 
-<p className="flex items-center gap-2">
-  <a href="https://wa.me/your_phone_number" target="_blank" rel="noopener noreferrer" className="text-cyan-400">
-    WhatsApp: +2347062284169
-  </a>
-</p>
+  <p className="flex items-center gap-2">
+    <span className="text-cyan-400">Location:</span>
+    Adamawa, Nigeria
+  </p>
+
+  <p className="flex items-center gap-2">
+    <a href="https://wa.me/your_phone_number" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">
+      WhatsApp: +2347062284169
+    </a>
+  </p>
+
+  {/* Insert socials component */}
+  <div className="pt-2">
+    <SocialLinks />
+  </div>
+</div>
 
 		    
-            </div>
           </motion.div>
 
           {/* Form Card */}
