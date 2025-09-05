@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { FaGithub, FaExternalLinkAlt, FaClock, FaCodeBranch, FaCircle } from "react-icons/fa";
 import projectsData from "./projects.json";
+import { getRandomDirection } from "../../utils/getRandomDirection";
 
 // Process projects data and add lastUpdated field based on status
 const processProjects = (projects) => {
@@ -46,10 +47,8 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
   useEffect(() => {
     if (!isInView || !project.images || project.images.length <= 1) return;
 
-    const directions = ['right', 'left'];
-
     const interval = setInterval(() => {
-      setSlideDirection(directions[Math.floor(Math.random() * directions.length)]);
+      setSlideDirection(getRandomDirection());
       setCurrentImageIndex(prev => (prev + 1) % project.images.length);
     }, 4000 + Math.random() * 2000); // Longer intervals for smoother experience
 
@@ -111,7 +110,7 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
   return (
     <div
       ref={cardRef}
-      className={`w-full max-w-2xl mx-auto mb-16 md:mb-32  rounded-xl ${isLeft ? 'md:ml-8' : 'md:mr-8 md:ml-auto'} snap-start`}
+      className={`w-full max-w-2xl mx-auto mb-16 md:mb-32 ${isLeft ? 'md:ml-8' : 'md:mr-8 md:ml-auto'} snap-start`}
       style={{ perspective: "1000px" }}
     >
       <motion.div
@@ -137,26 +136,30 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
               WebkitBackfaceVisibility: "hidden"
             }}
           >
-            <div className="w-full h-full bg-gray-800/90 backdrop-blur-sm relative overflow-hidden shadow-2xl hover:shadow-cyan-400/10 transition-shadow duration-300 border border-gray-700/50">
+            <div className="w-full h-full bg-gray-800/90 backdrop-blur-sm relative overflow-hidden shadow-2xl hover:shadow-cyan-400/10 transition-shadow duration-300 border border-gray-700/50 rounded-xl">
 
               {/* Background Image Carousel */}
               {project.images && project.images.length > 0 && (
                 <div className="absolute inset-0">
-                  <AnimatePresence mode="wait">
+                  <AnimatePresence mode="sync">
+
+
                     <motion.div
                       key={currentImageIndex}
                       initial={{
-                        x: slideDirection === 'right' ? '100%' : '-100%',
+                        x: slideDirection === 'right' ? '100%' : slideDirection === 'left' ? '-100%' : '0%',
+                        y: slideDirection === 'down' ? '100%' : slideDirection === 'up' ? '-100%' : '0%',
                         opacity: 0.7
                       }}
-                      animate={{ x: '0%', opacity: 1 }}
+                      animate={{ x: '0%', y: '0%', opacity: 1 }}
                       exit={{
-                        x: slideDirection === 'right' ? '-100%' : '100%',
+                        x: slideDirection === 'right' ? '-100%' : slideDirection === 'left' ? '100%' : '0%',
+                        y: slideDirection === 'down' ? '-100%' : slideDirection === 'up' ? '100%' : '0%',
                         opacity: 0.7
                       }}
                       transition={{
                         duration: 1.2,
-                        ease: [0.25, 0.46, 0.45, 0.94] // Custom cubic-bezier for smoother animation
+                        ease: [0.25, 0.46, 0.45, 0.94]
                       }}
                       className="absolute inset-0"
                     >
@@ -166,18 +169,20 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
                         className="w-full h-full object-cover"
                         loading="lazy"
                         onError={(e) => {
-                          e.target.src = 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop';
+                          e.target.src =
+                            'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop';
                         }}
                       />
                       <div className="absolute inset-0 bg-black/60" />
                     </motion.div>
+
                   </AnimatePresence>
                 </div>
               )}
 
               {/* Status Badge */}
               <div className="absolute top-4 right-4 z-10">
-                <div className={`flex items-center gap-2 px-3 py-1.5 ${statusConfig.bgColor} ${statusConfig.borderColor} border backdrop-blur-sm`}>
+                <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl ${statusConfig.bgColor} ${statusConfig.borderColor} border backdrop-blur-sm`}>
                   <div className={`w-2 h-2 ${statusConfig.color.replace('text-', 'bg-')} rounded-full animate-pulse`}></div>
                   <span className={`text-xs font-medium ${statusConfig.color}`}>
                     {statusConfig.label}
@@ -219,13 +224,13 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
                     {project.tags?.slice(0, 3).map((tag, i) => (
                       <span
                         key={i}
-                        className="px-2 py-1 text-xs bg-cyan-400/20 backdrop-blur-sm text-cyan-400 border border-cyan-400/30"
+                        className="px-2 py-1 rounded-xl text-xs bg-cyan-400/20 backdrop-blur-sm text-cyan-400 border border-cyan-400/30"
                       >
                         {tag}
                       </span>
                     ))}
                     {project.tags?.length > 3 && (
-                      <span className="px-2 py-1 text-xs bg-white/10 backdrop-blur-sm text-white/70 border border-white/20">
+                      <span className="px-2 py-1 rounded-xl text-xs bg-white/10 backdrop-blur-sm text-white/70 border border-white/20">
                         +{project.tags.length - 3}
                       </span>
                     )}
@@ -256,7 +261,7 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
 
           {/* Back Side - Detailed Information */}
           <div
-            className="absolute inset-0 bg-gray-900/95 backdrop-blur-sm border border-gray-700 works-card-face"
+            className="absolute inset-0 bg-gray-900/95 backdrop-blur-sm border border-gray-700 works-card-face rounded-xl"
             style={{
               backfaceVisibility: "hidden",
               WebkitBackfaceVisibility: "hidden",
@@ -287,12 +292,12 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
 
               {/* Full Tech Stack */}
               <div className="mb-4">
-                <h4 className="text-cyan-400 text-sm font-medium mb-2">Technologies</h4>
+                <h4 className="text-cyan-400 text-sm font-medium mb-2">Stack Used</h4>
                 <div className="flex flex-wrap gap-2">
                   {project.tags?.map((tag, i) => (
                     <span
                       key={i}
-                      className="px-3 py-1 text-xs bg-cyan-400/10 text-cyan-400 border border-cyan-400/30"
+                      className="px-3 py-1 rounded-xl text-xs bg-cyan-400/10 text-cyan-400 border border-cyan-400/30"
                     >
                       {tag}
                     </span>
@@ -307,7 +312,7 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
                     href={project.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-cyan-400/10 hover:bg-cyan-400/20 border border-cyan-400/30 text-cyan-400 font-medium transition-colors no-underline"
+                    className="flex-1 rounded-xl flex items-center justify-center gap-2 px-4 py-3 bg-cyan-400/10 hover:bg-cyan-400/20 border border-cyan-400/30 text-cyan-400 font-medium transition-colors no-underline"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <FaExternalLinkAlt className="w-4 h-4" />
@@ -320,7 +325,7 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
                     href={project.repo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gray-800 hover:bg-gray-700 border border-gray-600 text-gray-300 hover:text-white font-medium transition-colors no-underline"
+                    className="flex-1 rounded-xl flex items-center justify-center gap-2 px-4 py-3 bg-gray-800 hover:bg-gray-700 border border-gray-600 text-gray-300 hover:text-white font-medium transition-colors no-underline"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <FaGithub className="w-4 h-4" />
@@ -329,7 +334,7 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
                 )}
               </div>
 
-              {/* Footer */}
+              {/* Footer
               <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
                 <div className="flex items-center gap-2 text-xs text-gray-400">
                   <div className={`w-2 h-2 ${statusConfig.color.replace('text-', 'bg-')} rounded-full`}></div>
@@ -338,7 +343,9 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
                 <div className="text-xs text-gray-500">
                   Last updated: {formattedDate}
                 </div>
-              </div>
+              </div> */}
+
+
             </div>
           </div>
         </div>
@@ -433,7 +440,7 @@ export const Works = () => {
             </div>
             <div className="w-24 h-1 bg-cyan-400 mx-auto mb-6"></div>
             <p className="text-gray-300 max-w-2xl mx-auto text-lg">
-              A collection of projects showcasing modern web development with clean design and smooth interactions
+              These are collections of my Top projects. They showcase my best work, and the lengths i went while learning solo
             </p>
           </motion.div>
 
@@ -472,7 +479,8 @@ export const Works = () => {
                 {projects.length} projects loaded
               </span>
             </div>
-            <p className="text-sm">Windows 8 inspired • Scroll to explore</p>
+            <p className="text-sm">Microsoft Windows 8 inspired • Startmenu Tiles</p>
+              <p className="text-sm">Check out the <span>repo</span> and play with it to your liking</p>
           </motion.div>
 
         </div>

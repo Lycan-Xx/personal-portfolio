@@ -72,7 +72,6 @@ export const Home = () => {
         <Content />
       </div>
 
-      {/* <ThemeToggle /> */}
       <SpeedDial />
       {isVisible && (
         <div className={`${classes.resumeContainer} ${isHighPerformance ? 'slide-in-right' : ''}`}>
