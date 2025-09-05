@@ -23,6 +23,9 @@
 		/* Keep existing for compatibility */
 		--color-primary: #42bcbc;
 	}
+  	::selection {
+		@apply bg-theme-accent/30 text-theme-text-primary;
+	}
 
 	[data-theme='dark'] {
 		/* Dark Theme Overrides */
@@ -49,9 +52,6 @@
 		@apply m-0 p-0 border-0 outline-0 box-border;
 	}
 
-	::selection {
-		@apply bg-theme-accent/30 text-theme-text-primary;
-	}
 
 	html {
 		@apply scroll-smooth overflow-x-hidden;
