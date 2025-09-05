@@ -4,55 +4,84 @@
 
 @layer base {
 	:root {
+		/* Light Theme Defaults */
+		--color-background: #f8fafc; /* Light slate background */
+		--color-card: #ffffff; /* Pure white cards */
+		--color-text-primary: #1e293b; /* Dark slate text */
+		--color-text-secondary: #64748b; /* Medium slate text */
+		--color-text-muted: #94a3b8; /* Light slate text */
+		--color-accent: #0ea5e9; /* Sky blue accent */
+		--color-secondary: #ec704c; /* Orange secondary */
+		--color-border: #e2e8f0; /* Light slate border */
+		--color-shadow: rgba(0, 0, 0, 0.1); /* Light shadow */
+		--color-glass-overlay: rgba(255, 255, 255, 0.8); /* Light glass effect */
+		--color-glass-border: rgba(0, 0, 0, 0.1); /* Light glass border */
+		--color-hover: rgba(14, 165, 233, 0.1); /* Light hover state */
+		--color-surface: #f1f5f9; /* Light surface */
+		--color-surface-elevated: #ffffff; /* Elevated surface */
+		
+		/* Keep existing for compatibility */
 		--color-primary: #42bcbc;
-		--color-secondary: #ec704c;
-		--color-background: #0f172a;
-		--color-card: rgba(30, 41, 59, 0.5);
+	}
+
+	[data-theme='dark'] {
+		/* Dark Theme Overrides */
+		--color-background: #0f172a; /* Dark slate background */
+		--color-card: rgba(30, 41, 59, 0.7); /* Semi-transparent dark card */
+		--color-text-primary: #f1f5f9; /* Light slate text */
+		--color-text-secondary: #cbd5e1; /* Medium light text */
+		--color-text-muted: #94a3b8; /* Muted text */
+		--color-accent: #42bcbc; /* Cyan accent */
+		--color-secondary: #ec704c; /* Orange secondary */
+		--color-border: #334155; /* Dark slate border */
+		--color-shadow: rgba(0, 0, 0, 0.3); /* Dark shadow */
+		--color-glass-overlay: rgba(0, 0, 0, 0.4); /* Dark glass effect */
+		--color-glass-border: rgba(66, 188, 188, 0.2); /* Cyan glass border */
+		--color-hover: rgba(66, 188, 188, 0.1); /* Dark hover state */
+		--color-surface: #1e293b; /* Dark surface */
+		--color-surface-elevated: rgba(30, 41, 59, 0.8); /* Elevated dark surface */
+		
+		/* Keep existing for compatibility */
+		--color-primary: #42bcbc;
 	}
 
 	* {
 		@apply m-0 p-0 border-0 outline-0 box-border;
 	}
 
-	::selection {
-		@apply bg-cyan-500/30 text-white;
-	}
+  ::selection {
+  background-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
+  color: var(--color-text-primary);
+}
 
+  
 	html {
-		@apply scroll-smooth;
+		@apply scroll-smooth overflow-x-hidden;
 		scroll-behavior: smooth;
+		height: 100%;
 	}
 
 	body {
-		@apply bg-[var(--color-background)] text-gray-100 font-sans antialiased;
+		@apply bg-theme-background text-theme-text-primary font-sans antialiased overflow-x-hidden max-w-[100vw] min-h-screen;
 	}
-
-  html {
-    @apply overflow-x-hidden scroll-smooth;
-    scroll-behavior: smooth;
-    height: 100%;
-  }
-  
-  body {
-    @apply overflow-x-hidden max-w-[100vw] min-h-screen;
-  }
 }
 
 @layer components {
 	.glass-card {
-		@apply bg-[var(--color-card)] backdrop-blur-lg border border-white/10 rounded-2xl shadow-xl;
+		@apply bg-theme-glass-overlay backdrop-blur-lg border border-theme-glass-border rounded-2xl shadow-xl;
+		box-shadow: 0 8px 32px var(--color-shadow);
 	}
 
 	.glass-button {
-		@apply px-6 py-3 bg-cyan-600/50 hover:bg-cyan-500/20 border border-cyan-500/20 rounded-xl text-cyan-400 font-medium transition-all duration-300 hover:border-cyan-500/40 hover:scale-105 active:scale-95;
+		@apply px-6 py-3 bg-theme-accent/20 hover:bg-theme-accent/30 border border-theme-accent/30 hover:border-theme-accent rounded-xl text-theme-accent font-medium transition-all duration-300 hover:scale-105 active:scale-95;
 	}
 
 	.section-heading {
-		@apply text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-6;
+		@apply text-4xl md:text-5xl font-bold bg-gradient-to-r from-theme-text-primary to-theme-text-secondary bg-clip-text text-transparent mb-6;
 	}
 
 	.animated-gradient {
-		@apply absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-purple-500/20 to-pink-500/20 animate-gradient blur-3xl opacity-30;
+		@apply absolute inset-0 bg-gradient-to-br from-theme-accent/20 via-theme-secondary/20 to-theme-accent/10 animate-gradient blur-3xl opacity-30;
 	}
 
 	.today-card {
@@ -124,11 +153,12 @@
 }
 
 .text-glow {
-	text-shadow: 0 0 10px var(--color-primary);
+	text-shadow: 0 0 10px var(--color-accent);
 }
 
 .card-hover {
-	@apply transition-all duration-300 hover:translate-y-[-8px] hover:shadow-2xl hover:shadow-cyan-400/20;
+	@apply transition-all duration-300 hover:translate-y-[-8px] hover:shadow-2xl;
+	box-shadow: 0 20px 40px var(--color-shadow);
 }
 
 /* Text truncation utility */
@@ -158,10 +188,10 @@
 /* Enhanced branch line animations */
 @keyframes branchGlow {
 	0%, 100% {
-		filter: drop-shadow(0 0 2px var(--color-primary));
+		filter: drop-shadow(0 0 2px var(--color-accent));
 	}
 	50% {
-		filter: drop-shadow(0 0 8px var(--color-primary));
+		filter: drop-shadow(0 0 8px var(--color-accent));
 	}
 }
 
@@ -187,6 +217,7 @@
 		max-width: 300px;
 	}
 }
+
 @keyframes fadeInUp {
 	from {
 		opacity: 0;
@@ -273,7 +304,7 @@ section {
 	}
 }
 
-/* ----------- Github contribution calender styles  ------------ */
+/* ----------- Github contribution calendar styles  ------------ */
 
 .github-calendar-container {
 	width: 100%;
@@ -292,23 +323,11 @@ section {
 }
 
 .react-activity-calendar__calendar rect:hover {
-	stroke: #42bcbc;
+	stroke: var(--color-accent);
 	stroke-width: 2px;
 }
 
-.glass-card {
-	background: rgba(30, 41, 59, 0.7);
-	backdrop-filter: blur(10px);
-	border-radius: 10px;
-	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-	border: 1px solid rgba(66, 188, 188, 0.1);
-}
-
-
-
-
 /* -------- Samsung ChocoCoky font styles --------- */
-
 
 @font-face {
 	font-family: ChocoCooky;
@@ -317,29 +336,29 @@ section {
 	src: url('./assets/fonts/Chococooky.woff') format('woff');
 }
 
-
-/* ---------- Works-specific styles (append to indev.css) ---------- */
+/* ---------- Works-specific styles ---------- */
 @layer components {
   /* Git branch timeline styles */
   .git-timeline-card {
-    @apply glass-card transition-all duration-300 hover:shadow-xl hover:shadow-cyan-400/10;
+    @apply glass-card transition-all duration-300 hover:shadow-xl;
+    box-shadow: 0 8px 32px var(--color-shadow);
     max-width: 400px;
   }
 
   .git-branch-connector {
-    @apply absolute top-1/2 w-8 h-0.5 bg-gradient-to-r from-cyan-400/60 to-cyan-400/20;
+    @apply absolute top-1/2 w-8 h-0.5 bg-gradient-to-r from-theme-accent/60 to-theme-accent/20;
   }
 
   .git-commit-dot {
-    @apply absolute top-1/2 w-4 h-4 bg-cyan-400 rounded-full border-4 border-gray-900 transform -translate-x-1/2 -translate-y-1/2 z-20;
+    @apply absolute top-1/2 w-4 h-4 bg-theme-accent rounded-full border-4 border-theme-background transform -translate-x-1/2 -translate-y-1/2 z-20;
   }
 
   .git-main-branch {
-    @apply absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-400/80 via-cyan-400/60 to-cyan-400/40 transform -translate-x-1/2;
+    @apply absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-theme-accent/80 via-theme-accent/60 to-theme-accent/40 transform -translate-x-1/2;
   }
 
   .git-branch-glow {
-    @apply absolute inset-0 w-1 bg-cyan-400/20 blur-sm transform -translate-x-1/4;
+    @apply absolute inset-0 w-1 bg-theme-accent/20 blur-sm transform -translate-x-1/4;
   }
 
   /* Status badges */
@@ -401,7 +420,7 @@ section {
   }
 
   .contact-socials .social-action {
-    @apply p-2 rounded-md hover:bg-white/5 transition;
+    @apply p-2 rounded-md hover:bg-theme-hover transition;
   }
 
   /* Make sure the 'Copied' badge doesn't shift layout on small screens */
@@ -412,7 +431,6 @@ section {
   }
 }
 
-
 @layer utilities {
   .pl-72 { padding-left: 18rem; }
   .pr-72 { padding-right: 18rem; }
@@ -420,4 +438,3 @@ section {
   .right-72 { right: 18rem; }
   .left-72 { left: 18rem; }
 }
-
