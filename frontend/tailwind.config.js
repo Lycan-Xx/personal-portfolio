@@ -4,9 +4,27 @@ module.exports = {
 		"./src/**/*.{js,jsx,ts,tsx}",
 		"./public/index.html",
 	],
+	darkMode: ['selector', '[data-theme="dark"]'], // Use data-theme attribute for dark mode
 	theme: {
 		extend: {
 			colors: {
+				// Theme-aware semantic colors that map to CSS variables
+				'theme-background': 'var(--color-background)',
+				'theme-card': 'var(--color-card)',
+				'theme-text-primary': 'var(--color-text-primary)',
+				'theme-text-secondary': 'var(--color-text-secondary)',
+				'theme-text-muted': 'var(--color-text-muted)',
+				'theme-accent': 'var(--color-accent)',
+				'theme-secondary': 'var(--color-secondary)',
+				'theme-border': 'var(--color-border)',
+				'theme-shadow': 'var(--color-shadow)',
+				'theme-glass-overlay': 'var(--color-glass-overlay)',
+				'theme-glass-border': 'var(--color-glass-border)',
+				'theme-hover': 'var(--color-hover)',
+				'theme-surface': 'var(--color-surface)',
+				'theme-surface-elevated': 'var(--color-surface-elevated)',
+				
+				// Keep existing custom colors for specific use cases
 				primary: "#42bcbc",
 				secondary: "#ec704c",
 				loader: "#20c9e2",
@@ -19,7 +37,8 @@ module.exports = {
 			},
 			fontFamily: {
 				sans: ['Inter', 'system-ui', 'sans-serif'],
-				mono: ['JetBrains Mono', 'monospace']
+				mono: ['JetBrains Mono', 'monospace'],
+				'choco-cooky': ['ChocoCooky', 'cursive'], // Add ChocoCooky
 			},
 			animation: {
 				'gradient': 'gradient 15s ease infinite',
