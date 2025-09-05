@@ -14,20 +14,25 @@ const processProjects = (projects) => {
 
     switch (project.status) {
       case 'active':
-        // Active projects updated recently (1-30 days ago)
+        // Recently updated (1–30 days ago)
         lastUpdated = new Date(now.getTime() - Math.random() * 30 * 24 * 60 * 60 * 1000);
         break;
-      case 'in-progress':
-        // In-progress projects updated very recently (1-7 days ago)
-        lastUpdated = new Date(now.getTime() - Math.random() * 7 * 24 * 60 * 60 * 1000);
+      case 'dormant':
+        // Left alone for 2–12 months
+        lastUpdated = new Date(now.getTime() - (60 + Math.random() * 300) * 24 * 60 * 60 * 1000);
         break;
-      case 'completed':
-        // Completed projects updated 1-6 months ago
-        lastUpdated = new Date(now.getTime() - (30 + Math.random() * 150) * 24 * 60 * 60 * 1000);
+      case 'experimental':
+        // Updated anytime, but mostly quick bursts (1–14 days ago)
+        lastUpdated = new Date(now.getTime() - Math.random() * 14 * 24 * 60 * 60 * 1000);
+        break;
+      case 'archived':
+        // Really old stuff (1–3 years ago)
+        lastUpdated = new Date(now.getTime() - (365 + Math.random() * 730) * 24 * 60 * 60 * 1000);
         break;
       default:
-        lastUpdated = new Date(now.getTime() - Math.random() * 60 * 24 * 60 * 60 * 1000);
+        lastUpdated = new Date(now.getTime() - Math.random() * 180 * 24 * 60 * 60 * 1000);
     }
+    
 
     return {
       ...project,
@@ -84,27 +89,36 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
 
   const statusConfig = useMemo(() => {
     const configs = {
-      'completed': {
-        color: 'text-green-400',
-        bgColor: 'bg-green-400/10',
-        borderColor: 'border-green-400/30',
-        label: 'Completed'
+      active: {
+        color: "text-emerald-400",
+        bgColor: "bg-emerald-400/10",
+        borderColor: "border-emerald-400/30",
+        label: "Active",
       },
-      'active': {
-        color: 'text-cyan-400',
-        bgColor: 'bg-cyan-400/10',
-        borderColor: 'border-cyan-400/30',
-        label: 'Active'
+      dormant: {
+        color: "text-gray-400",
+        bgColor: "bg-gray-500/10",
+        borderColor: "border-gray-500/30",
+        label: "Dormant",
       },
-      'in-progress': {
-        color: 'text-yellow-400',
-        bgColor: 'bg-yellow-400/10',
-        borderColor: 'border-yellow-400/30',
-        label: 'In Progress'
-      }
+      experimental: {
+        color: "text-purple-400",
+        bgColor: "bg-purple-400/10",
+        borderColor: "border-purple-400/30",
+        label: "Experimental",
+      },
+      archived: {
+        color: "text-red-400",
+        bgColor: "bg-red-400/10",
+        borderColor: "border-red-400/30",
+        label: "Archived",
+      },
     };
-    return configs[project.status] || configs['completed'];
+    return configs[project.status] || configs["dormant"];
   }, [project.status]);
+  
+
+
   const isLeft = index % 2 === 0;
 
   return (
