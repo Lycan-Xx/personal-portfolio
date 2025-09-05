@@ -39,7 +39,7 @@ export const App = () => {
 					initial={{ opacity: 1 }}
 					animate={{ opacity: 2 }}
 					transition={{ duration: 0.5 }}
-					className="fixed bottom-4 right-4 text-lg text-gray-400/60 hover:text-cyan-400 transition-colors duration-300 font-mono z-50"
+					className="fixed bottom-4 right-4 text-sm text-gray-400/60 hover:text-cyan-400 transition-colors duration-300 font-mono z-50"
 				>
 					Lycan-Xx says hi... 👾
 				</motion.div>
