@@ -355,6 +355,18 @@ section {
     @apply bg-yellow-400/10 border-yellow-400/30 text-yellow-400;
   }
 
+  /* Works component optimizations */
+  .works-card-container {
+    @apply will-change-transform;
+    transform-style: preserve-3d;
+  }
+
+  .works-card-face {
+    @apply will-change-transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
   /* Responsive adjustments */
   @media (max-width: 768px) {
     .git-timeline-card {
@@ -364,6 +376,20 @@ section {
 
     .git-branch-connector {
       @apply w-6;
+    }
+
+    /* Mobile works optimizations */
+    .works-mobile-card {
+      width: calc(100vw - 2rem);
+      max-width: 28rem;
+      margin: 0 auto 2rem auto;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .works-mobile-card {
+      width: calc(100vw - 1rem);
+      max-width: 20rem;
     }
   }
 }

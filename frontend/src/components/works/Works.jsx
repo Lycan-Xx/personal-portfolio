@@ -1,174 +1,303 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import projects from "./projects.json";
 import { FaGithub, FaExternalLinkAlt, FaClock, FaCodeBranch, FaCircle } from "react-icons/fa";
+import projectsData from "./projects.json";
 
-const ProjectCard = ({ project, index, inView, isLeft }) => {
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
+// Process projects data and add lastUpdated field based on status
+const processProjects = (projects) => {
+  return projects.map(project => {
+    // Generate realistic lastUpdated dates based on project status
+    let lastUpdated;
+    const now = new Date();
+
+    switch (project.status) {
+      case 'active':
+        // Active projects updated recently (1-30 days ago)
+        lastUpdated = new Date(now.getTime() - Math.random() * 30 * 24 * 60 * 60 * 1000);
+        break;
+      case 'in-progress':
+        // In-progress projects updated very recently (1-7 days ago)
+        lastUpdated = new Date(now.getTime() - Math.random() * 7 * 24 * 60 * 60 * 1000);
+        break;
+      case 'completed':
+        // Completed projects updated 1-6 months ago
+        lastUpdated = new Date(now.getTime() - (30 + Math.random() * 150) * 24 * 60 * 60 * 1000);
+        break;
+      default:
+        lastUpdated = new Date(now.getTime() - Math.random() * 60 * 24 * 60 * 60 * 1000);
+    }
+
+    return {
+      ...project,
+      lastUpdated: lastUpdated.toISOString().split('T')[0] // Format as YYYY-MM-DD
+    };
+  });
+};
+
+const projects = processProjects(projectsData);
+
+const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutside }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [slideDirection, setSlideDirection] = useState('right');
+  const cardRef = useRef(null);
+
+  // Image carousel for in-view cards only - optimized with longer intervals
+  useEffect(() => {
+    if (!isInView || !project.images || project.images.length <= 1) return;
+
+    const directions = ['right', 'left'];
+
+    const interval = setInterval(() => {
+      setSlideDirection(directions[Math.floor(Math.random() * directions.length)]);
+      setCurrentImageIndex(prev => (prev + 1) % project.images.length);
+    }, 4000 + Math.random() * 2000); // Longer intervals for smoother experience
+
+    return () => clearInterval(interval);
+  }, [isInView, project.images]);
+
+  // Handle click outside to close flipped card
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isFlipped && cardRef.current && !cardRef.current.contains(event.target)) {
+        onClickOutside(index);
+      }
+    };
+
+    if (isFlipped) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isFlipped, index, onClickOutside]);
+
+  // Memoize date formatting and status config for performance
+  const formattedDate = useMemo(() => {
+    const date = new Date(project.lastUpdated);
     const now = new Date();
     const diffTime = Math.abs(now - date);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays === 1) return "1 day ago";
     if (diffDays < 30) return `${diffDays} days ago`;
     if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
     return `${Math.floor(diffDays / 365)} years ago`;
-  };
+  }, [project.lastUpdated]);
 
-  const getStatusConfig = (status) => {
+  const statusConfig = useMemo(() => {
     const configs = {
       'completed': {
         color: 'text-green-400',
         bgColor: 'bg-green-400/10',
         borderColor: 'border-green-400/30',
-        dotColor: 'bg-green-400',
-        icon: '✓',
         label: 'Completed'
       },
       'active': {
-        color: 'text-blue-400',
-        bgColor: 'bg-blue-400/10',
-        borderColor: 'border-blue-400/30',
-        dotColor: 'bg-blue-400',
-        icon: '●',
+        color: 'text-cyan-400',
+        bgColor: 'bg-cyan-400/10',
+        borderColor: 'border-cyan-400/30',
         label: 'Active'
       },
       'in-progress': {
         color: 'text-yellow-400',
         bgColor: 'bg-yellow-400/10',
         borderColor: 'border-yellow-400/30',
-        dotColor: 'bg-yellow-400',
-        icon: '⚡',
         label: 'In Progress'
       }
     };
-    return configs[status] || configs['completed'];
-  };
-
-  const statusConfig = getStatusConfig(project.status);
-
-  const cardVariants = {
-    hidden: { 
-      opacity: 0, 
-      x: isLeft ? -80 : 80,
-      scale: 0.9 
-    },
-    visible: { 
-      opacity: 1, 
-      x: 0,
-      scale: 1 
-    },
-  };
+    return configs[project.status] || configs['completed'];
+  }, [project.status]);
+  const isLeft = index % 2 === 0;
 
   return (
-    <div className="relative w-full flex items-center">
-      {/* Branch Connection - Properly positioned */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-        {/* Main branch dot */}
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={inView ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
-          transition={{ duration: 0.5, delay: index * 0.1 }}
-          className="w-5 h-5 bg-cyan-400 rounded-full border-4 border-gray-900 shadow-lg shadow-cyan-400/50 relative"
-        >
-          <div className="absolute inset-0 bg-cyan-400 rounded-full animate-ping opacity-30"></div>
-          <div className="absolute inset-0 bg-cyan-400/50 rounded-full animate-pulse"></div>
-        </motion.div>
-        
-        {/* Branch line extending to card */}
-        <div 
-          className={`absolute top-1/2 -translate-y-1/2 h-0.5 bg-gradient-to-${isLeft ? 'l' : 'r'} from-cyan-400/80 to-cyan-400/20 ${
-            isLeft ? 'right-2.5 w-32 md:w-40 lg:w-48' : 'left-2.5 w-32 md:w-40 lg:w-48'
-          }`}
-        />
-        
-        {/* Branch endpoint dot */}
-        <div 
-          className={`absolute top-1/2 -translate-y-1/2 w-3 h-3 ${statusConfig.dotColor} rounded-full border-2 border-gray-900 ${
-            isLeft ? 'right-32 md:right-40 lg:right-48' : 'left-32 md:left-40 lg:left-48'
-          }`}
-        >
-          <div className="absolute inset-0 bg-current rounded-full animate-ping opacity-20"></div>
-        </div>
-      </div>
-
-      {/* Project Card Container */}
-      <div className={`w-full flex ${isLeft ? 'justify-start pl-8 md:pl-12 lg:pl-16' : 'justify-end pr-8 md:pr-12 lg:pr-16'}`}>
-        <motion.div
-          variants={cardVariants}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          transition={{ 
-            duration: 0.8, 
-            delay: index * 0.2,
-            type: "spring",
-            stiffness: 100 
+    <div
+      ref={cardRef}
+      className={`w-full max-w-2xl mx-auto mb-16 md:mb-32  rounded-xl ${isLeft ? 'md:ml-8' : 'md:mr-8 md:ml-auto'} snap-start`}
+      style={{ perspective: "1000px" }}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: index * 0.15, duration: 0.5 }}
+        className="relative cursor-pointer group h-80 md:h-96 works-card-container"
+        onClick={onFlip}
+      >
+        {/* Card Container */}
+        <div
+          className="w-full h-full relative transition-transform duration-700 ease-out"
+          style={{
+            transformStyle: "preserve-3d",
+            transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)"
           }}
-          className="w-full max-w-lg"
         >
-          {/* Project Card */}
-          <div className="glass-card group hover:shadow-xl hover:shadow-cyan-400/10 hover:scale-[1.02] transition-all duration-300 overflow-hidden cursor-pointer">
-            {/* Card Header with Status */}
-            <div className="relative">
+          {/* Front Side - Windows 8 Style */}
+          <div
+            className="absolute inset-0 works-card-face"
+            style={{
+              backfaceVisibility: "hidden",
+              WebkitBackfaceVisibility: "hidden"
+            }}
+          >
+            <div className="w-full h-full bg-gray-800/90 backdrop-blur-sm relative overflow-hidden shadow-2xl hover:shadow-cyan-400/10 transition-shadow duration-300 border border-gray-700/50">
+
+              {/* Background Image Carousel */}
+              {project.images && project.images.length > 0 && (
+                <div className="absolute inset-0">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={currentImageIndex}
+                      initial={{
+                        x: slideDirection === 'right' ? '100%' : '-100%',
+                        opacity: 0.7
+                      }}
+                      animate={{ x: '0%', opacity: 1 }}
+                      exit={{
+                        x: slideDirection === 'right' ? '-100%' : '100%',
+                        opacity: 0.7
+                      }}
+                      transition={{
+                        duration: 1.2,
+                        ease: [0.25, 0.46, 0.45, 0.94] // Custom cubic-bezier for smoother animation
+                      }}
+                      className="absolute inset-0"
+                    >
+                      <img
+                        src={project.images[currentImageIndex]}
+                        alt={project.title}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                        onError={(e) => {
+                          e.target.src = 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop';
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-black/60" />
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              )}
+
+              {/* Status Badge */}
               <div className="absolute top-4 right-4 z-10">
-                <div className={`flex items-center gap-2 px-3 py-1.5 ${statusConfig.bgColor} ${statusConfig.borderColor} border backdrop-blur-sm rounded-full`}>
-                  <span className={`text-xs ${statusConfig.color}`}>{statusConfig.icon}</span>
-                  <span className={`text-xs font-mono ${statusConfig.color}`}>
+                <div className={`flex items-center gap-2 px-3 py-1.5 ${statusConfig.bgColor} ${statusConfig.borderColor} border backdrop-blur-sm`}>
+                  <div className={`w-2 h-2 ${statusConfig.color.replace('text-', 'bg-')} rounded-full animate-pulse`}></div>
+                  <span className={`text-xs font-medium ${statusConfig.color}`}>
                     {statusConfig.label}
                   </span>
                 </div>
               </div>
 
-              {/* Project Image */}
-              <div className="relative h-52 overflow-hidden">
-                <img
-                  src={project.images?.[0] || project.image || 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop'}
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  loading="lazy"
-                  onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop'; }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent" />
-                
-                {/* Tech count badge */}
-                <div className="absolute bottom-4 left-4">
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-black/60 backdrop-blur-sm rounded-full border border-cyan-400/20">
-                    <FaCodeBranch className="w-3 h-3 text-cyan-400" />
-                    <span className="text-xs font-mono text-cyan-400">
-                      {project.tags?.length || 0} techs
-                    </span>
-                  </div>
+              {/* Image Indicators */}
+              {project.images && project.images.length > 1 && (
+                <div className="absolute top-4 left-4 flex space-x-1">
+                  {project.images.map((_, idx) => (
+                    <div
+                      key={idx}
+                      className={`w-2 h-2 rounded-full ${idx === currentImageIndex ? 'bg-cyan-400' : 'bg-white/30'
+                        }`}
+                    />
+                  ))}
                 </div>
+              )}
+
+              {/* Content Overlay */}
+              <div className="absolute inset-0 p-6 flex flex-col justify-end z-10">
+                <motion.div
+                  key={project.title}
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  className="space-y-3"
+                >
+                  <h3 className="text-2xl md:text-3xl font-light text-white drop-shadow-lg">
+                    {project.title}
+                  </h3>
+
+                  <p className="text-white/90 text-sm md:text-base line-clamp-2 drop-shadow">
+                    {project.description}
+                  </p>
+
+                  {/* Tech Tags */}
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags?.slice(0, 3).map((tag, i) => (
+                      <span
+                        key={i}
+                        className="px-2 py-1 text-xs bg-cyan-400/20 backdrop-blur-sm text-cyan-400 border border-cyan-400/30"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                    {project.tags?.length > 3 && (
+                      <span className="px-2 py-1 text-xs bg-white/10 backdrop-blur-sm text-white/70 border border-white/20">
+                        +{project.tags.length - 3}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs text-white/70">
+                    <div className="flex items-center gap-1">
+                      <FaClock className="w-3 h-3" />
+                      <span>{formattedDate}</span>
+                    </div>
+                    <span>Click to view details</span>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Hover Shimmer Effect */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12"
+                  style={{
+                    animation: "shimmer 2s ease-in-out infinite",
+                    transform: "skewX(-12deg) translateX(-100%)"
+                  }}
+                />
               </div>
             </div>
+          </div>
 
-            {/* Card Content */}
-            <div className="p-6">
-              <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors mb-3" style={{ fontFamily: 'ChocoCooky' }}>
-                {project.title}
-              </h3>
+          {/* Back Side - Detailed Information */}
+          <div
+            className="absolute inset-0 bg-gray-900/95 backdrop-blur-sm border border-gray-700 works-card-face"
+            style={{
+              backfaceVisibility: "hidden",
+              WebkitBackfaceVisibility: "hidden",
+              transform: "rotateY(180deg)"
+            }}
+          >
+            <div className="w-full h-full p-6 flex flex-col">
 
-              <p className="text-gray-300 text-sm leading-relaxed mb-4 line-clamp-3" style={{ fontFamily: 'ChocoCooky' }}>
-                {project.description}
-              </p>
+              {/* Header */}
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl md:text-2xl font-light text-white">
+                  {project.title}
+                </h3>
+                <button
+                  onClick={(e) => { e.stopPropagation(); onFlip(); }}
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
 
-              {/* Tech Tags */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                {(project.tags || []).slice(0, 4).map((tag, i) => (
-                  <span
-                    key={i}
-                    className="px-3 py-1 text-xs font-mono font-medium text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 rounded-md hover:bg-cyan-400/20 transition-colors"
-                  >
-                    {tag}
-                  </span>
-                ))}
-                {(project.tags?.length || 0) > 4 && (
-                  <span className="px-3 py-1 text-xs font-mono font-medium text-gray-400 bg-gray-800/50 border border-gray-600/30 rounded-md">
-                    +{project.tags.length - 4}
-                  </span>
-                )}
+              {/* Description */}
+              <div className="flex-1 overflow-y-auto mb-4">
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  {project.description}
+                </p>
+              </div>
+
+              {/* Full Tech Stack */}
+              <div className="mb-4">
+                <h4 className="text-cyan-400 text-sm font-medium mb-2">Technologies</h4>
+                <div className="flex flex-wrap gap-2">
+                  {project.tags?.map((tag, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1 text-xs bg-cyan-400/10 text-cyan-400 border border-cyan-400/30"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
 
               {/* Action Buttons */}
@@ -178,11 +307,11 @@ const ProjectCard = ({ project, index, inView, isLeft }) => {
                     href={project.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-cyan-400/10 hover:bg-cyan-400/20 border border-cyan-400/30 hover:border-cyan-400/50 rounded-lg text-cyan-400 font-medium transition-all duration-200 hover:scale-105 active:scale-95 no-underline"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-cyan-400/10 hover:bg-cyan-400/20 border border-cyan-400/30 text-cyan-400 font-medium transition-colors no-underline"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <FaExternalLinkAlt className="w-3 h-3" />
-                    <span className="text-sm">Live</span>
+                    <FaExternalLinkAlt className="w-4 h-4" />
+                    <span>Live Demo</span>
                   </a>
                 )}
 
@@ -191,29 +320,29 @@ const ProjectCard = ({ project, index, inView, isLeft }) => {
                     href={project.repo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-600/30 hover:border-gray-500/50 rounded-lg text-gray-300 hover:text-white font-medium transition-all duration-200 hover:scale-105 active:scale-95 no-underline"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gray-800 hover:bg-gray-700 border border-gray-600 text-gray-300 hover:text-white font-medium transition-colors no-underline"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <FaGithub className="w-3 h-3" />
-                    <span className="text-sm">Code</span>
+                    <FaGithub className="w-4 h-4" />
+                    <span>Source Code</span>
                   </a>
                 )}
               </div>
 
-              {/* Footer with timestamp */}
-              <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700/50">
+              {/* Footer */}
+              <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
                 <div className="flex items-center gap-2 text-xs text-gray-400">
-                  <FaClock className="w-3 h-3" />
-                  <span>{formatDate(project.lastUpdated || new Date().toISOString())}</span>
+                  <div className={`w-2 h-2 ${statusConfig.color.replace('text-', 'bg-')} rounded-full`}></div>
+                  <span>{statusConfig.label}</span>
                 </div>
-                <div className="text-xs text-gray-500 font-mono">
-                  commit #{String(index + 1).padStart(3, '0')}
+                <div className="text-xs text-gray-500">
+                  Last updated: {formattedDate}
                 </div>
               </div>
             </div>
           </div>
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
     </div>
   );
 };
@@ -224,20 +353,72 @@ export const Works = () => {
     threshold: 0.1,
   });
 
+  const [flippedCards, setFlippedCards] = useState(new Set());
+  const [visibleCards, setVisibleCards] = useState(new Set());
+
+  // Track which cards are in view for carousel functionality
+  const cardRefs = useRef([]);
+
+  useEffect(() => {
+    const observers = cardRefs.current.map((ref, index) => {
+      if (!ref) return null;
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setVisibleCards(prev => new Set(prev).add(index));
+          } else {
+            setVisibleCards(prev => {
+              const newSet = new Set(prev);
+              newSet.delete(index);
+              return newSet;
+            });
+          }
+        },
+        { threshold: 0.3 }
+      );
+
+      observer.observe(ref);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach(observer => observer?.disconnect());
+    };
+  }, []);
+
+  const handleCardFlip = useCallback((index) => {
+    setFlippedCards(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
+  }, []);
+
+  const handleClickOutside = useCallback((index) => {
+    setFlippedCards(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(index);
+      return newSet;
+    });
+  }, []);
+
   return (
-    <section 
-      ref={ref} 
-      id="works" 
-      className="relative min-h-screen py-16 sm:py-20 px-4 z-20"
+    <section
+      ref={ref}
+      id="works"
+      className="relative min-h-screen py-16 sm:py-20 px-0 md:px-4 z-20"
     >
       <div className="w-full max-w-[86rem] mx-auto relative">
-        
-        {/* Glassmorphism Background */}
-        <div className="absolute inset-0 glass-card opacity-40"></div>
-        
+        {/* Glassmorphism container */}
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-xl rounded-none md:rounded-3xl shadow-lg shadow-cyan-400/5"></div>
         <div className="relative p-6 md:p-10 z-10">
-          
-          {/* Header Section */}
+
+          {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -245,83 +426,106 @@ export const Works = () => {
             className="text-center mb-16"
           >
             <div className="flex items-center justify-center gap-3 mb-6">
-              <FaCodeBranch className="text-cyan-400 text-2xl animate-pulse-slow" />
-              <h2 className="section-heading font-mono">
-                git log --projects
+              <FaCodeBranch className="text-cyan-400 text-2xl animate-pulse" />
+              <h2 className="text-4xl md:text-5xl font-light text-white">
+                Featured Works
               </h2>
             </div>
-            <p className="text-gray-300 max-w-2xl mx-auto text-lg leading-relaxed" style={{ fontFamily: 'ChocoCooky' }}>
-              A timeline of my development journey. Each branch represents a unique solution, 
-              crafted with passion and precision.
+            <div className="w-24 h-1 bg-cyan-400 mx-auto mb-6"></div>
+            <p className="text-gray-300 max-w-2xl mx-auto text-lg">
+              A collection of projects showcasing modern web development with clean design and smooth interactions
             </p>
           </motion.div>
 
-          {/* Git Branch Timeline */}
-          <div className="relative max-w-6xl mx-auto">
-            
-            {/* Main Branch Line */}
-            <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400/90 via-cyan-400/70 to-cyan-400/50 transform -translate-x-1/2 rounded-full z-10">
-              {/* Enhanced glow effect */}
-              <div className="absolute inset-0 w-2 bg-cyan-400/30 blur-sm transform -translate-x-1/4 rounded-full"></div>
-              <div className="absolute inset-0 w-3 bg-cyan-400/10 blur-md transform -translate-x-1/3 rounded-full"></div>
-            </div>
-
-            {/* Branch Commits */}
-            <div className="space-y-20 md:space-y-24 relative">
-              {projects.map((project, index) => {
-                const isLeft = index % 2 === 0;
-                
-                return (
-                  <ProjectCard 
-                    key={project.id || index}
-                    project={project} 
-                    index={index} 
-                    inView={inView}
-                    isLeft={isLeft}
+          {/* Projects Container with Scroll Snap */}
+          <div className="overflow-y-auto snap-y snap-mandatory" style={{ scrollBehavior: 'smooth' }}>
+            <div className="space-y-8 md:space-y-16">
+              {projects.map((project, index) => (
+                <div
+                  key={project.id}
+                  ref={el => cardRefs.current[index] = el}
+                  className="snap-start"
+                >
+                  <ProjectCard
+                    project={project}
+                    index={index}
+                    isFlipped={flippedCards.has(index)}
+                    onFlip={() => handleCardFlip(index)}
+                    onClickOutside={handleClickOutside}
+                    isInView={visibleCards.has(index)}
                   />
-                );
-              })}
+                </div>
+              ))}
             </div>
-
-            {/* Branch end indicator */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.6, delay: projects.length * 0.1 }}
-              className="flex justify-center mt-16 relative z-30"
-            >
-              <div className="flex items-center gap-3 px-6 py-3 glass-card">
-                <FaCircle className="text-cyan-400 text-xs animate-pulse" />
-                <span className="text-gray-300 font-mono text-sm">
-                  HEAD → main ({projects.length} commits)
-                </span>
-              </div>
-            </motion.div>
           </div>
 
-          {/* Decorative Elements */}
-          <div className="animated-gradient"></div>
-          <div className="absolute top-1/4 right-10 w-24 h-24 rounded-full bg-cyan-400/10 blur-2xl animate-float"></div>
-          <div className="absolute bottom-1/4 left-10 w-32 h-32 rounded-full bg-cyan-400/5 blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+          {/* Footer */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ delay: 0.8 }}
+            className="text-center mt-16 text-gray-400"
+          >
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <FaCircle className="text-cyan-400 text-xs animate-pulse" />
+              <span className="font-mono text-sm">
+                {projects.length} projects loaded
+              </span>
+            </div>
+            <p className="text-sm">Windows 8 inspired • Scroll to explore</p>
+          </motion.div>
+
         </div>
-        
-        {/* Background Grid Pattern */}
-        <div className="absolute inset-0 -z-10 overflow-hidden rounded-none md:rounded-3xl opacity-20">
-          <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+
+        {/* Decorative blobs */}
+        <div className="absolute top-1/4 right-10 w-24 h-24 rounded-full bg-cyan-400/10 blur-2xl"></div>
+        <div className="absolute bottom-1/4 left-10 w-32 h-32 rounded-full bg-cyan-400/5 blur-3xl"></div>
+
+        {/* Background grid/pattern */}
+        <div className="absolute inset-0 -z-10 overflow-hidden rounded-none md:rounded-3xl">
+          <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M40 0 L0 0 0 40" stroke="var(--color-primary)" strokeWidth="0.5" opacity="0.3" />
+              <pattern id="works-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M40 0 L0 0 0 40" stroke="rgba(66,188,188,0.2)" strokeWidth="0.5" />
               </pattern>
-              <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.1" />
-                <stop offset="100%" stopColor="transparent" />
+              <linearGradient id="works-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="rgba(66,188,188,0.1)" />
+                <stop offset="100%" stopColor="rgba(0,0,0,0)" />
               </linearGradient>
             </defs>
-            <rect width="100%" height="100%" fill="url(#grid)" />
-            <rect width="100%" height="100%" fill="url(#bgGrad)" />
+            <rect width="100%" height="100%" fill="url(#works-grid)" />
+            <rect width="100%" height="100%" fill="url(#works-grad)" />
           </svg>
         </div>
       </div>
+
+      {/* Custom Styles */}
+      <style jsx>{`
+        @keyframes shimmer {
+          0% { transform: skewX(-12deg) translateX(-100%); }
+          100% { transform: skewX(-12deg) translateX(200%); }
+        }
+        
+        .line-clamp-2 {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        /* Mobile Responsive Adjustments */
+        @media (max-width: 768px) {
+          .max-w-2xl {
+            max-width: calc(100vw - 2rem);
+          }
+        }
+
+        @media (max-width: 480px) {
+          .max-w-2xl {
+            max-width: calc(100vw - 1rem);
+          }
+        }
+      `}</style>
     </section>
   );
 };

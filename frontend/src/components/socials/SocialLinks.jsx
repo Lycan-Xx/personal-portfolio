@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { FaLinkedin, FaGithub, FaTwitter, FaTelegram, FaDiscord, FaClipboard, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaLinkedin, FaGithub, FaTwitter, FaTelegram, FaDiscord, FaClipboard, FaExternalLinkAlt, FaWhatsapp } from 'react-icons/fa';
 
 const profiles = [
   { network: "LinkedIn", username: "mohammad-bello", url: "https://www.linkedin.com/in/mohammad-bello/", icon: FaLinkedin },
   { network: "GitHub", username: "Lycan-Xx", url: "https://github.com/Lycan-Xx", icon: FaGithub },
   { network: "Twitter", username: "LycanXx2", url: "https://x.com/LycanXx2", icon: FaTwitter },
-  { network: "Telegram", username: "lycan_xx1", url: "https://t.me/lycan_xx1", icon: FaTelegram },
   { network: "Discord", username: "lycan_xx0", url: "https://discord.com/users/lycan_xx0", icon: FaDiscord },
 ];
+
 
 export default function SocialLinks({ className = '' }) {
   const [copied, setCopied] = useState(null);
@@ -63,20 +63,9 @@ export default function SocialLinks({ className = '' }) {
                 >
                   <FaExternalLinkAlt className="w-4 h-4 text-gray-200" />
                 </button>
-
-                <button
-                  aria-label={`Copy ${p.network} link`}
-                  onClick={() => handleCopy(p.url, p.network)}
-                  className="p-2 rounded-md hover:bg-white/5 transition"
-                >
-                  <FaClipboard className="w-4 h-4 text-gray-200" />
-                </button>
               </div>
 
-              {/* simple inline feedback shown to the right when copied */}
-              {copied === p.network && (
-                <div className="ml-3 text-xs text-green-400 font-mono">Copied</div>
-              )}
+              
             </div>
           );
         })}
