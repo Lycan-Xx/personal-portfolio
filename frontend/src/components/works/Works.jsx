@@ -282,36 +282,36 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
               transform: "rotateY(180deg)"
             }}
           >
-            <div className="w-full h-full p-6 flex flex-col">
+            <div className="w-full h-full p-4 md:p-6 flex flex-col overflow-hidden">
 
               {/* Header */}
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl md:text-2xl font-light text-white">
+              <div className="flex items-center justify-between mb-3 md:mb-4 flex-shrink-0">
+                <h3 className="text-lg md:text-xl lg:text-2xl font-light text-theme-text-primary truncate pr-2">
                   {project.title}
                 </h3>
                 <button
                   onClick={(e) => { e.stopPropagation(); onFlip(); }}
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-theme-text-secondary hover:text-theme-text-primary transition-colors flex-shrink-0 p-1"
                 >
                   ✕
                 </button>
               </div>
 
               {/* Description */}
-              <div className="flex-1 overflow-y-auto mb-4">
-                <p className="text-gray-300 text-sm leading-relaxed">
+              <div className="flex-1 overflow-y-auto mb-3 md:mb-4 min-h-0">
+                <p className="text-theme-text-secondary text-xs md:text-sm leading-relaxed">
                   {project.description}
                 </p>
               </div>
 
               {/* Full Tech Stack */}
-              <div className="mb-4">
-                <h4 className="text-cyan-400 text-sm font-medium mb-2">Stack Used</h4>
+              <div className="mb-3 md:mb-4 flex-shrink-0">
+                <h4 className="text-theme-accent text-xs md:text-sm font-medium mb-2">Stack Used</h4>
                 <div className="flex flex-wrap gap-2">
                   {project.tags?.map((tag, i) => (
                     <span
                       key={i}
-                      className="px-3 py-1 rounded-xl text-xs bg-cyan-400/10 text-cyan-400 border border-cyan-400/30"
+                      className="px-2 md:px-3 py-1 rounded-xl text-xs bg-theme-accent/10 text-theme-accent border border-theme-accent/30"
                     >
                       {tag}
                     </span>
@@ -320,17 +320,18 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-3">
+              <div className="flex gap-2 md:gap-3 flex-shrink-0">
                 {project.link && (
                   <a
                     href={project.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 rounded-xl flex items-center justify-center gap-2 px-4 py-3 bg-cyan-400/10 hover:bg-cyan-400/20 border border-cyan-400/30 text-cyan-400 font-medium transition-colors no-underline"
+                    className="flex-1 rounded-xl flex items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3 bg-theme-accent/10 hover:bg-theme-accent/20 border border-theme-accent/30 text-theme-accent font-medium transition-colors no-underline text-xs md:text-sm"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <FaExternalLinkAlt className="w-4 h-4" />
-                    <span>Live Demo</span>
+                    <span className="hidden sm:inline">Live Demo</span>
+                    <span className="sm:hidden">Demo</span>
                   </a>
                 )}
 
@@ -339,11 +340,12 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
                     href={project.repo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 rounded-xl flex items-center justify-center gap-2 px-4 py-3 bg-gray-800 hover:bg-gray-700 border border-gray-600 text-gray-300 hover:text-white font-medium transition-colors no-underline"
+                    className="flex-1 rounded-xl flex items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3 bg-theme-surface hover:bg-theme-hover border border-theme-border text-theme-text-secondary hover:text-theme-text-primary font-medium transition-colors no-underline text-xs md:text-sm"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <FaGithub className="w-4 h-4" />
-                    <span>Source Code</span>
+                    <span className="hidden sm:inline">Source Code</span>
+                    <span className="sm:hidden">Code</span>
                   </a>
                 )}
               </div>
