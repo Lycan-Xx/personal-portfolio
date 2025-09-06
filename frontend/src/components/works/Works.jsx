@@ -2,60 +2,24 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { FaGithub, FaExternalLinkAlt, FaClock, FaCodeBranch, FaCircle } from "react-icons/fa";
-import projectsData from "./projects.json";
+import { useProjects } from "../../hooks/useProjects";
+import { urlFor } from "../../lib/sanity";
+import { formatLastUpdated } from "../../utils/dateHelpers";
 import { getRandomDirection } from "../../utils/getRandomDirection";
-
-// Process projects data and add lastUpdated field based on status
-const processProjects = (projects) => {
-  return projects.map(project => {
-    // Generate realistic lastUpdated dates based on project status
-    let lastUpdated;
-    const now = new Date();
-
-    switch (project.status) {
-      case 'active':
-        // Recently updated (1–30 days ago)
-        lastUpdated = new Date(now.getTime() - Math.random() * 30 * 24 * 60 * 60 * 1000);
-        break;
-      case 'dormant':
-        // Left alone for 2–12 months
-        lastUpdated = new Date(now.getTime() - (60 + Math.random() * 300) * 24 * 60 * 60 * 1000);
-        break;
-      case 'experimental':
-        // Updated anytime, but mostly quick bursts (1–14 days ago)
-        lastUpdated = new Date(now.getTime() - Math.random() * 14 * 24 * 60 * 60 * 1000);
-        break;
-      case 'archived':
-        // Really old stuff (1–3 years ago)
-        lastUpdated = new Date(now.getTime() - (365 + Math.random() * 730) * 24 * 60 * 60 * 1000);
-        break;
-      default:
-        lastUpdated = new Date(now.getTime() - Math.random() * 180 * 24 * 60 * 60 * 1000);
-    }
-
-
-    return {
-      ...project,
-      lastUpdated: lastUpdated.toISOString().split('T')[0] // Format as YYYY-MM-DD
-    };
-  });
-};
-
-const projects = processProjects(projectsData);
 
 const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutside }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState('right');
   const cardRef = useRef(null);
 
-  // Image carousel for in-view cards only - optimized with longer intervals
+  // Image carousel for in-view cards only
   useEffect(() => {
     if (!isInView || !project.images || project.images.length <= 1) return;
 
     const interval = setInterval(() => {
       setSlideDirection(getRandomDirection());
       setCurrentImageIndex(prev => (prev + 1) % project.images.length);
-    }, 4000 + Math.random() * 2000); // Longer intervals for smoother experience
+    }, 4000 + Math.random() * 2000);
 
     return () => clearInterval(interval);
   }, [isInView, project.images]);
@@ -74,18 +38,10 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
     }
   }, [isFlipped, index, onClickOutside]);
 
-  // Memoize date formatting and status config for performance
+  // Date formatting using Sanity's _updatedAt
   const formattedDate = useMemo(() => {
-    const date = new Date(project.lastUpdated);
-    const now = new Date();
-    const diffTime = Math.abs(now - date);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 1) return "1 day ago";
-    if (diffDays < 30) return `${diffDays} days ago`;
-    if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
-    return `${Math.floor(diffDays / 365)} years ago`;
-  }, [project.lastUpdated]);
+    return formatLastUpdated(project.lastUpdated || project._updatedAt);
+  }, [project.lastUpdated, project._updatedAt]);
 
   const statusConfig = useMemo(() => {
     const configs = {
@@ -117,9 +73,26 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
     return configs[project.status] || configs["dormant"];
   }, [project.status]);
 
-
-
   const isLeft = index % 2 === 0;
+
+  // Helper function to get optimized image URL
+  const getImageUrl = (image) => {
+    if (typeof image === 'string') {
+      // Old format - direct URL
+      return image;
+    } else if (image?.asset) {
+      // Sanity format
+      return urlFor(image.asset)
+        .width(800)
+        .height(600)
+        .fit('crop')
+        .auto('format')
+        .quality(85)
+        .url();
+    }
+    // Fallback
+    return 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop';
+  };
 
   return (
     <div
@@ -134,7 +107,6 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
         className="relative cursor-pointer group h-80 md:h-96 works-card-container"
         onClick={onFlip}
       >
-        {/* Card Container */}
         <div
           className="w-full h-full relative transition-transform duration-700 ease-out"
           style={{
@@ -142,7 +114,7 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
             transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)"
           }}
         >
-          {/* Front Side - Windows 8 Style */}
+          {/* Front Side */}
           <div
             className="absolute inset-0 works-card-face"
             style={{
@@ -155,9 +127,7 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
               {/* Background Image Carousel */}
               {project.images && project.images.length > 0 && (
                 <div className="absolute inset-0">
-                  <AnimatePresence mode="sync">
-
-
+                  <AnimatePresence mode="wait">
                     <motion.div
                       key={currentImageIndex}
                       initial={{
@@ -178,18 +148,16 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
                       className="absolute inset-0"
                     >
                       <img
-                        src={project.images[currentImageIndex]}
-                        alt={project.title}
+                        src={getImageUrl(project.images[currentImageIndex])}
+                        alt={project.images[currentImageIndex]?.alt || project.title}
                         className="w-full h-full object-cover"
                         loading="lazy"
                         onError={(e) => {
-                          e.target.src =
-                            'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop';
+                          e.target.src = 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop';
                         }}
                       />
                       <div className="absolute inset-0 bg-black/60" />
                     </motion.div>
-
                   </AnimatePresence>
                 </div>
               )}
@@ -204,14 +172,22 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
                 </div>
               </div>
 
+              {/* Featured Badge */}
+              {project.featured && (
+                <div className="absolute top-4 left-4 z-10">
+                  <div className="px-3 py-1.5 rounded-xl bg-yellow-500/20 border border-yellow-500/30 backdrop-blur-sm">
+                    <span className="text-xs font-medium text-yellow-400">Featured</span>
+                  </div>
+                </div>
+              )}
+
               {/* Image Indicators */}
               {project.images && project.images.length > 1 && (
-                <div className="absolute top-4 left-4 flex space-x-1">
+                <div className={`absolute ${project.featured ? 'top-16' : 'top-4'} left-4 flex space-x-1 z-10`}>
                   {project.images.map((_, idx) => (
                     <div
                       key={idx}
-                      className={`w-2 h-2 rounded-full ${idx === currentImageIndex ? 'bg-cyan-400' : 'bg-white/30'
-                        }`}
+                      className={`w-2 h-2 rounded-full ${idx === currentImageIndex ? 'bg-cyan-400' : 'bg-white/30'}`}
                     />
                   ))}
                 </div>
@@ -273,7 +249,7 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
             </div>
           </div>
 
-          {/* Back Side - Detailed Information */}
+          {/* Back Side */}
           <div
             className="absolute inset-0 bg-gray-900/95 backdrop-blur-sm border border-gray-700 works-card-face rounded-xl"
             style={{
@@ -283,7 +259,6 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
             }}
           >
             <div className="w-full h-full p-4 md:p-6 flex flex-col overflow-hidden">
-
               {/* Header */}
               <div className="flex items-center justify-between mb-3 md:mb-4 flex-shrink-0">
                 <h3 className="text-lg md:text-xl lg:text-2xl font-light text-white truncate pr-2">
@@ -304,7 +279,7 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
                 </p>
               </div>
 
-              {/* Full Tech Stack */}
+              {/* Tech Stack */}
               <div className="mb-3 md:mb-4 flex-shrink-0">
                 <h4 className="text-cyan-400 text-xs md:text-sm font-medium mb-2">Stack Used</h4>
                 <div className="flex flex-wrap gap-2">
@@ -321,9 +296,9 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
 
               {/* Action Buttons */}
               <div className="flex gap-2 md:gap-3 flex-shrink-0">
-                {project.link && (
+                {(project.link || project.liveLink) && (
                   <a
-                    href={project.link}
+                    href={project.link || project.liveLink}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 rounded-xl flex items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3 bg-cyan-400/10 hover:bg-cyan-400/20 border border-cyan-400/30 text-cyan-400 font-medium transition-colors no-underline text-xs md:text-sm"
@@ -335,9 +310,9 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
                   </a>
                 )}
 
-                {project.repo && (
+                {(project.repo || project.repoLink) && (
                   <a
-                    href={project.repo}
+                    href={project.repo || project.repoLink}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 rounded-xl flex items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-600 text-gray-300 hover:text-white font-medium transition-colors no-underline text-xs md:text-sm"
@@ -349,19 +324,6 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
                   </a>
                 )}
               </div>
-
-              {/* Footer
-              <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
-                <div className="flex items-center gap-2 text-xs text-gray-400">
-                  <div className={`w-2 h-2 ${statusConfig.color.replace('text-', 'bg-')} rounded-full`}></div>
-                  <span>{statusConfig.label}</span>
-                </div>
-                <div className="text-xs text-gray-500">
-                  Last updated: {formattedDate}
-                </div>
-              </div> */}
-
-
             </div>
           </div>
         </div>
@@ -376,13 +338,15 @@ export const Works = () => {
     threshold: 0.1,
   });
 
+  const { projects, loading, error } = useProjects();
   const [flippedCards, setFlippedCards] = useState(new Set());
   const [visibleCards, setVisibleCards] = useState(new Set());
-
-  // Track which cards are in view for carousel functionality
   const cardRefs = useRef([]);
 
+  // Track which cards are in view for carousel functionality
   useEffect(() => {
+    if (!projects || projects.length === 0) return;
+
     const observers = cardRefs.current.map((ref, index) => {
       if (!ref) return null;
 
@@ -408,7 +372,7 @@ export const Works = () => {
     return () => {
       observers.forEach(observer => observer?.disconnect());
     };
-  }, []);
+  }, [projects]);
 
   const handleCardFlip = useCallback((index) => {
     setFlippedCards(prev => {
@@ -429,6 +393,48 @@ export const Works = () => {
       return newSet;
     });
   }, []);
+
+  // Loading state
+  if (loading) {
+    return (
+      <section className="relative min-h-screen py-16 sm:py-20 px-0 md:px-4 z-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-cyan-400 mx-auto mb-4"></div>
+          <p className="text-gray-400">Loading projects from CMS...</p>
+        </div>
+      </section>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <section className="relative min-h-screen py-16 sm:py-20 px-0 md:px-4 z-20 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-400 mb-4">Error loading projects</p>
+          <p className="text-gray-400 text-sm">{error.message}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-cyan-400/10 border border-cyan-400/30 text-cyan-400 rounded-xl hover:bg-cyan-400/20 transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      </section>
+    );
+  }
+
+  // Empty state
+  if (!projects || projects.length === 0) {
+    return (
+      <section className="relative min-h-screen py-16 sm:py-20 px-0 md:px-4 z-20 flex items-center justify-center">
+        <div className="text-center">
+          <FaCodeBranch className="text-cyan-400 text-4xl mx-auto mb-4" />
+          <p className="text-gray-400">No projects found</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
@@ -460,12 +466,12 @@ export const Works = () => {
             </p>
           </motion.div>
 
-          {/* Projects Container with Scroll Snap */}
+          {/* Projects Container */}
           <div className="overflow-y-auto snap-y snap-mandatory" style={{ scrollBehavior: 'smooth' }}>
             <div className="space-y-8 md:space-y-16">
               {projects.map((project, index) => (
                 <div
-                  key={project.id}
+                  key={project._id || project.id}
                   ref={el => cardRefs.current[index] = el}
                   className="snap-start"
                 >
@@ -492,11 +498,11 @@ export const Works = () => {
             <div className="flex items-center justify-center gap-2 mb-2">
               <FaCircle className="text-cyan-400 text-xs animate-pulse" />
               <span className="font-mono text-sm">
-                {projects.length} projects loaded
+                {projects.length} projects loaded • Powered by Sanity CMS
               </span>
             </div>
             <p className="text-sm">Microsoft Windows 8 inspired • Startmenu Tiles</p>
-            <p className="text-sm">Check out the <span>repo</span> and play with it to your liking</p>
+            <p className="text-sm">Check out the repo and play with it to your liking</p>
           </motion.div>
 
         </div>
@@ -537,7 +543,6 @@ export const Works = () => {
           overflow: hidden;
         }
 
-        /* Mobile Responsive Adjustments */
         @media (max-width: 768px) {
           .max-w-2xl {
             max-width: calc(100vw - 2rem);
