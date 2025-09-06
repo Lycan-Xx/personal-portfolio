@@ -15,7 +15,7 @@
 		--color-border: #e2e8f0; /* Light slate border */
 		--color-shadow: rgba(0, 0, 0, 0.1); /* Light shadow */
 		--color-glass-overlay: rgba(255, 255, 255, 0.8); /* Light glass effect */
-		--color-glass-border: rgba(0, 0, 0, 0.1); /* Light glass border */
+		--color-glass-border: rgba(255, 255, 255, 0.5); /* White glass border for uniformity */
 		--color-hover: rgba(14, 165, 233, 0.1); /* Light hover state */
 		--color-surface: #f1f5f9; /* Light surface */
 		--color-surface-elevated: #ffffff; /* Elevated surface */
@@ -33,10 +33,10 @@
 		--color-text-muted: #94a3b8; /* Muted text */
 		--color-accent: #42bcbc; /* Cyan accent */
 		--color-secondary: #ec704c; /* Orange secondary */
-		--color-border: #334155; /* Dark slate border */
+		--color-border: rgba(66, 188, 188, 0.3); /* Cyan border for consistency */
 		--color-shadow: rgba(0, 0, 0, 0.3); /* Dark shadow */
 		--color-glass-overlay: rgba(0, 0, 0, 0.4); /* Dark glass effect */
-		--color-glass-border: rgba(66, 188, 188, 0.2); /* Cyan glass border */
+		--color-glass-border: rgba(66, 188, 188, 0.3); /* Cyan glass border for consistency */
 		--color-hover: rgba(66, 188, 188, 0.1); /* Dark hover state */
 		--color-surface: #1e293b; /* Dark surface */
 		--color-surface-elevated: rgba(30, 41, 59, 0.8); /* Elevated dark surface */
