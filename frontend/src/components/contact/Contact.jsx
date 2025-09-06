@@ -19,12 +19,12 @@ export const Contact = () => {
   // inView for scroll animations
   const [refSection, inViewSection] = useInView({
     triggerOnce: false,
-    threshold: 0.1,
+    threshold: 0.2,
   });
 
   const [refCards, inViewCards] = useInView({
     triggerOnce: true,
-    threshold: 0.2,
+    threshold: 0.1,
   });
 
   // email send handler
@@ -64,7 +64,7 @@ export const Contact = () => {
 
   // animation variants
   const containerVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0 },
   };
 
@@ -88,7 +88,7 @@ export const Contact = () => {
             variants={containerVariants}
             initial="hidden"
             animate={inViewSection ? "visible" : "hidden"}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             className="mb-12 text-start"
             style={{ fontFamily: "ChocoCooky" }}
           >
@@ -110,7 +110,7 @@ export const Contact = () => {
               variants={containerVariants}
               initial="hidden"
               animate={inViewCards ? "visible" : "hidden"}
-              transition={{ duration: 0.5, delay: highPerf ? 0.1 : 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
               className="glass-card p-8 bg-gray-800/40 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg border border-cyan-400/10 hover:border-cyan-400/40 transition-all duration-300"
             >
               <h3 className="text-2xl font-bold text-cyan-400 mb-6">

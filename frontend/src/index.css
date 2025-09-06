@@ -403,6 +403,11 @@ section {
       max-width: 28rem;
       margin: 0 auto 2rem auto;
     }
+    
+    /* Ensure project card back side is properly sized on mobile */
+    .works-card-face {
+      min-height: 320px;
+    }
   }
 
   @media (max-width: 480px) {
