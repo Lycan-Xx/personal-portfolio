@@ -64,7 +64,12 @@ export const Contact = () => {
 
   // animation variants
   const containerVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 15 },
     visible: { opacity: 1, y: 0 },
   };
 
@@ -77,7 +82,7 @@ export const Contact = () => {
     >
       <div className="w-full max-w-[86rem] mx-auto relative">
         {/* Glassmorphism container */}
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-xl rounded-none md:rounded-3xl shadow-lg shadow-cyan-400/5"></div>
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-xl rounded-none md:rounded-3xl shadow-lg shadow-cyan-400/5 border border-white/10"></div>
 
         {/* content wrapper */}
         <div className="relative p-6 md:p-10 z-10">
@@ -88,7 +93,7 @@ export const Contact = () => {
             variants={containerVariants}
             initial="hidden"
             animate={inViewSection ? "visible" : "hidden"}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="mb-12 text-start"
             style={{ fontFamily: "ChocoCooky" }}
           >
@@ -107,11 +112,11 @@ export const Contact = () => {
           >
             {/* Info Card */}
             <motion.div
-              variants={containerVariants}
+              variants={cardVariants}
               initial="hidden"
               animate={inViewCards ? "visible" : "hidden"}
-              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-              className="glass-card p-8 bg-gray-800/40 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg border border-cyan-400/10 hover:border-cyan-400/40 transition-all duration-300"
+              transition={{ duration: 0.5, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="glass-card p-8 bg-gray-800/40 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg border border-white/10 hover:border-cyan-400/40 transition-all duration-300"
             >
               <h3 className="text-2xl font-bold text-cyan-400 mb-6">
                 Let's Connect
@@ -138,11 +143,11 @@ export const Contact = () => {
 
             {/* Social Links Card */}
             <motion.div
-              variants={containerVariants}
+              variants={cardVariants}
               initial="hidden"
               animate={inViewCards ? "visible" : "hidden"}
-              transition={{ duration: 0.5, delay: highPerf ? 0.2 : 0 }}
-              className="glass-card p-8 bg-gray-800/40 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg border border-cyan-400/10 hover:border-cyan-400/40 transition-all duration-300"
+              transition={{ duration: 0.5, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="glass-card p-8 bg-gray-800/40 backdrop-blur-sm rounded-xl overflow-hidden shadow-lg border border-white/10 hover:border-cyan-400/40 transition-all duration-300"
             >
               <h3 className="text-2xl font-bold text-cyan-400 mb-6">
                 Find Me Online

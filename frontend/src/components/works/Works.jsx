@@ -32,7 +32,7 @@ const processProjects = (projects) => {
       default:
         lastUpdated = new Date(now.getTime() - Math.random() * 180 * 24 * 60 * 60 * 1000);
     }
-    
+
 
     return {
       ...project,
@@ -116,7 +116,7 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
     };
     return configs[project.status] || configs["dormant"];
   }, [project.status]);
-  
+
 
 
   const isLeft = index % 2 === 0;
@@ -286,12 +286,12 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
 
               {/* Header */}
               <div className="flex items-center justify-between mb-3 md:mb-4 flex-shrink-0">
-                <h3 className="text-lg md:text-xl lg:text-2xl font-light text-theme-text-primary truncate pr-2">
+                <h3 className="text-lg md:text-xl lg:text-2xl font-light text-white truncate pr-2">
                   {project.title}
                 </h3>
                 <button
                   onClick={(e) => { e.stopPropagation(); onFlip(); }}
-                  className="text-theme-text-secondary hover:text-theme-text-primary transition-colors flex-shrink-0 p-1"
+                  className="text-gray-400 hover:text-white transition-colors flex-shrink-0 p-1"
                 >
                   ✕
                 </button>
@@ -299,19 +299,19 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
 
               {/* Description */}
               <div className="flex-1 overflow-y-auto mb-3 md:mb-4 min-h-0">
-                <p className="text-theme-text-secondary text-xs md:text-sm leading-relaxed">
+                <p className="text-gray-300 text-xs md:text-sm leading-relaxed">
                   {project.description}
                 </p>
               </div>
 
               {/* Full Tech Stack */}
               <div className="mb-3 md:mb-4 flex-shrink-0">
-                <h4 className="text-theme-accent text-xs md:text-sm font-medium mb-2">Stack Used</h4>
+                <h4 className="text-cyan-400 text-xs md:text-sm font-medium mb-2">Stack Used</h4>
                 <div className="flex flex-wrap gap-2">
                   {project.tags?.map((tag, i) => (
                     <span
                       key={i}
-                      className="px-2 md:px-3 py-1 rounded-xl text-xs bg-theme-accent/10 text-theme-accent border border-theme-accent/30"
+                      className="px-2 md:px-3 py-1 rounded-xl text-xs bg-cyan-400/10 text-cyan-400 border border-cyan-400/30"
                     >
                       {tag}
                     </span>
@@ -326,7 +326,7 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
                     href={project.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 rounded-xl flex items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3 bg-theme-accent/10 hover:bg-theme-accent/20 border border-theme-accent/30 text-theme-accent font-medium transition-colors no-underline text-xs md:text-sm"
+                    className="flex-1 rounded-xl flex items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3 bg-cyan-400/10 hover:bg-cyan-400/20 border border-cyan-400/30 text-cyan-400 font-medium transition-colors no-underline text-xs md:text-sm"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <FaExternalLinkAlt className="w-4 h-4" />
@@ -340,7 +340,7 @@ const ProjectCard = ({ project, index, isFlipped, onFlip, isInView, onClickOutsi
                     href={project.repo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 rounded-xl flex items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3 bg-theme-surface hover:bg-theme-hover border border-theme-border text-theme-text-secondary hover:text-theme-text-primary font-medium transition-colors no-underline text-xs md:text-sm"
+                    className="flex-1 rounded-xl flex items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-600 text-gray-300 hover:text-white font-medium transition-colors no-underline text-xs md:text-sm"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <FaGithub className="w-4 h-4" />
@@ -496,7 +496,7 @@ export const Works = () => {
               </span>
             </div>
             <p className="text-sm">Microsoft Windows 8 inspired • Startmenu Tiles</p>
-              <p className="text-sm">Check out the <span>repo</span> and play with it to your liking</p>
+            <p className="text-sm">Check out the <span>repo</span> and play with it to your liking</p>
           </motion.div>
 
         </div>

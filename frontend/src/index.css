@@ -15,7 +15,7 @@
 		--color-border: #e2e8f0; /* Light slate border */
 		--color-shadow: rgba(0, 0, 0, 0.1); /* Light shadow */
 		--color-glass-overlay: rgba(255, 255, 255, 0.8); /* Light glass effect */
-		--color-glass-border: rgba(255, 255, 255, 0.5); /* White glass border for uniformity */
+		--color-glass-border: rgba(255, 255, 255, 0.2); /* White glass border for uniformity */
 		--color-hover: rgba(14, 165, 233, 0.1); /* Light hover state */
 		--color-surface: #f1f5f9; /* Light surface */
 		--color-surface-elevated: #ffffff; /* Elevated surface */
@@ -68,8 +68,27 @@
 
 @layer components {
 	.glass-card {
-		@apply bg-theme-glass-overlay backdrop-blur-lg border border-theme-glass-border rounded-2xl shadow-xl;
+		@apply bg-theme-glass-overlay backdrop-blur-lg border-themed rounded-2xl shadow-xl;
 		box-shadow: 0 8px 32px var(--color-shadow);
+	}
+
+	/* Ensure consistent themed borders for all glassmorphism containers */
+	.glass-container {
+		@apply border border-theme-glass-border;
+	}
+
+	/* Override for specific components that need consistent theming */
+	.themed-border {
+		@apply border border-theme-glass-border;
+	}
+
+	[data-theme='dark'] .themed-border {
+		@apply border border-cyan-400/30;
+	}
+
+	[data-theme='light'] .themed-border,
+	:root .themed-border {
+		@apply border border-white/20;
 	}
 
 	.glass-button {
@@ -442,4 +461,18 @@ section {
   .w-72 { width: 18rem; }
   .right-72 { right: 18rem; }
   .left-72 { left: 18rem; }
+  
+  /* Consistent border utilities */
+  .border-themed {
+    @apply border border-theme-glass-border;
+  }
+  
+  .border-themed-strong {
+    border: 1px solid rgba(66, 188, 188, 0.3); /* Cyan in dark mode */
+  }
+  
+  [data-theme='light'] .border-themed-strong,
+  :root .border-themed-strong {
+    border: 1px solid rgba(255, 255, 255, 0.2); /* White in light mode */
+  }
 }
