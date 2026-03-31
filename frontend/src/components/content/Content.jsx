@@ -13,10 +13,11 @@ export const Content = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setIsAnimating(true);
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         setCurrentJobIndex((prevIndex) => (prevIndex + 1) % jobs.length);
         setIsAnimating(false);
       }, 500);
+      return () => clearTimeout(timeout);
     }, 3000);
 
     return () => clearInterval(interval);
@@ -26,7 +27,8 @@ export const Content = () => {
     <section className="min-h-[calc(100vh-4rem)] relative px-2 sm:px-4 md:px-8 flex items-center justify-center max-w-[100vw] overflow-x-hidden">
       <div className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 md:gap-8 py-8 md:py-0">
         
-        <div className="order-2 md:order-1 w-full md:w-2/3 relative z-10 text-center md:text-left">
+        {/* Left text column with local scrim */}
+        <div className="order-2 md:order-1 w-full md:w-2/3 relative z-10 text-center md:text-left hero-text-col">
           <div className={`mb-6 md:mb-8 ${isHighPerformance ? 'slide-up' : ''}`}>
             <h2 className="text-lg sm:text-xl md:text-4xl text-cyan-400 mb-3 md:mb-4 font-mono">
               {Resume.basics.x_title}
@@ -43,7 +45,7 @@ export const Content = () => {
             <div className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl text-gray-300 font-light">
               <div className="relative h-16 md:h-24 overflow-hidden">
                 <div
-                  className={`transition-all duration-500 ease-in-out ${isAnimating
+                  className={`transition-all duration-500 ease-in-out will-change-transform ${isAnimating
                     ? "opacity-0 -translate-y-6"
                     : "opacity-100 translate-y-0"
                     }`}
@@ -55,11 +57,9 @@ export const Content = () => {
           </div>
 
           <p
-            className={`sm:text-lg md:text-2xl font-semibold text-cyan-400 max-w-3xl mx-auto md:mx-0 ${isHighPerformance ? 'slide-in-left delay-300' : ''
-              }`}
-            style={{ fontFamily: "ChocoCooky" }}
+            className={`text-sm leading-relaxed text-slate-300 max-w-3xl mx-auto md:mx-0 font-mono ${isHighPerformance ? 'slide-in-left delay-300' : ''}`}
           >
-            {Resume.basics.description}
+            I build things end to end — fintech wallets, campus marketplaces, Linux tools. Based in Adamawa, Nigeria. Always shipping.
           </p>
         </div>
 

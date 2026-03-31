@@ -3,14 +3,13 @@ import { motion } from "framer-motion";
 import { CustomThemeProvider } from "../components/theme/ThemeProvider";
 
 import { Home } from "../pages/Home";
-import { Works } from "../components/works/Works";
 import Navbar from '../components/nav/Navbar';
-import LoadingScreen from '../components/LoadingScreen'; // Add this import
-import BlogFeed from "../components/blog/BlogFeed";
-import YouTubeFeed from "../components/youtube/YoutubeFeed";
+import LoadingScreen from '../components/LoadingScreen';
 
-// Add lazy loading for About and Contact
+// Lazy load — everything below the fold
 const About = lazy(() => import("../components/about/About"));
+const Works = lazy(() => import("../components/works/Works"));
+const ContentHub = lazy(() => import("../components/content/ContentHub"));
 const Contact = lazy(() => import("../components/contact/Contact"));
 const VideoBackground = lazy(() => import("../components/background/VideoBackground"));
 
@@ -21,17 +20,12 @@ export const App = () => {
 				<Navbar />
 				<main>
 					<Home />
-					<Works />
-					<BlogFeed />
-					<YouTubeFeed />
 					<div className="relative">
-						<Suspense fallback={
-							<div className="min-h-screen flex items-center justify-center">
-								<div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-secondary"></div>
-							</div>
-						}>
+						<Suspense fallback={null}>
 							<VideoBackground />
 							<About />
+							<Works />
+							<ContentHub />
 							<Contact />
 						</Suspense>
 					</div>

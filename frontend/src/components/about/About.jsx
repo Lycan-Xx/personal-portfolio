@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import GitHubStats from '../github/GithubStats';
 import Resume from '../../settings/resume.json';
 import {
   FaCode, FaLinux, FaShieldAlt, FaWrench
@@ -70,14 +69,14 @@ const SkillCard = ({ skill, index, inView }) => {
       variants={variants}
       initial="hidden"
       animate={inView ? 'visible' : 'hidden'}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="glass-card p-6 flex flex-col items-center text-center group hover:shadow-cyan-400/20 hover:shadow-lg transition-shadow duration-300"
+      transition={{ duration: 0.5, delay: index * 0.08 }}
+      className="bg-black/20 backdrop-blur-md p-6 flex flex-col items-center text-center group hover:shadow-cyan-400/20 hover:shadow-lg transition-shadow duration-300 rounded-2xl border border-cyan-400/20"
     >
       {skill.icon}
       <h3 className="mt-4 text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">
         {skill.title}
       </h3>
-      <p className="mt-2 text-gray-300 text-sm">
+      <p className="mt-2 text-gray-300 text-sm font-mono">
         {truncate(skill.description, 20)}
       </p>
     </motion.div>
@@ -85,12 +84,10 @@ const SkillCard = ({ skill, index, inView }) => {
 };
 
 const About = () => {
-  // Scroll-trigger flags
-  const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: false });
+  const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
   const [bioRef, bioInView] = useInView({ threshold: 0.2, triggerOnce: true });
   const [techRef, techInView] = useInView({ threshold: 0.2, triggerOnce: true });
 
-  // Extract name
   const names = Resume.basics.name.split(' ');
   const first = names[0];
   const last = names[names.length - 1];
@@ -98,114 +95,92 @@ const About = () => {
   return (
     <section ref={ref} id="about" className="relative min-h-screen py-16 sm:py-20 px-0 md:px-4 z-20">
       <div className="w-full max-w-[86rem] mx-auto relative">
-        {/* Glassmorphism container */}
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-xl rounded-none md:rounded-3xl shadow-lg shadow-cyan-400/5"></div>
-        <div className="relative p-6 md:p-10 z-10" style={{ fontFamily: 'ChocoCooky' }}>
+        {/* Glassmorphism container — reduced opacity */}
+        <div className="absolute inset-0 bg-black/20 backdrop-blur-md rounded-none md:rounded-3xl shadow-lg shadow-cyan-400/5" />
+        {/* Dark overlay for video bleed */}
+        <div className="absolute inset-0 bg-black/50 rounded-none md:rounded-3xl" />
 
-        {/* Header  Text*/}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16 text-start"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-white relative inline-block pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-2/3 after:h-1 after:bg-cyan-400" style={{ fontFamily: 'ChocoCooky' }}>
-            About Me
-          </h2>
-          <p className="text-slate-100 max-w-2xl mt-8 text-lg md:text-xl" style={{ fontFamily: 'ChocoCooky' }}>
-            I am <span className="text-cyan-400">{first} (Sani) {last}</span>, a multidisciplinary technician & developer.
-          </p>
-        </motion.div>
-
-        {/* Bio + Skills */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
-          {/* Bio */}
+        <div className="relative p-6 md:p-10 z-10">
+          {/* Header */}
           <motion.div
-            ref={bioRef}
-            initial={{ opacity: 0, x: -30 }}
-            animate={bioInView ? { opacity: 1, x: 0 } : {}}
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
-            className="glass-card p-6"
+            className="mb-16 text-start"
           >
-            <h3 className="text-2xl font-bold text-cyan-400 mb-4">
-              A Little Bit About Myself
+            <h2
+              className="text-4xl font-bold text-white relative inline-block pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-2/3 after:h-1 after:bg-cyan-400"
+              style={{ fontFamily: 'ChocoCooky', fontSize: '36px' }}
+            >
+              {'< About Me />'}
+            </h2>
+            <p className="text-slate-100 max-w-2xl mt-8 text-lg md:text-xl" style={{ fontFamily: 'ChocoCooky' }}>
+              I am <span className="text-cyan-400">{first} (Sani) {last}</span>, a multidisciplinary technician & developer.
+            </p>
+          </motion.div>
+
+          {/* Bio + Skills */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+            <motion.div
+              ref={bioRef}
+              initial={{ opacity: 0, x: -30 }}
+              animate={bioInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.6 }}
+              className="bg-black/20 backdrop-blur-md p-6 rounded-2xl border border-cyan-400/20"
+            >
+              <h3 className="text-2xl font-bold text-cyan-400 mb-4">
+                A Little Bit About Myself
+              </h3>
+              <div className="space-y-4 text-gray-300 leading-relaxed font-mono text-sm">
+                <p>I'm passionate about continuous learning and self-improvement, solving real-world problems with tech.</p>
+                <p>My journey spans web development, system administration, and now chemistry & full-stack dev.</p>
+                <p>Currently pursuing a degree in Chemistry while honing my skills as a full-stack developer.</p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={bioInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.6 }}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-8"
+            >
+              {skills.map((skill, i) => (
+                <SkillCard key={i} skill={skill} index={i} inView={inView} />
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Tech Stack */}
+          <motion.div
+            ref={techRef}
+            initial={{ opacity: 0, y: 30 }}
+            animate={techInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+            className="bg-black/20 backdrop-blur-md p-8 w-full mb-16 rounded-2xl border border-cyan-400/20"
+          >
+            <h3 className="text-3xl font-bold text-white mb-8 text-center">
+              My Tech Arsenal
             </h3>
-            <div className="space-y-4 text-gray-300 leading-relaxed">
-              <p>I’m passionate about continuous learning and self-improvement, solving real-world problems with tech.</p>
-              <p>My journey spans web development, system administration, and now chemistry & full-stack dev.</p>
-              <p>Currently pursuing a degree in Chemistry while honing my skills as a full-stack developer.</p>
+            <div className="flex flex-wrap justify-center gap-12">
+              {techStack.map((tech, i) => (
+                <motion.div
+                  key={i}
+                  whileHover={{ scale: 1.2, y: -10 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex flex-col items-center group cursor-pointer"
+                >
+                  <div className="text-5xl mb-3 text-gray-300 group-hover:text-cyan-400 transition-colors duration-300">
+                    {tech.icon}
+                  </div>
+                  <span className="text-sm text-gray-400 group-hover:text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-mono">
+                    {tech.name}
+                  </span>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
-
-          {/* Skills Grid */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={bioInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-8"
-          >
-            {skills.map((skill, i) => (
-              <SkillCard key={i} skill={skill} index={i} inView={inView} />
-            ))}
-          </motion.div>
         </div>
-
-        {/* Tech Stack */}
-        <motion.div
-          ref={techRef}
-          initial={{ opacity: 0, y: 30 }}
-          animate={techInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="glass-card p-8 w-full mb-16"
-        >
-          <h3 className="text-3xl font-bold text-white mb-8 text-center">
-            My Tech Arsenal
-          </h3>
-          <div className="flex flex-wrap justify-center gap-12">
-            {techStack.map((tech, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ scale: 1.2, y: -10 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex flex-col items-center group cursor-pointer"
-              >
-                <div className="text-5xl mb-3 text-gray-300 group-hover:text-cyan-400 transition-colors duration-300">
-                  {tech.icon}
-                </div>
-                <span className="text-sm text-gray-400 group-hover:text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  {tech.name}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* GitHub Calendar */}
-        <GitHubStats />
-
       </div>
-
-      {/* Decorative blobs */}
-      <div className="absolute top-1/4 right-10 w-24 h-24 rounded-full bg-cyan-400/10 blur-2xl"></div>
-      <div className="absolute bottom-1/4 left-10 w-32 h-32 rounded-full bg-cyan-400/5 blur-3xl"></div>
-
-      {/* Background grid/pattern */}
-      <div className="absolute inset-0 -z-10 overflow-hidden rounded-3xl">
-        <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M40 0 L0 0 0 40" stroke="rgba(66,188,188,0.2)" strokeWidth="0.5" />
-            </pattern>
-            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="rgba(66,188,188,0.1)" />
-              <stop offset="100%" stopColor="rgba(0,0,0,0)" />
-            </linearGradient>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-          <rect width="100%" height="100%" fill="url(#grad)" />
-        </svg>
-      </div>
-	  </div>
     </section>
   );
 };
