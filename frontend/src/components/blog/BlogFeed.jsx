@@ -143,7 +143,7 @@ const PostCard = ({ post, index }) => {
 
       {/* thumbnail */}
       {post.thumbnail && (
-        <div className="mb-4 overflow-hidden rounded-md h-36 bg-gray-800">
+        <div className="mb-4 overflow-hidden rounded-md aspect-video bg-gray-800">
           <motion.img
             src={post.thumbnail}
             alt={post.title}
