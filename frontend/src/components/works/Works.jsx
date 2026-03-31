@@ -163,14 +163,14 @@ const ImageCarousel = React.memo(({ images, isInView, title }) => {
 
       {/* Dot indicators */}
       {images.length > 1 && (
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 z-10">
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
           {images.map((_, i) => (
             <div
               key={i}
               className={`rounded-full transition-all duration-300 ${
                 i === currentIndex
-                  ? "w-4 h-1.5 bg-cyan-400"
-                  : "w-1.5 h-1.5 bg-white/30"
+                  ? "w-5 h-2.5 bg-cyan-400"
+                  : "w-2.5 h-2.5 bg-white/30"
               }`}
             />
           ))}
