@@ -1,8 +1,6 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-
-const GitHubCalendar = lazy(() => import('react-github-calendar'));
 
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
 const USERNAME = 'Lycan-Xx';
@@ -146,11 +144,6 @@ const getTopRepo = (repos) => {
       url: r.url,
     }));
 };
-
-// ─── SUB-COMPONENTS ───────────────────────────────────────────────────────────
-const CalendarPlaceholder = () => (
-  <div className="animate-pulse h-32 bg-gray-800 rounded-lg w-full" />
-);
 
 const StatCard = ({ label, value, sub, accent = '#22d3ee', delay, href }) => {
   const inner = (
@@ -335,21 +328,8 @@ const GitHubStats = ({ token }) => {
               <span className="text-cyan-400">{'/>'}</span>
             </h2>
 
-            {/* contribution calendar */}
+            {/* contribution calendar - removed temporarily */}
             <div ref={calRef} className="mb-2">
-              {calInView && (
-                <Suspense fallback={<CalendarPlaceholder />}>
-                  <GitHubCalendar
-                    username={USERNAME}
-                    colorScheme="dark"
-                    blockSize={11}
-                    blockMargin={4}
-                    fontSize={14}
-                    showWeekdayLabels
-                    style={{ margin: '0 auto', maxWidth: '100%' }}
-                  />
-                </Suspense>
-              )}
             </div>
 
             {/* ── Activity ── */}

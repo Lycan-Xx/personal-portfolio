@@ -1,8 +1,5 @@
 import React, { useEffect, useState, createContext } from "react";
 
-// Module-level browser check
-const isBrowser = typeof window !== 'undefined' && typeof localStorage !== 'undefined';
-
 export const ThemeContext = createContext();
 
 export const useTheme = () => {
@@ -10,60 +7,50 @@ export const useTheme = () => {
 };
 
 export const CustomThemeProvider = ({ children }) => {
-	// Safe check for browser environment
-	const isBrowser = typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+  // Use lazy initialization to avoid running logic during render
+  const [theme, setTheme] = useState(() => {
+    // Only run this once on mount
+    if (typeof window === 'undefined') return 'dark';
+    try {
+      const saved = localStorage.getItem('dark');
+      if (saved) {
+        return JSON.parse(saved) ? 'dark' : 'light';
+      }
+      const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+      return prefersDark ? 'dark' : 'light';
+    } catch {
+      return 'dark';
+    }
+  });
 
-	const getInitialMode = () => {
-		if (!isBrowser) return true; // Default to dark if localStorage not available
-		try {
-			const isReturningUser = "dark" in localStorage;
-			const savedMode = localStorage.getItem("dark") ? JSON.parse(localStorage.getItem("dark")) : null;
-			const userPrefersDark = getPrefColorScheme();
-			if (isReturningUser && savedMode !== null) {
-				return savedMode;
-			}
-			return !!userPrefersDark; // Respect system preference
-		} catch (e) {
-			return true; // Default to dark on error
-		}
-	};
+  // Effect to apply data-theme attribute to HTML element
+  useEffect(() => {
+    const html = document.documentElement;
+    if (theme === "dark") {
+      html.setAttribute("data-theme", "dark");
+    } else {
+      html.removeAttribute("data-theme");
+    }
+    // Persist theme preference
+    try {
+      localStorage.setItem("dark", JSON.stringify(theme === "dark"));
+    } catch (e) {
+      // Storage error - ignore
+    }
+  }, [theme]);
 
-	const getPrefColorScheme = () => {
-		if (!isBrowser || !window.matchMedia) return;
-		return window.matchMedia("(prefers-color-scheme: dark)").matches;
-	};
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+  };
 
-	const [theme, setTheme] = useState(getInitialMode() ? "dark" : "light");
-
-	// Effect to apply data-theme attribute to HTML element
-	useEffect(() => {
-		if (!isBrowser) return;
-		const html = document.documentElement;
-		if (theme === "dark") {
-			html.setAttribute("data-theme", "dark");
-		} else {
-			html.removeAttribute("data-theme"); // Remove for light mode
-		}
-		// Persist theme preference
-		try {
-			localStorage.setItem("dark", JSON.stringify(theme === "dark"));
-		} catch (e) {
-			// Storage quota exceeded or other error
-		}
-	}, [theme]);
-
-	const toggleTheme = () => {
-		setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
-	};
-
-	return (
-		<ThemeContext.Provider
-			value={{
-				theme,
-				toggleTheme,
-			}}
-		>
-			{children}
-		</ThemeContext.Provider>
-	);
+  return (
+    <ThemeContext.Provider
+      value={{
+        theme,
+        toggleTheme,
+      }}
+    >
+      {children}
+    </ThemeContext.Provider>
+  );
 };

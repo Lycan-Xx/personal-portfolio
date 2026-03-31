@@ -1,91 +1,17 @@
 import React, { useState, useEffect } from 'react';
 
-// Module-level browser check
-const isBrowser = typeof window !== 'undefined' && typeof localStorage !== 'undefined';
-
 const LoadingScreen = ({ children }) => {
     const [loading, setLoading] = useState(true);
-    const [contentLoaded, setContentLoaded] = useState(false);
-    const [loadingProgress, setLoadingProgress] = useState(0);
 
     useEffect(() => {
-        // Check if user has visited before (skip loading for returning users)
-        if (!isBrowser) {
+        // Always set loading to false after a short delay
+        // This ensures the app doesn't get stuck
+        const timer = setTimeout(() => {
             setLoading(false);
-            return;
-        }
-        
-        const hasVisited = localStorage.getItem('portfolio-visited');
-        if (hasVisited) {
-            setLoading(false);
-            return;
-        }
-        
-        // Simulate loading progress
-        const progressInterval = setInterval(() => {
-            setLoadingProgress(prev => {
-                const newProgress = prev + Math.random() * 15;
-                return newProgress > 90 ? 90 : newProgress; // Cap at 90% until actual content loads
-            });
-        }, 400);
+        }, 1500);
 
-        // Start preloading critical assets (not the video - that's lazy loaded)
-        const preloadAssets = async () => {
-            try {
-                // Preload critical fonts or small images if needed
-                // For this example, we'll just simulate asset loading
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                setContentLoaded(true);
-                setLoadingProgress(100); // Set to 100% when done
-                try {
-                    localStorage.setItem('portfolio-visited', 'true');
-                } catch (e) {
-                    // Storage error - ignore
-                }
-            } catch (error) {
-                console.error("Error preloading assets:", error);
-                setContentLoaded(true); // Continue anyway
-                setLoadingProgress(100);
-                try {
-                    localStorage.setItem('portfolio-visited', 'true');
-                } catch (e) {
-                    // Storage error - ignore
-                }
-            }
-        };
-
-        preloadAssets();
-
-        // Minimum display time for loading screen
-        const minDisplayTimer = setTimeout(() => {
-            if (contentLoaded) {
-                setLoading(false);
-            }
-        }, 2000);
-
-        // Maximum display time (fallback)
-        const maxDisplayTimer = setTimeout(() => {
-            setLoading(false);
-        }, 4000);
-
-        return () => {
-            clearTimeout(minDisplayTimer);
-            clearTimeout(maxDisplayTimer);
-            clearInterval(progressInterval);
-        };
-    }, [contentLoaded]);
-
-    // When content is loaded, start the transition
-    useEffect(() => {
-        if (contentLoaded) {
-            const timer = setTimeout(() => {
-                setLoading(false);
-            }, 800); // Give a little extra time after content loads
-            
-            return () => clearTimeout(timer);
-        }
-    }, [contentLoaded]);
+        return () => clearTimeout(timer);
+    }, []);
 
     if (loading) {
         return (
@@ -108,15 +34,9 @@ const LoadingScreen = ({ children }) => {
                     />
                 </div>
                 
-                {/* Loading progress bar */}
-                <div className="w-64 h-1 bg-gray-800 rounded-full overflow-hidden">
-                    <div 
-                        className="h-full bg-loader transition-all duration-300 ease-out"
-                        style={{ width: `${loadingProgress}%` }}
-                    ></div>
-                </div>
-                <div className="mt-2 text-xs text-gray-400 font-mono">
-                    {Math.round(loadingProgress)}% loaded
+                {/* Simple loading indicator */}
+                <div className="text-xs text-gray-400 font-mono">
+                    Loading...
                 </div>
             </div>
         );
