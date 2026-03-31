@@ -3,8 +3,13 @@ import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Load environment variables from .env file
+dotenv.config({ path: path.join(__dirname, 'frontend/.env') });
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -226,6 +231,86 @@ app.put('/api/projects/:id', localhostOnly, (req, res) => {
       message: 'Failed to update project',
       error: error.message
     });
+  }
+});
+
+// ================================================
+// GitHub GraphQL API Proxy
+// ================================================
+const GITHUB_GRAPHQL_URL = 'https://api.github.com/graphql';
+
+app.post('/api/github/graphql', async (req, res) => {
+  try {
+    // Get the GitHub token from environment variables or Authorization header
+    const githubToken = req.headers.authorization?.replace('Bearer ', '')
+      || process.env.GITHUB_TOKEN
+      || process.env.VITE_GITHUB_TOKEN;
+
+    if (!githubToken) {
+      return res.status(401).json({ error: 'GitHub token not configured' });
+    }
+
+    // Parse the request body
+    const { query } = req.body;
+
+    if (!query) {
+      return res.status(400).json({ error: 'Query is required' });
+    }
+
+    // Forward the request to GitHub GraphQL API
+    const response = await fetch(GITHUB_GRAPHQL_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${githubToken.trim()}`,
+      },
+      body: JSON.stringify({ query }),
+    });
+
+    // Get the response
+    const data = await response.json();
+
+    // Return the response
+    res.status(response.status).json(data);
+  } catch (error) {
+    console.error('GitHub GraphQL error:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ================================================
+// YouTube Data API Proxy
+// ================================================
+const YOUTUBE_API_BASE = 'https://www.googleapis.com/youtube/v3';
+
+app.get('/api/youtube/videos', async (req, res) => {
+  try {
+    // Get the YouTube API key from environment variables
+    const apiKey = process.env.YOUTUBE_API_KEY || process.env.VITE_YOUTUBE_API_KEY;
+
+    if (!apiKey) {
+      return res.status(401).json({ error: 'YouTube API key not configured' });
+    }
+
+    // Parse query parameters
+    const channelId = req.query.channelId || 'UCcGgfqebSy8yIGlnhW0qT_g';
+    const maxResults = req.query.maxResults || '3';
+    const part = req.query.part || 'snippet,id';
+
+    // Build the YouTube API URL
+    const youtubeUrl = `${YOUTUBE_API_BASE}/search?key=${apiKey}&channelId=${channelId}&part=${part}&order=date&maxResults=${maxResults}&type=video`;
+
+    // Forward the request to YouTube API
+    const response = await fetch(youtubeUrl);
+
+    // Get the response
+    const data = await response.json();
+
+    // Return the response
+    res.status(response.status).json(data);
+  } catch (error) {
+    console.error('YouTube API error:', error.message);
+    res.status(500).json({ error: error.message });
   }
 });
 
