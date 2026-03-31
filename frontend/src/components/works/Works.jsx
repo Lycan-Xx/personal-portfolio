@@ -253,7 +253,7 @@ const ProjectCard = React.memo(
                 backface-visibility. Replaced with a solid bg + manual blur
                 on a pseudo-layer so the 3D isolation is preserved.
               */}
-              <div className="w-full h-full bg-gray-800/90 relative overflow-hidden shadow-2xl hover:shadow-cyan-400/10 transition-shadow duration-300 border border-secondary rounded-xl">
+              <div className="w-full h-full bg-gray-800/90 relative overflow-hidden shadow-2xl hover:shadow-cyan-400/10 transition-shadow duration-300 border border-white/[0.08] hover:border-cyan-400/35 rounded-xl">
 
                 {/* Carousel — only rendered when there are images */}
                 {images.length > 0 ? (
