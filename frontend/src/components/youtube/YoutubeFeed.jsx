@@ -63,11 +63,8 @@ const PlayIcon = () => (
 );
 
 const YouTubeBadge = () => (
-  <span className="inline-flex items-center gap-1.5 text-xs font-mono px-2 py-0.5 rounded-full border border-secondary text-red-400">
-    <svg viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3">
-      <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.6 5.8a3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.75 15.5v-7l6.5 3.5-6.5 3.5z"/>
-    </svg>
-    YouTube
+  <span className="inline-flex items-center gap-1.5 text-xs font-mono px-2 py-0.5 rounded-full text-slate-400">
+    ▶ Video
   </span>
 );
 
