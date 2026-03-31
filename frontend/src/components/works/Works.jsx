@@ -421,7 +421,7 @@ ProjectCard.displayName = "ProjectCard";
 
 // ─── WORKS SECTION ────────────────────────────────────────────────────────────
 export const Works = () => {
-  const [ref, inView] = useInView({ triggerOnce: false, threshold: 0.1 });
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const { projects, loading, error } = useProjects();
   const [flippedCards, setFlippedCards]   = useState(new Set());
   const [visibleCards, setVisibleCards]   = useState(new Set());
