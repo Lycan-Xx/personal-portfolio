@@ -82,7 +82,7 @@ const Navbar = () => {
 
 						<button
 							onClick={() => setShowMobileMenu(!showMobileMenu)}
-							className="md:hidden p-2 rounded-full hover:bg-cyan-400/10 transition-colors duration-300"
+							className="md:hidden p-2 rounded-full hover:bg-cyan-400/10 transition-colors duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center"
 							aria-label="Toggle menu"
 						>
 							<span className="block w-6 h-6">
