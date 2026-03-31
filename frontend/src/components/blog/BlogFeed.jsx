@@ -31,7 +31,6 @@ const extractThumbnailFromHtml = (htmlContent) => {
 const normaliseMedium = (item) => {
   // Try: thumbnail field, then enclosure, then extract from HTML
   const thumbnail = item.thumbnail || item.enclosure?.link || extractThumbnailFromHtml(item.content || item.description);
-  console.log('[BlogFeed] Medium thumbnail extracted:', thumbnail);
   return {
     id:          item.guid,
     title:       item.title,
