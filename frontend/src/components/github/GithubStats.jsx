@@ -228,7 +228,7 @@ const GitHubStats = ({ token }) => {
     }
 
     try {
-      const res = await fetch('https://api.github.com/graphql', {
+      const res = await fetch('/api/github/graphql', {
         method:  'POST',
         headers: {
           'Content-Type':  'application/json',

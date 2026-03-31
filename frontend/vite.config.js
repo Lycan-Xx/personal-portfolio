@@ -11,7 +11,14 @@ export default defineConfig({
 	],
 	server: {
 		port: 3000,
-		open: true
+		open: true,
+		proxy: {
+			'/api/github': {
+				target: 'https://api.github.com',
+				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/api\/github/, ''),
+			},
+		},
 	},
 	resolve: {
 		extensions: ['.js', '.jsx']
