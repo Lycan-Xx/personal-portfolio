@@ -113,11 +113,11 @@ const Navbar = () => {
 									duration={500}
 									onSetActive={handleSetActive}
 									onClick={() => setShowMobileMenu(false)}
-									className={`px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-mono font-semibold text-left w-full transition-all duration-300 block
+								className={`px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-mono font-semibold text-left w-full transition-all duration-300 block min-h-[44px]
                     ${activeNav === item.id
-											? "text-white bg-cyan-400/10 border-2 border-cyan-400"
-											: "text-cyan-400 hover:text-white hover:bg-cyan-400/10"
-										}`}
+										? "text-cyan-400 border-b-2 border-cyan-400"
+										: "text-gray-400 hover:text-cyan-400"
+									}`}
 								>
 									{item.label}
 								</Link>

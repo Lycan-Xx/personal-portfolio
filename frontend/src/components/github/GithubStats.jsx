@@ -161,10 +161,9 @@ const StatCard = ({ label, value, sub, accent = '#22d3ee', delay, href }) => {
         style={{ background: accent }}
       />
       <div className="flex items-start justify-between mb-2">
-        <span className="text-xs text-gray-500 font-mono uppercase tracking-widest leading-tight">
+        <span className="text-xs text-slate-500 font-mono uppercase tracking-widest leading-tight">
           {label}
         </span>
-        {icon && <span className="text-lg opacity-60">{icon}</span>}
       </div>
       <p
         className="text-3xl font-bold font-mono my-1 tabular-nums"

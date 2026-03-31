@@ -170,7 +170,7 @@ const PostCard = ({ post, index }) => {
       <div className="flex items-center justify-between mt-auto">
         <div className="flex flex-wrap gap-1">
           {post.tags.map((tag) => (
-            <span key={tag} className="text-[10px] font-mono text-gray-500 bg-gray-800 px-1.5 py-0.5 rounded">
+            <span key={tag} className="text-[10px] font-mono text-cyan-400/70 bg-slate-800/60 px-2 py-0.5 rounded">
               #{tag}
             </span>
           ))}

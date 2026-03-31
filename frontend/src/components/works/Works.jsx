@@ -577,44 +577,6 @@ export const Works = () => {
           </motion.div>
         </div>
 
-        {/* Decorative blobs */}
-        <div className="absolute top-1/4 right-10 w-24 h-24 rounded-full bg-cyan-400/10 blur-2xl pointer-events-none" />
-        <div className="absolute bottom-1/4 left-10 w-32 h-32 rounded-full bg-cyan-400/5 blur-3xl pointer-events-none" />
-
-        {/* Background grid */}
-        <div className="absolute inset-0 -z-10 overflow-hidden rounded-none md:rounded-3xl pointer-events-none">
-          <svg
-            className="absolute inset-0 w-full h-full opacity-20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <pattern
-                id="works-grid"
-                width="40"
-                height="40"
-                patternUnits="userSpaceOnUse"
-              >
-                <path
-                  d="M40 0 L0 0 0 40"
-                  stroke="rgba(66,188,188,0.2)"
-                  strokeWidth="0.5"
-                />
-              </pattern>
-              <linearGradient
-                id="works-grad"
-                x1="0%"
-                y1="0%"
-                x2="100%"
-                y2="100%"
-              >
-                <stop offset="0%" stopColor="rgba(66,188,188,0.1)" />
-                <stop offset="100%" stopColor="rgba(0,0,0,0)" />
-              </linearGradient>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#works-grid)" />
-            <rect width="100%" height="100%" fill="url(#works-grad)" />
-          </svg>
-        </div>
       </div>
 
       <style>{`

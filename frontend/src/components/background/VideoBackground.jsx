@@ -69,7 +69,7 @@ const VideoBackground = () => {
 			};
 			
 			const handleError = (error) => {
-				console.error("Error loading video:", error);
+				// Error loading video
 				setHasError(true);
 			};
 			

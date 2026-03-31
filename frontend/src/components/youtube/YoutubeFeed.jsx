@@ -312,7 +312,7 @@ const YouTubeFeed = () => {
               href={`https://www.youtube.com/${getChannelHandle()}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs font-mono text-gray-500 hover:text-red-400 border border-secondary hover:border-secondary px-4 py-2 rounded transition-colors duration-200"
+              className="text-xs font-mono text-gray-500 hover:text-cyan-400 border border-cyan-400/15 hover:border-cyan-400/30 px-4 py-2 rounded transition-colors duration-200"
             >
               All videos ↗
             </a>

@@ -289,9 +289,41 @@ section {
 	scroll-snap-stop: always;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
 	section {
 		scroll-margin-top: 60px;
+		scroll-snap-align: none;
+		scroll-snap-stop: normal;
+	}
+	.scroll-container,
+	html {
+		scroll-snap-type: none !important;
+	}
+}
+
+/* Hero text scrim */
+.hero-text-col {
+	position: relative;
+}
+.hero-text-col::before {
+	content: '';
+	position: absolute;
+	inset: -48px -32px;
+	background: radial-gradient(
+		ellipse at 30% 50%,
+		rgba(0, 0, 0, 0.50) 0%,
+		transparent 68%
+	);
+	filter: blur(24px);
+	z-index: -1;
+	pointer-events: none;
+}
+
+/* Mobile project card height */
+@media (max-width: 767px) {
+	.project-card,
+	.h-80 {
+		height: 280px !important;
 	}
 }
 
