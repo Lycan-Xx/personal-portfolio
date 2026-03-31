@@ -389,7 +389,6 @@ const GitHubStats = ({ token }) => {
                 value={data.totalRepos}
                 sub="owned repositories"
                 accent="#22d3ee"
-                icon="📁"
                 delay={0.25}
                 href={`https://github.com/${USERNAME}?tab=repositories`}
               />
@@ -397,8 +396,7 @@ const GitHubStats = ({ token }) => {
                 label="Merged PRs"
                 value={data.mergedPRs.toLocaleString()}
                 sub="pull requests merged"
-                accent="#34d399"
-                icon="🔀"
+                accent="#22d3ee"
                 delay={0.30}
                 href={`https://github.com/pulls?q=is:pr+author:${USERNAME}+is:merged`}
               />
