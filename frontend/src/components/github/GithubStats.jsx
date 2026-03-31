@@ -419,7 +419,7 @@ const GitHubStats = ({ token }) => {
                         <span className="text-xs font-mono text-gray-600 w-4">{idx + 1}.</span>
                         {repo.isPrivate ? (
                           <span className="text-sm text-gray-400 font-mono">
-                            🔒 Private repo
+                            <span className="text-xs text-slate-500">[private]</span> {repo.name}
                           </span>
                         ) : (
                           <a
