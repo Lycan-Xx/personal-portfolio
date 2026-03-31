@@ -7,19 +7,26 @@ export const useTheme = () => {
 };
 
 export const CustomThemeProvider = ({ children }) => {
+	// Safe check for browser environment
+	const isBrowser = typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+
 	const getInitialMode = () => {
-		if (typeof localStorage === "undefined") return true; // Default to dark if localStorage not available
-		const isReturningUser = "dark" in localStorage;
-		const savedMode = JSON.parse(localStorage.getItem("dark"));
-		const userPrefersDark = getPrefColorScheme();
-		if (isReturningUser) {
-			return savedMode;
+		if (!isBrowser) return true; // Default to dark if localStorage not available
+		try {
+			const isReturningUser = "dark" in localStorage;
+			const savedMode = localStorage.getItem("dark") ? JSON.parse(localStorage.getItem("dark")) : null;
+			const userPrefersDark = getPrefColorScheme();
+			if (isReturningUser && savedMode !== null) {
+				return savedMode;
+			}
+			return !!userPrefersDark; // Respect system preference
+		} catch (e) {
+			return true; // Default to dark on error
 		}
-		return !!userPrefersDark; // Respect system preference
 	};
 
 	const getPrefColorScheme = () => {
-		if (!window.matchMedia) return;
+		if (!isBrowser || !window.matchMedia) return;
 		return window.matchMedia("(prefers-color-scheme: dark)").matches;
 	};
 

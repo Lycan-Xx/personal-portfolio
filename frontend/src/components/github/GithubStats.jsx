@@ -7,11 +7,15 @@ const GitHubCalendar = lazy(() => import('react-github-calendar'));
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
 const USERNAME = 'Lycan-Xx';
 
+// Safe localStorage check - only runs in browser
+const isBrowser = typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+
 // ─── CACHE ────────────────────────────────────────────────────────────────────
 const CACHE_KEY = `github-stats-v2-${USERNAME}`;
 const CACHE_TTL = 1000 * 60 * 60 * 12; // 12 hours
 
 const readCache = () => {
+  if (!isBrowser) return null;
   try {
     const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
@@ -22,6 +26,7 @@ const readCache = () => {
 };
 
 const writeCache = (data) => {
+  if (!isBrowser) return;
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify({ data, expiry: Date.now() + CACHE_TTL }));
   } catch {}

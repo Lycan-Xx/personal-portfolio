@@ -8,6 +8,9 @@ const getDevtoHandle = () => import.meta.env.VITE_DEVTO_HANDLE || 'lycan_xx';
 const getRss2JsonKey = () => import.meta.env.VITE_RSS2JSON_KEY || '';
 const MAX_POSTS = 6;
 
+// Safe localStorage check
+const isBrowser = typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+
 const RSS2JSON_BASE = 'https://api.rss2json.com/v1/api.json';
 
 // ─── FETCH HELPERS ────────────────────────────────────────────────────────────
@@ -74,6 +77,7 @@ const CACHE_KEY = 'blog-feed-cache';
 const CACHE_TTL = 1000 * 60 * 60 * 6; // 6 hours
 
 const readCache = () => {
+  if (!isBrowser) return null;
   try {
     const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
@@ -84,6 +88,7 @@ const readCache = () => {
 };
 
 const writeCache = (data) => {
+  if (!isBrowser) return;
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify({ data, expiry: Date.now() + CACHE_TTL }));
   } catch { /* quota exceeded – silent */ }

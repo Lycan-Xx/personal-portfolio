@@ -10,11 +10,15 @@ const MAX_VIDEOS = 3;
 // ─── YOUTUBE DATA API ────────────────────────────────────────────────────────────
 const getYouTubeApiKey = () => import.meta.env.VITE_YOUTUBE_API_KEY;
 
+// Safe localStorage check
+const isBrowser = typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+
 // ─── CACHE ────────────────────────────────────────────────────────────────────
 const CACHE_KEY = 'yt-feed-cache-v1';
 const CACHE_TTL = 1000 * 60 * 60 * 3; // 3 hours
 
 const readCache = () => {
+  if (!isBrowser) return null;
   try {
     const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
@@ -25,6 +29,7 @@ const readCache = () => {
 };
 
 const writeCache = (data) => {
+  if (!isBrowser) return;
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify({ data, expiry: Date.now() + CACHE_TTL }));
   } catch {}
