@@ -515,7 +515,7 @@ export const Works = () => {
       <div className="w-full max-w-[86rem] mx-auto relative">
 
         {/* Glassmorphism backdrop */}
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-xl rounded-none md:rounded-3xl shadow-lg shadow-cyan-400/5" />
+        <div className="absolute inset-0 bg-black/20 backdrop-blur-md rounded-none md:rounded-3xl shadow-lg shadow-cyan-400/5" />
 
         <div className="relative p-6 md:p-10 z-10">
 
