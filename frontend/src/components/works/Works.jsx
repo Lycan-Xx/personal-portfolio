@@ -307,7 +307,7 @@ const ProjectCard = React.memo(
                       {project.tags?.slice(0, 3).map((tag, i) => (
                         <span
                           key={i}
-                          className="px-2 py-1 rounded-xl text-xs font-mono bg-cyan-400/20 backdrop-blur-sm text-cyan-400 border border-secondary"
+                          className="px-2 py-0.5 rounded text-xs font-mono bg-cyan-400/[0.08] text-cyan-400/65"
                         >
                           {tag}
                         </span>
