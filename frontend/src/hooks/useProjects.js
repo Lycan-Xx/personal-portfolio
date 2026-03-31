@@ -1,5 +1,5 @@
 // hooks/useProjects.js  
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import localProjects from '../components/works/projects.json'
 
 export function useProjects() {
