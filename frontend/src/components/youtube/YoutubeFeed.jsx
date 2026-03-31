@@ -138,7 +138,7 @@ const FeaturedVideoCard = ({ video }) => {
               <YouTubeBadge />
               <span className="text-xs text-gray-500 font-mono">{formatDate(video.pubDate)}</span>
             </div>
-            <h3 className="text-base font-semibold text-gray-200 group-hover:text-red-400 transition-colors duration-200 leading-snug mb-2">
+            <h3 className="text-base font-semibold text-gray-200 group-hover:text-cyan-400 transition-colors duration-200 leading-snug mb-2">
               {video.title}
             </h3>
             <p className="text-sm text-gray-500 leading-relaxed line-clamp-3">
