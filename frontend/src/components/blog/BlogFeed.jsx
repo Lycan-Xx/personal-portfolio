@@ -147,7 +147,7 @@ const PostCard = ({ post, index }) => {
           <motion.img
             src={post.thumbnail}
             alt={post.title}
-            className="w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-300"
+            className="w-full h-full object-cover aspect-video opacity-70 group-hover:opacity-90 transition-opacity duration-300"
             animate={{ scale: hovered ? 1.04 : 1 }}
             transition={{ duration: 0.4 }}
             onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
