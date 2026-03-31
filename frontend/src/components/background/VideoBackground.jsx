@@ -65,7 +65,7 @@ const VideoBackground = () => {
 		if (videoElement && videoSrc) {
 			const handleLoaded = () => {
 				setIsLoaded(true);
-				console.log("Video loaded successfully");
+				// Video loaded successfully
 			};
 			
 			const handleError = (error) => {
