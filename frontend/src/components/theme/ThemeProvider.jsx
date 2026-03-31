@@ -7,23 +7,16 @@ export const useTheme = () => {
 };
 
 export const CustomThemeProvider = ({ children }) => {
-  // Use lazy initialization to avoid running logic during render
+  // Use lazy initialization to read from localStorage synchronously
   const [theme, setTheme] = useState(() => {
-    // Only run this once on mount
     if (typeof window === 'undefined') return 'dark';
     try {
       const saved = localStorage.getItem('dark');
-      if (saved) {
-        return JSON.parse(saved) ? 'dark' : 'light';
-      }
-      const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
-      return prefersDark ? 'dark' : 'light';
-    } catch {
-      return 'dark';
-    }
+      if (saved) return JSON.parse(saved) ? 'dark' : 'light';
+      return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    } catch { return 'dark'; }
   });
 
-  // Effect to apply data-theme attribute to HTML element
   useEffect(() => {
     const html = document.documentElement;
     if (theme === "dark") {
@@ -31,7 +24,6 @@ export const CustomThemeProvider = ({ children }) => {
     } else {
       html.removeAttribute("data-theme");
     }
-    // Persist theme preference
     try {
       localStorage.setItem("dark", JSON.stringify(theme === "dark"));
     } catch (e) {
@@ -44,12 +36,7 @@ export const CustomThemeProvider = ({ children }) => {
   };
 
   return (
-    <ThemeContext.Provider
-      value={{
-        theme,
-        toggleTheme,
-      }}
-    >
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );

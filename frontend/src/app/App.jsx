@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { Suspense } from "react";
 import { motion } from "framer-motion";
 import { CustomThemeProvider } from "../components/theme/ThemeProvider";
 import { ErrorBoundary } from "../components/ErrorBoundary";
@@ -6,32 +6,21 @@ import { ErrorBoundary } from "../components/ErrorBoundary";
 import { Home } from "../pages/Home";
 import Navbar from '../components/nav/Navbar';
 import LoadingScreen from '../components/LoadingScreen';
+import About from '../components/about/About';
+import { Works } from '../components/works/Works';
+import ContentHub from '../components/content/ContentHub';
+import Contact from '../components/contact/Contact';
+import VideoBackground from '../components/background/VideoBackground';
 
-// Lazy load — everything below the fold
-const About = lazy(() => import("../components/about/About"));
-const Works = lazy(() => import("../components/works/Works"));
-const ContentHub = lazy(() => import("../components/content/ContentHub"));
-const Contact = lazy(() => import("../components/contact/Contact"));
-const VideoBackground = lazy(() => import("../components/background/VideoBackground"));
-
-// Simple loading fallback for Suspense
+// Simple loading fallback
 const SuspenseFallback = () => (
-  <div style={{ 
-    minHeight: '50vh', 
-    display: 'flex', 
-    alignItems: 'center', 
-    justifyContent: 'center',
-    color: '#22d3ee',
-    fontFamily: 'monospace'
-  }}>
-    Loading...
-  </div>
+  <div className="min-h-[50vh]" />
 );
 
 export const App = () => {
 	return (
-		<ErrorBoundary>
-			<LoadingScreen>
+		<LoadingScreen>
+			<ErrorBoundary>
 				<CustomThemeProvider>
 					<Navbar />
 					<main>
@@ -49,15 +38,15 @@ export const App = () => {
 					
 					{/* Footer text */}
 					<motion.div
-						initial={{ opacity: 1 }}
-						animate={{ opacity: 2 }}
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
 						transition={{ duration: 0.5 }}
 						className="fixed bottom-4 right-4 text-sm text-gray-400/60 hover:text-cyan-400 transition-colors duration-300 font-mono z-50"
 					>
 						Lycan-Xx says hi... 👾
 					</motion.div>
 				</CustomThemeProvider>
-			</LoadingScreen>
-		</ErrorBoundary>
+			</ErrorBoundary>
+		</LoadingScreen>
 	);
 };
