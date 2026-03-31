@@ -145,7 +145,7 @@ const FeaturedVideoCard = ({ video }) => {
               {video.description}
             </p>
           </div>
-          <div className="mt-4 flex items-center gap-2 text-xs font-mono text-gray-500 group-hover:text-red-400 transition-colors duration-200">
+          <div className="mt-4 flex items-center gap-2 text-xs font-mono text-gray-500 group-hover:text-cyan-400 transition-colors duration-200">
             <span>Watch on YouTube</span>
             <span>↗</span>
           </div>
