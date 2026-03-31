@@ -12,14 +12,11 @@ const RSS2JSON_BASE = 'https://api.rss2json.com/v1/api.json';
 
 // ─── FETCH HELPERS ────────────────────────────────────────────────────────────
 const fetchFeed = async (rssUrl) => {
-  console.log('[BlogFeed] Fetching:', rssUrl);
   const params = new URLSearchParams({ rss_url: rssUrl });
   if (getRss2JsonKey()) params.set('api_key', getRss2JsonKey());
   const res = await fetch(`${RSS2JSON_BASE}?${params}`);
-  console.log('[BlogFeed] Response status:', res.status);
   if (!res.ok) throw new Error(`Feed fetch failed: ${res.status}`);
   const json = await res.json();
-  console.log('[BlogFeed] JSON status:', json.status, '- Items:', json.items?.length);
   if (json.status !== 'ok') throw new Error(json.message || 'Feed error');
   return json.items;
 };
