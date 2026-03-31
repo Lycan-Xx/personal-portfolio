@@ -147,10 +147,10 @@ const CalendarPlaceholder = () => (
   <div className="animate-pulse h-32 bg-gray-800 rounded-lg w-full" />
 );
 
-const StatCard = ({ label, value, sub, accent = '#22d3ee', icon, delay, href }) => {
+const StatCard = ({ label, value, sub, accent = '#22d3ee', delay, href }) => {
   const inner = (
     <motion.div
-      className="relative border border-secondary hover:border-secondary bg-gray-800/50 rounded-lg p-4 transition-colors duration-300 group overflow-hidden"
+      className="relative border border-cyan-400/15 hover:border-cyan-400/30 bg-black/30 rounded-xl p-4 transition-colors duration-300 group overflow-hidden"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
