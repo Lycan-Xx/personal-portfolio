@@ -5,16 +5,24 @@ export const usePerformance = () => {
 	const [isHighPerformance, setIsHighPerformance] = useState(false);
 
 	useEffect(() => {
-		const checkPerformance = () => {
-			const highEnd =
-				// Check if user hasn't requested reduced motion
-				!window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
-				// Check if device has more than 4GB RAM
-				window.deviceMemory > 4 &&
-				// Check if data-saver mode is off
-				!navigator.connection?.saveData;
+		// Only run in browser
+		if (typeof window === 'undefined') return;
 
-			setIsHighPerformance(highEnd);
+		const checkPerformance = () => {
+			try {
+				const highEnd =
+					// Check if user hasn't requested reduced motion
+					(!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) &&
+					// Check if device has more than 4GB RAM (may be undefined)
+					(window.deviceMemory === undefined || window.deviceMemory > 4) &&
+					// Check if data-saver mode is off
+					(!navigator.connection || !navigator.connection.saveData);
+
+				setIsHighPerformance(highEnd);
+			} catch (e) {
+				// If any property access fails, default to false
+				setIsHighPerformance(false);
+			}
 		};
 
 		checkPerformance();

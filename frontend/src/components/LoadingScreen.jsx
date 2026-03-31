@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
+// Module-level browser check
+const isBrowser = typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+
 const LoadingScreen = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [contentLoaded, setContentLoaded] = useState(false);
@@ -7,6 +10,11 @@ const LoadingScreen = ({ children }) => {
 
     useEffect(() => {
         // Check if user has visited before (skip loading for returning users)
+        if (!isBrowser) {
+            setLoading(false);
+            return;
+        }
+        
         const hasVisited = localStorage.getItem('portfolio-visited');
         if (hasVisited) {
             setLoading(false);
@@ -30,12 +38,20 @@ const LoadingScreen = ({ children }) => {
                 
                 setContentLoaded(true);
                 setLoadingProgress(100); // Set to 100% when done
-                localStorage.setItem('portfolio-visited', 'true');
+                try {
+                    localStorage.setItem('portfolio-visited', 'true');
+                } catch (e) {
+                    // Storage error - ignore
+                }
             } catch (error) {
                 console.error("Error preloading assets:", error);
                 setContentLoaded(true); // Continue anyway
                 setLoadingProgress(100);
-                localStorage.setItem('portfolio-visited', 'true');
+                try {
+                    localStorage.setItem('portfolio-visited', 'true');
+                } catch (e) {
+                    // Storage error - ignore
+                }
             }
         };
 

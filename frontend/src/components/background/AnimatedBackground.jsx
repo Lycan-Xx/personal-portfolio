@@ -1,7 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 const AnimatedBackground = () => {
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    // Set dimensions after mount to avoid SSR issues
+    setDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight
+    });
+
+    const handleResize = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-black animate-gradient" />
@@ -13,12 +33,12 @@ const AnimatedBackground = () => {
             key={i}
             className="absolute w-2 h-2 bg-cyan-400 rounded-full"
             initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+              x: dimensions.width * Math.random(),
+              y: dimensions.height * Math.random(),
             }}
             animate={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+              x: dimensions.width * Math.random(),
+              y: dimensions.height * Math.random(),
               transition: {
                 duration: Math.random() * 10 + 20,
                 repeat: Infinity,

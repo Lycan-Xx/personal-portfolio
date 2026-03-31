@@ -1,5 +1,8 @@
 import React, { useEffect, useState, createContext } from "react";
 
+// Module-level browser check
+const isBrowser = typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+
 export const ThemeContext = createContext();
 
 export const useTheme = () => {
@@ -34,6 +37,7 @@ export const CustomThemeProvider = ({ children }) => {
 
 	// Effect to apply data-theme attribute to HTML element
 	useEffect(() => {
+		if (!isBrowser) return;
 		const html = document.documentElement;
 		if (theme === "dark") {
 			html.setAttribute("data-theme", "dark");
@@ -41,7 +45,11 @@ export const CustomThemeProvider = ({ children }) => {
 			html.removeAttribute("data-theme"); // Remove for light mode
 		}
 		// Persist theme preference
-		localStorage.setItem("dark", JSON.stringify(theme === "dark"));
+		try {
+			localStorage.setItem("dark", JSON.stringify(theme === "dark"));
+		} catch (e) {
+			// Storage quota exceeded or other error
+		}
 	}, [theme]);
 
 	const toggleTheme = () => {
