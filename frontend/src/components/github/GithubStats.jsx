@@ -410,7 +410,7 @@ const GitHubStats = ({ token }) => {
                   {data.topRepos.map((repo, idx) => (
                     <motion.div
                       key={repo.name}
-                      className="flex items-center justify-between p-3 bg-gray-800/30 rounded-lg border border-secondary hover:border-secondary transition-colors"
+                      className="flex items-center justify-between p-3 bg-black/30 rounded-xl border border-cyan-400/15 hover:border-cyan-400/30 transition-colors"
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.3, delay: 0.4 + idx * 0.05 }}
