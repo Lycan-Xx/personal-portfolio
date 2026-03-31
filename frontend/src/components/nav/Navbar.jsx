@@ -69,11 +69,11 @@ const Navbar = () => {
 									offset={-80}
 									duration={500}
 									onSetActive={handleSetActive}
-									className={`px-3 sm:px-4 py-2 rounded-xl text-base lg:text-lg font-semibold font-mono transition-all duration-300 cursor-pointer
+								className={`px-3 sm:px-4 py-2 text-base lg:text-lg font-semibold font-mono transition-all duration-300 cursor-pointer
                     ${activeNav === item.id
-											? "text-white border-2 border-cyan-400 bg-cyan-400/10"
-											: "text-cyan-400 hover:text-white hover:bg-cyan-400/10"
-										}`}
+										? "text-cyan-400 border-b-2 border-cyan-400"
+										: "text-gray-400 hover:text-cyan-400"
+									}`}
 								>
 									{item.label}
 								</Link>
