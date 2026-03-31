@@ -126,7 +126,7 @@ const FeaturedVideoCard = ({ video }) => {
             <PlayIcon />
           </div>
           {/* "LATEST" tag */}
-          <span className="absolute top-2 left-2 text-[10px] font-mono bg-red-600 text-white px-1.5 py-0.5 rounded uppercase tracking-wider">
+          <span className="absolute top-2 left-2 text-[10px] font-mono bg-cyan-400/80 text-black px-1.5 py-0.5 rounded uppercase tracking-wider">
             Latest
           </span>
         </div>
