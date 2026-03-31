@@ -172,7 +172,7 @@ const VideoCard = ({ video, index }) => {
       onMouseLeave={() => setHovered(false)}
     >
       <motion.div
-        className="h-[2px] bg-red-500"
+        className="h-[2px] bg-cyan-400"
         initial={{ scaleX: 0 }}
         animate={{ scaleX: hovered ? 1 : 0 }}
         transition={{ duration: 0.3 }}
