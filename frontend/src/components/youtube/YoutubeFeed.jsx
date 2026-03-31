@@ -100,7 +100,7 @@ const FeaturedVideoCard = ({ video }) => {
     >
       {/* accent line */}
       <motion.div
-        className="h-[2px] bg-red-500"
+        className="h-[2px] bg-cyan-400"
         initial={{ scaleX: 0 }}
         animate={{ scaleX: hovered ? 1 : 0 }}
         transition={{ duration: 0.3 }}
