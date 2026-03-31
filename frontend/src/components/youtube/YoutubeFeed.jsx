@@ -63,11 +63,8 @@ const PlayIcon = () => (
 );
 
 const YouTubeBadge = () => (
-  <span className="inline-flex items-center gap-1.5 text-xs font-mono px-2 py-0.5 rounded-full border border-secondary text-red-400">
-    <svg viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3">
-      <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.6 5.8a3 3 0 0 0 2.1 2.1C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.75 15.5v-7l6.5 3.5-6.5 3.5z"/>
-    </svg>
-    YouTube
+  <span className="inline-flex items-center gap-1.5 text-xs font-mono px-2 py-0.5 rounded-full text-slate-400">
+    ▶ Video
   </span>
 );
 
@@ -103,7 +100,7 @@ const FeaturedVideoCard = ({ video }) => {
     >
       {/* accent line */}
       <motion.div
-        className="h-[2px] bg-red-500"
+        className="h-[2px] bg-cyan-400"
         initial={{ scaleX: 0 }}
         animate={{ scaleX: hovered ? 1 : 0 }}
         transition={{ duration: 0.3 }}
@@ -129,7 +126,7 @@ const FeaturedVideoCard = ({ video }) => {
             <PlayIcon />
           </div>
           {/* "LATEST" tag */}
-          <span className="absolute top-2 left-2 text-[10px] font-mono bg-red-600 text-white px-1.5 py-0.5 rounded uppercase tracking-wider">
+          <span className="absolute top-2 left-2 text-[10px] font-mono bg-cyan-400/80 text-black px-1.5 py-0.5 rounded uppercase tracking-wider">
             Latest
           </span>
         </div>
@@ -141,14 +138,14 @@ const FeaturedVideoCard = ({ video }) => {
               <YouTubeBadge />
               <span className="text-xs text-gray-500 font-mono">{formatDate(video.pubDate)}</span>
             </div>
-            <h3 className="text-base font-semibold text-gray-200 group-hover:text-red-400 transition-colors duration-200 leading-snug mb-2">
+            <h3 className="text-base font-semibold text-gray-200 group-hover:text-cyan-400 transition-colors duration-200 leading-snug mb-2">
               {video.title}
             </h3>
             <p className="text-sm text-gray-500 leading-relaxed line-clamp-3">
               {video.description}
             </p>
           </div>
-          <div className="mt-4 flex items-center gap-2 text-xs font-mono text-gray-500 group-hover:text-red-400 transition-colors duration-200">
+          <div className="mt-4 flex items-center gap-2 text-xs font-mono text-gray-500 group-hover:text-cyan-400 transition-colors duration-200">
             <span>Watch on YouTube</span>
             <span>↗</span>
           </div>
@@ -175,7 +172,7 @@ const VideoCard = ({ video, index }) => {
       onMouseLeave={() => setHovered(false)}
     >
       <motion.div
-        className="h-[2px] bg-red-500"
+        className="h-[2px] bg-cyan-400"
         initial={{ scaleX: 0 }}
         animate={{ scaleX: hovered ? 1 : 0 }}
         transition={{ duration: 0.3 }}
@@ -206,7 +203,7 @@ const VideoCard = ({ video, index }) => {
           <YouTubeBadge />
           <span className="text-xs text-gray-500 font-mono">{formatDate(video.pubDate)}</span>
         </div>
-        <h3 className="text-sm font-semibold text-gray-200 group-hover:text-red-400 transition-colors duration-200 leading-snug line-clamp-2">
+        <h3 className="text-sm font-semibold text-gray-200 group-hover:text-cyan-400 transition-colors duration-200 leading-snug line-clamp-2">
           {video.title}
         </h3>
       </div>
@@ -315,7 +312,7 @@ const YouTubeFeed = () => {
               href={`https://www.youtube.com/${getChannelHandle()}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs font-mono text-gray-500 hover:text-red-400 border border-secondary hover:border-secondary px-4 py-2 rounded transition-colors duration-200"
+              className="text-xs font-mono text-gray-500 hover:text-cyan-400 border border-cyan-400/15 hover:border-cyan-400/30 px-4 py-2 rounded transition-colors duration-200"
             >
               All videos ↗
             </a>

@@ -163,14 +163,14 @@ const ImageCarousel = React.memo(({ images, isInView, title }) => {
 
       {/* Dot indicators */}
       {images.length > 1 && (
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 z-10">
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
           {images.map((_, i) => (
             <div
               key={i}
               className={`rounded-full transition-all duration-300 ${
                 i === currentIndex
-                  ? "w-4 h-1.5 bg-cyan-400"
-                  : "w-1.5 h-1.5 bg-white/30"
+                  ? "w-5 h-2.5 bg-cyan-400"
+                  : "w-2.5 h-2.5 bg-white/30"
               }`}
             />
           ))}
@@ -253,7 +253,7 @@ const ProjectCard = React.memo(
                 backface-visibility. Replaced with a solid bg + manual blur
                 on a pseudo-layer so the 3D isolation is preserved.
               */}
-              <div className="w-full h-full bg-gray-800/90 relative overflow-hidden shadow-2xl hover:shadow-cyan-400/10 transition-shadow duration-300 border border-secondary rounded-xl">
+              <div className="w-full h-full bg-gray-800/90 relative overflow-hidden shadow-2xl hover:shadow-cyan-400/10 transition-shadow duration-300 border border-white/[0.08] hover:border-cyan-400/35 rounded-xl">
 
                 {/* Carousel — only rendered when there are images */}
                 {images.length > 0 ? (
@@ -307,7 +307,7 @@ const ProjectCard = React.memo(
                       {project.tags?.slice(0, 3).map((tag, i) => (
                         <span
                           key={i}
-                          className="px-2 py-1 rounded-xl text-xs font-mono bg-cyan-400/20 backdrop-blur-sm text-cyan-400 border border-secondary"
+                          className="px-2 py-0.5 rounded text-xs font-mono bg-cyan-400/[0.08] text-cyan-400/65"
                         >
                           {tag}
                         </span>
@@ -421,7 +421,7 @@ ProjectCard.displayName = "ProjectCard";
 
 // ─── WORKS SECTION ────────────────────────────────────────────────────────────
 export const Works = () => {
-  const [ref, inView] = useInView({ triggerOnce: false, threshold: 0.1 });
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const { projects, loading, error } = useProjects();
   const [flippedCards, setFlippedCards]   = useState(new Set());
   const [visibleCards, setVisibleCards]   = useState(new Set());
@@ -515,7 +515,7 @@ export const Works = () => {
       <div className="w-full max-w-[86rem] mx-auto relative">
 
         {/* Glassmorphism backdrop */}
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-xl rounded-none md:rounded-3xl shadow-lg shadow-cyan-400/5" />
+        <div className="absolute inset-0 bg-black/20 backdrop-blur-md rounded-none md:rounded-3xl shadow-lg shadow-cyan-400/5" />
 
         <div className="relative p-6 md:p-10 z-10">
 
@@ -577,44 +577,6 @@ export const Works = () => {
           </motion.div>
         </div>
 
-        {/* Decorative blobs */}
-        <div className="absolute top-1/4 right-10 w-24 h-24 rounded-full bg-cyan-400/10 blur-2xl pointer-events-none" />
-        <div className="absolute bottom-1/4 left-10 w-32 h-32 rounded-full bg-cyan-400/5 blur-3xl pointer-events-none" />
-
-        {/* Background grid */}
-        <div className="absolute inset-0 -z-10 overflow-hidden rounded-none md:rounded-3xl pointer-events-none">
-          <svg
-            className="absolute inset-0 w-full h-full opacity-20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <pattern
-                id="works-grid"
-                width="40"
-                height="40"
-                patternUnits="userSpaceOnUse"
-              >
-                <path
-                  d="M40 0 L0 0 0 40"
-                  stroke="rgba(66,188,188,0.2)"
-                  strokeWidth="0.5"
-                />
-              </pattern>
-              <linearGradient
-                id="works-grad"
-                x1="0%"
-                y1="0%"
-                x2="100%"
-                y2="100%"
-              >
-                <stop offset="0%" stopColor="rgba(66,188,188,0.1)" />
-                <stop offset="100%" stopColor="rgba(0,0,0,0)" />
-              </linearGradient>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#works-grid)" />
-            <rect width="100%" height="100%" fill="url(#works-grad)" />
-          </svg>
-        </div>
       </div>
 
       <style>{`

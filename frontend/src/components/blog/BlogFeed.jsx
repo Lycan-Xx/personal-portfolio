@@ -12,14 +12,11 @@ const RSS2JSON_BASE = 'https://api.rss2json.com/v1/api.json';
 
 // ─── FETCH HELPERS ────────────────────────────────────────────────────────────
 const fetchFeed = async (rssUrl) => {
-  console.log('[BlogFeed] Fetching:', rssUrl);
   const params = new URLSearchParams({ rss_url: rssUrl });
   if (getRss2JsonKey()) params.set('api_key', getRss2JsonKey());
   const res = await fetch(`${RSS2JSON_BASE}?${params}`);
-  console.log('[BlogFeed] Response status:', res.status);
   if (!res.ok) throw new Error(`Feed fetch failed: ${res.status}`);
   const json = await res.json();
-  console.log('[BlogFeed] JSON status:', json.status, '- Items:', json.items?.length);
   if (json.status !== 'ok') throw new Error(json.message || 'Feed error');
   return json.items;
 };
@@ -34,7 +31,6 @@ const extractThumbnailFromHtml = (htmlContent) => {
 const normaliseMedium = (item) => {
   // Try: thumbnail field, then enclosure, then extract from HTML
   const thumbnail = item.thumbnail || item.enclosure?.link || extractThumbnailFromHtml(item.content || item.description);
-  console.log('[BlogFeed] Medium thumbnail extracted:', thumbnail);
   return {
     id:          item.guid,
     title:       item.title,
@@ -147,11 +143,11 @@ const PostCard = ({ post, index }) => {
 
       {/* thumbnail */}
       {post.thumbnail && (
-        <div className="mb-4 overflow-hidden rounded-md h-36 bg-gray-800">
+        <div className="mb-4 overflow-hidden rounded-md aspect-video bg-gray-800">
           <motion.img
             src={post.thumbnail}
             alt={post.title}
-            className="w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-300"
+            className="w-full h-full object-cover aspect-video opacity-70 group-hover:opacity-90 transition-opacity duration-300"
             animate={{ scale: hovered ? 1.04 : 1 }}
             transition={{ duration: 0.4 }}
             onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
@@ -174,7 +170,7 @@ const PostCard = ({ post, index }) => {
       <div className="flex items-center justify-between mt-auto">
         <div className="flex flex-wrap gap-1">
           {post.tags.map((tag) => (
-            <span key={tag} className="text-[10px] font-mono text-gray-500 bg-gray-800 px-1.5 py-0.5 rounded">
+            <span key={tag} className="text-[10px] font-mono text-cyan-400/70 bg-slate-800/60 px-2 py-0.5 rounded">
               #{tag}
             </span>
           ))}

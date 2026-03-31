@@ -147,10 +147,10 @@ const CalendarPlaceholder = () => (
   <div className="animate-pulse h-32 bg-gray-800 rounded-lg w-full" />
 );
 
-const StatCard = ({ label, value, sub, accent = '#22d3ee', icon, delay, href }) => {
+const StatCard = ({ label, value, sub, accent = '#22d3ee', delay, href }) => {
   const inner = (
     <motion.div
-      className="relative border border-secondary hover:border-secondary bg-gray-800/50 rounded-lg p-4 transition-colors duration-300 group overflow-hidden"
+      className="relative border border-cyan-400/15 hover:border-cyan-400/30 bg-black/30 rounded-xl p-4 transition-colors duration-300 group overflow-hidden"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
@@ -161,10 +161,9 @@ const StatCard = ({ label, value, sub, accent = '#22d3ee', icon, delay, href }) 
         style={{ background: accent }}
       />
       <div className="flex items-start justify-between mb-2">
-        <span className="text-xs text-gray-500 font-mono uppercase tracking-widest leading-tight">
+        <span className="text-xs text-slate-500 font-mono uppercase tracking-widest leading-tight">
           {label}
         </span>
-        {icon && <span className="text-lg opacity-60">{icon}</span>}
       </div>
       <p
         className="text-3xl font-bold font-mono my-1 tabular-nums"
@@ -356,31 +355,27 @@ const GitHubStats = ({ token }) => {
                 value={data.totalContributions.toLocaleString()}
                 sub="past 12 months"
                 accent="#22d3ee"
-                icon="📊"
                 delay={0.05}
               />
               <StatCard
                 label={`${monthName} commits`}
                 value={data.monthlyCommits}
                 sub="this month"
-                accent="#34d399"
-                icon="⚡"
+                accent="#22d3ee"
                 delay={0.10}
               />
               <StatCard
                 label="Current streak"
                 value={`${data.current.days}d`}
                 sub={data.current.days > 0 ? `${data.current.start} – ${data.current.end}` : 'No active streak'}
-                accent="#f59e0b"
-                icon="🔥"
+                accent="#22d3ee"
                 delay={0.15}
               />
               <StatCard
                 label="Longest streak"
                 value={`${data.longest.days}d`}
                 sub={data.longest.days > 0 ? `${data.longest.start} – ${data.longest.end}` : '—'}
-                accent="#a78bfa"
-                icon="🏆"
+                accent="#22d3ee"
                 delay={0.20}
               />
             </div>
@@ -393,7 +388,6 @@ const GitHubStats = ({ token }) => {
                 value={data.totalRepos}
                 sub="owned repositories"
                 accent="#22d3ee"
-                icon="📁"
                 delay={0.25}
                 href={`https://github.com/${USERNAME}?tab=repositories`}
               />
@@ -401,8 +395,7 @@ const GitHubStats = ({ token }) => {
                 label="Merged PRs"
                 value={data.mergedPRs.toLocaleString()}
                 sub="pull requests merged"
-                accent="#34d399"
-                icon="🔀"
+                accent="#22d3ee"
                 delay={0.30}
                 href={`https://github.com/pulls?q=is:pr+author:${USERNAME}+is:merged`}
               />
@@ -416,7 +409,7 @@ const GitHubStats = ({ token }) => {
                   {data.topRepos.map((repo, idx) => (
                     <motion.div
                       key={repo.name}
-                      className="flex items-center justify-between p-3 bg-gray-800/30 rounded-lg border border-secondary hover:border-secondary transition-colors"
+                      className="flex items-center justify-between p-3 bg-black/30 rounded-xl border border-cyan-400/15 hover:border-cyan-400/30 transition-colors"
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.3, delay: 0.4 + idx * 0.05 }}
@@ -425,7 +418,7 @@ const GitHubStats = ({ token }) => {
                         <span className="text-xs font-mono text-gray-600 w-4">{idx + 1}.</span>
                         {repo.isPrivate ? (
                           <span className="text-sm text-gray-400 font-mono">
-                            🔒 Private repo
+                            <span className="text-xs text-slate-500">[private]</span> {repo.name}
                           </span>
                         ) : (
                           <a

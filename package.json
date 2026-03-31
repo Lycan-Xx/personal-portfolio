@@ -8,6 +8,7 @@
 		"frontend": "cd frontend && npm run dev",
 		"dev": "npm run frontend",
 		"build": "cd frontend && npm run build",
+		"build:dev": "cd frontend && npm run build",
 		"deploy": "cd frontend && npm run deploy"
 	},
 	"keywords": [],

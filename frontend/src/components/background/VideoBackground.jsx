@@ -18,7 +18,7 @@ const VideoBackground = () => {
 		
 		// Don't load video on slow connections or save-data mode
 		if (isSlowConnection || isSaveData) {
-			console.log('Skipping video load due to connection constraints');
+			// Skip video load due to connection constraints
 			return;
 		}
 		
@@ -65,11 +65,11 @@ const VideoBackground = () => {
 		if (videoElement && videoSrc) {
 			const handleLoaded = () => {
 				setIsLoaded(true);
-				console.log("Video loaded successfully");
+				// Video loaded successfully
 			};
 			
 			const handleError = (error) => {
-				console.error("Error loading video:", error);
+				// Error loading video
 				setHasError(true);
 			};
 			

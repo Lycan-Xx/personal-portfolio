@@ -69,11 +69,11 @@ const Navbar = () => {
 									offset={-80}
 									duration={500}
 									onSetActive={handleSetActive}
-									className={`px-3 sm:px-4 py-2 rounded-xl text-base lg:text-lg font-semibold font-mono transition-all duration-300 cursor-pointer
+								className={`px-3 sm:px-4 py-2 text-base lg:text-lg font-semibold font-mono transition-all duration-300 cursor-pointer
                     ${activeNav === item.id
-											? "text-white border-2 border-cyan-400 bg-cyan-400/10"
-											: "text-cyan-400 hover:text-white hover:bg-cyan-400/10"
-										}`}
+										? "text-cyan-400 border-b-2 border-cyan-400"
+										: "text-gray-400 hover:text-cyan-400"
+									}`}
 								>
 									{item.label}
 								</Link>
@@ -82,7 +82,7 @@ const Navbar = () => {
 
 						<button
 							onClick={() => setShowMobileMenu(!showMobileMenu)}
-							className="md:hidden p-2 rounded-full hover:bg-cyan-400/10 transition-colors duration-300"
+							className="md:hidden p-2 rounded-full hover:bg-cyan-400/10 transition-colors duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center"
 							aria-label="Toggle menu"
 						>
 							<span className="block w-6 h-6">
@@ -113,11 +113,11 @@ const Navbar = () => {
 									duration={500}
 									onSetActive={handleSetActive}
 									onClick={() => setShowMobileMenu(false)}
-									className={`px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-mono font-semibold text-left w-full transition-all duration-300 block
+								className={`px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-mono font-semibold text-left w-full transition-all duration-300 block min-h-[44px]
                     ${activeNav === item.id
-											? "text-white bg-cyan-400/10 border-2 border-cyan-400"
-											: "text-cyan-400 hover:text-white hover:bg-cyan-400/10"
-										}`}
+										? "text-cyan-400 border-b-2 border-cyan-400"
+										: "text-gray-400 hover:text-cyan-400"
+									}`}
 								>
 									{item.label}
 								</Link>
