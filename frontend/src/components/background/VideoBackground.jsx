@@ -18,7 +18,7 @@ const VideoBackground = () => {
 		
 		// Don't load video on slow connections or save-data mode
 		if (isSlowConnection || isSaveData) {
-			console.log('Skipping video load due to connection constraints');
+			// Skip video load due to connection constraints
 			return;
 		}
 		
