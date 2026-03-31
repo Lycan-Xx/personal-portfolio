@@ -356,31 +356,27 @@ const GitHubStats = ({ token }) => {
                 value={data.totalContributions.toLocaleString()}
                 sub="past 12 months"
                 accent="#22d3ee"
-                icon="📊"
                 delay={0.05}
               />
               <StatCard
                 label={`${monthName} commits`}
                 value={data.monthlyCommits}
                 sub="this month"
-                accent="#34d399"
-                icon="⚡"
+                accent="#22d3ee"
                 delay={0.10}
               />
               <StatCard
                 label="Current streak"
                 value={`${data.current.days}d`}
                 sub={data.current.days > 0 ? `${data.current.start} – ${data.current.end}` : 'No active streak'}
-                accent="#f59e0b"
-                icon="🔥"
+                accent="#22d3ee"
                 delay={0.15}
               />
               <StatCard
                 label="Longest streak"
                 value={`${data.longest.days}d`}
                 sub={data.longest.days > 0 ? `${data.longest.start} – ${data.longest.end}` : '—'}
-                accent="#a78bfa"
-                icon="🏆"
+                accent="#22d3ee"
                 delay={0.20}
               />
             </div>
