@@ -1,0 +1,478 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		/* Light Theme Defaults */
+		--color-background: #f8fafc; /* Light slate background */
+		--color-card: #ffffff; /* Pure white cards */
+		--color-text-primary: #1e293b; /* Dark slate text */
+		--color-text-secondary: #64748b; /* Medium slate text */
+		--color-text-muted: #94a3b8; /* Light slate text */
+		--color-accent: #0ea5e9; /* Sky blue accent */
+		--color-secondary: #ec704c; /* Orange secondary */
+		--color-border: #e2e8f0; /* Light slate border */
+		--color-shadow: rgba(0, 0, 0, 0.1); /* Light shadow */
+		--color-glass-overlay: rgba(255, 255, 255, 0.8); /* Light glass effect */
+		--color-glass-border: rgba(255, 255, 255, 0.2); /* White glass border for uniformity */
+		--color-hover: rgba(14, 165, 233, 0.1); /* Light hover state */
+		--color-surface: #f1f5f9; /* Light surface */
+		--color-surface-elevated: #ffffff; /* Elevated surface */
+		
+		/* Keep existing for compatibility */
+		--color-primary: #42bcbc;
+	}
+
+	[data-theme='dark'] {
+		/* Dark Theme Overrides */
+		--color-background: #0f172a; /* Dark slate background */
+		--color-card: rgba(30, 41, 59, 0.7); /* Semi-transparent dark card */
+		--color-text-primary: #f1f5f9; /* Light slate text */
+		--color-text-secondary: #cbd5e1; /* Medium light text */
+		--color-text-muted: #94a3b8; /* Muted text */
+		--color-accent: #42bcbc; /* Cyan accent */
+		--color-secondary: #ec704c; /* Orange secondary */
+		--color-border: rgba(66, 188, 188, 0.3); /* Cyan border for consistency */
+		--color-shadow: rgba(0, 0, 0, 0.3); /* Dark shadow */
+		--color-glass-overlay: rgba(0, 0, 0, 0.4); /* Dark glass effect */
+		--color-glass-border: rgba(66, 188, 188, 0.3); /* Cyan glass border for consistency */
+		--color-hover: rgba(66, 188, 188, 0.1); /* Dark hover state */
+		--color-surface: #1e293b; /* Dark surface */
+		--color-surface-elevated: rgba(30, 41, 59, 0.8); /* Elevated dark surface */
+		
+		/* Keep existing for compatibility */
+		--color-primary: #42bcbc;
+	}
+
+	* {
+		@apply m-0 p-0 border-0 outline-0 box-border;
+	}
+
+  ::selection {
+  background-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
+  color: var(--color-text-primary);
+}
+
+  
+	html {
+		@apply scroll-smooth overflow-x-hidden;
+		scroll-behavior: smooth;
+		height: 100%;
+	}
+
+	body {
+		@apply bg-theme-background text-theme-text-primary font-sans antialiased overflow-x-hidden max-w-[100vw] min-h-screen;
+	}
+}
+
+@layer components {
+	.glass-card {
+		@apply bg-theme-glass-overlay backdrop-blur-lg border-themed rounded-2xl shadow-xl;
+		box-shadow: 0 8px 32px var(--color-shadow);
+	}
+
+	/* Ensure consistent themed borders for all glassmorphism containers */
+	.glass-container {
+		@apply border border-secondary;
+	}
+
+	/* Override for specific components that need consistent theming */
+	.themed-border {
+		@apply border border-secondary;
+	}
+
+	[data-theme='dark'] .themed-border {
+		@apply border border-secondary;
+	}
+
+	[data-theme='light'] .themed-border,
+	:root .themed-border {
+		@apply border border-secondary;
+	}
+
+	.glass-button {
+		@apply px-6 py-3 bg-theme-accent/20 hover:bg-theme-accent/30 border border-secondary hover:border-secondary rounded-xl text-theme-accent font-medium transition-all duration-300 hover:scale-105 active:scale-95;
+	}
+
+	.section-heading {
+		@apply text-4xl md:text-5xl font-bold bg-gradient-to-r from-theme-text-primary to-theme-text-secondary bg-clip-text text-transparent mb-6;
+	}
+
+	.animated-gradient {
+		@apply absolute inset-0 bg-gradient-to-br from-theme-accent/20 via-theme-secondary/20 to-theme-accent/10 animate-gradient blur-3xl opacity-30;
+	}
+
+	.today-card {
+		@apply w-full max-w-[350px] sm:max-w-[400px] md:max-w-[450px];
+	}
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+
+	50% {
+		background-position: 100% 50%;
+	}
+
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+@keyframes float {
+
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+
+	50% {
+		transform: translateY(-20px);
+	}
+}
+
+@keyframes pulse {
+
+	0%,
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+
+	50% {
+		transform: scale(1.1);
+		opacity: 0.8;
+	}
+}
+
+.animate-gradient {
+	animation: gradient 15s ease infinite;
+	background-size: 400% 400%;
+}
+
+.animate-float {
+	animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+	animation: pulse 3s ease-in-out infinite;
+}
+
+/* Masonry layout support */
+.masonry-grid {
+	column-fill: balance;
+}
+
+.masonry-item {
+	break-inside: avoid;
+	page-break-inside: avoid;
+}
+
+.text-glow {
+	text-shadow: 0 0 10px var(--color-accent);
+}
+
+.card-hover {
+	@apply transition-all duration-300 hover:translate-y-[-8px] hover:shadow-2xl;
+	box-shadow: 0 20px 40px var(--color-shadow);
+}
+
+/* Text truncation utility */
+.line-clamp-3 {
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+/* Enhanced status badge animations */
+@keyframes statusPulse {
+	0%, 100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+	50% {
+		opacity: 0.8;
+		transform: scale(1.05);
+	}
+}
+
+.status-active {
+	animation: statusPulse 2s ease-in-out infinite;
+}
+
+/* Enhanced branch line animations */
+@keyframes branchGlow {
+	0%, 100% {
+		filter: drop-shadow(0 0 2px var(--color-accent));
+	}
+	50% {
+		filter: drop-shadow(0 0 8px var(--color-accent));
+	}
+}
+
+.branch-line-glow {
+	animation: branchGlow 3s ease-in-out infinite;
+}
+
+/* Improved responsive design */
+@media (max-width: 768px) {
+	.git-branch-container {
+		padding: 0 1rem;
+	}
+	
+	.project-card-mobile {
+		width: calc(100vw - 2rem);
+		max-width: 350px;
+	}
+}
+
+@media (max-width: 480px) {
+	.project-card-mobile {
+		width: calc(100vw - 1rem);
+		max-width: 300px;
+	}
+}
+
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes blink {
+
+	0%,
+	100% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0;
+	}
+}
+
+@keyframes slideUp {
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes slideIn {
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+.animate-fade-in-up {
+	animation: fadeInUp 0.6s ease forwards;
+}
+
+.animate-blink {
+	animation: blink 0.8s infinite;
+}
+
+section {
+	scroll-margin-top: 80px;
+	scroll-snap-align: start;
+	scroll-snap-stop: always;
+}
+
+@media (max-width: 768px) {
+	section {
+		scroll-margin-top: 60px;
+	}
+}
+
+@layer utilities {
+	.transition-custom {
+		@apply transition-all duration-300 ease-in-out;
+	}
+
+	.slide-up {
+		@apply opacity-0 translate-y-4;
+		animation: slideUp 0.6s ease-out forwards;
+	}
+
+	.slide-in-left {
+		@apply opacity-0 -translate-x-4;
+		animation: slideIn 0.6s ease-out forwards;
+	}
+
+	.slide-in-right {
+		@apply opacity-0 translate-x-4;
+		animation: slideIn 0.6s ease-out forwards;
+	}
+}
+
+/* Add performance class for high-end devices */
+@media (prefers-reduced-motion: no-preference) {
+	.enable-animations {
+		@apply transition-custom;
+	}
+}
+
+/* ----------- Github contribution calendar styles  ------------ */
+
+.github-calendar-container {
+	width: 100%;
+	overflow-x: auto;
+	padding: 1rem 0;
+}
+
+.react-activity-calendar__calendar {
+	width: 100%;
+	min-width: 730px;
+}
+
+/* Custom theme colors for calendar */
+.react-activity-calendar__calendar rect {
+	transition: all 0.2s ease;
+}
+
+.react-activity-calendar__calendar rect:hover {
+	stroke: var(--color-accent);
+	stroke-width: 2px;
+}
+
+/* -------- Samsung ChocoCoky font styles --------- */
+
+@font-face {
+	font-family: ChocoCooky;
+	font-style: normal;
+	font-weight: normale;
+	src: url('./assets/fonts/Chococooky.woff') format('woff');
+}
+
+/* ---------- Works-specific styles ---------- */
+@layer components {
+  /* Git branch timeline styles */
+  .git-timeline-card {
+    @apply glass-card transition-all duration-300 hover:shadow-xl;
+    box-shadow: 0 8px 32px var(--color-shadow);
+    max-width: 400px;
+  }
+
+  .git-branch-connector {
+    @apply absolute top-1/2 w-8 h-0.5 bg-gradient-to-r from-theme-accent/60 to-theme-accent/20;
+  }
+
+  .git-commit-dot {
+    @apply absolute top-1/2 w-4 h-4 bg-theme-accent rounded-full border-4 border-theme-background transform -translate-x-1/2 -translate-y-1/2 z-20;
+  }
+
+  .git-main-branch {
+    @apply absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-theme-accent/80 via-theme-accent/60 to-theme-accent/40 transform -translate-x-1/2;
+  }
+
+  .git-branch-glow {
+    @apply absolute inset-0 w-1 bg-theme-accent/20 blur-sm transform -translate-x-1/4;
+  }
+
+  /* Status badges */
+  .status-completed {
+    @apply bg-green-400/10 border-secondary text-green-400;
+  }
+
+  .status-active {
+    @apply bg-blue-400/10 border-secondary text-blue-400;
+  }
+
+  .status-in-progress {
+    @apply bg-yellow-400/10 border-secondary text-yellow-400;
+  }
+
+  /* Works component optimizations */
+  .works-card-container {
+    @apply will-change-transform;
+    transform-style: preserve-3d;
+  }
+
+  .works-card-face {
+    @apply will-change-transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .git-timeline-card {
+      max-width: 100%;
+      margin: 0 1rem;
+    }
+
+    .git-branch-connector {
+      @apply w-6;
+    }
+
+    /* Mobile works optimizations */
+    .works-mobile-card {
+      width: calc(100vw - 2rem);
+      max-width: 28rem;
+      margin: 0 auto 2rem auto;
+    }
+    
+    /* Ensure project card back side is properly sized on mobile */
+    .works-card-face {
+      min-height: 320px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .works-mobile-card {
+      width: calc(100vw - 1rem);
+      max-width: 20rem;
+    }
+  }
+}
+
+@layer components {
+  /* Contact socials small tweaks */
+  .contact-socials h4 {
+    font-size: 0.95rem;
+  }
+
+  .contact-socials .social-action {
+    @apply p-2 rounded-md hover:bg-theme-hover transition;
+  }
+
+  /* Make sure the 'Copied' badge doesn't shift layout on small screens */
+  @media (max-width: 640px) {
+    .contact-socials .grid {
+      gap: 0.5rem;
+    }
+  }
+}
+
+@layer utilities {
+  .pl-72 { padding-left: 18rem; }
+  .pr-72 { padding-right: 18rem; }
+  .w-72 { width: 18rem; }
+  .right-72 { right: 18rem; }
+  .left-72 { left: 18rem; }
+  
+  /* Consistent border utilities */
+  .border-themed {
+    @apply border border-secondary;
+  }
+  
+  .border-themed-strong {
+    @apply border-secondary;
+  }
+  
+  [data-theme='light'] .border-themed-strong,
+  :root .border-themed-strong {
+    @apply border border-secondary;
+  }
+}
