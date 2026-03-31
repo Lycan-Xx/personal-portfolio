@@ -17,8 +17,8 @@
 	},
 	"dependencies": {
 		"@emailjs/browser": "^4.4.1",
-		"@sanity/client": "^7.11.0",
-		"@sanity/image-url": "^1.2.0",
+		"cloudinary": "^1.40.0",
+		"cloudinary-react": "^1.8.1",
 		"cors": "^2.8.5",
 		"date-fns": "^4.1.0",
 		"dotenv": "^16.4.7",

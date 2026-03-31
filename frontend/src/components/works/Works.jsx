@@ -15,7 +15,6 @@ import {
   FaCircle,
 } from "react-icons/fa";
 import { useProjects } from "../../hooks/useProjects";
-import { urlFor } from "../../lib/sanity";
 import { formatLastUpdated } from "../../utils/dateHelpers";
 
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
@@ -27,15 +26,6 @@ const SLIDE_DURATION = 0.65; // was 1.2s — halved so the gap is imperceptible
 const getImageUrl = (image) => {
   if (!image) return null;
   if (typeof image === "string") return image;
-  if (image?.asset) {
-    return urlFor(image.asset)
-      .width(800)
-      .height(600)
-      .fit("crop")
-      .auto("format")
-      .quality(80)
-      .url();
-  }
   return null;
 };
 

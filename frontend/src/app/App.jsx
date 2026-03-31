@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { CustomThemeProvider } from "../components/theme/ThemeProvider";
 import { ErrorBoundary } from "../components/ErrorBoundary";
@@ -11,6 +11,7 @@ import { Works } from '../components/works/Works';
 import ContentHub from '../components/content/ContentHub';
 import Contact from '../components/contact/Contact';
 import VideoBackground from '../components/background/VideoBackground';
+import { Admin } from '../pages/Admin';
 
 // Simple loading fallback
 const SuspenseFallback = () => (
@@ -18,6 +19,24 @@ const SuspenseFallback = () => (
 );
 
 export const App = () => {
+	const [currentPath, setCurrentPath] = useState(window.location.pathname);
+
+	// Listen for route changes
+	useEffect(() => {
+		const handlePopState = () => setCurrentPath(window.location.pathname);
+		window.addEventListener('popstate', handlePopState);
+		return () => window.removeEventListener('popstate', handlePopState);
+	}, []);
+
+	// Admin panel route
+	if (currentPath === '/admin') {
+		return (
+			<ErrorBoundary>
+				<Admin />
+			</ErrorBoundary>
+		);
+	}
+
 	return (
 		<LoadingScreen>
 			<ErrorBoundary>
