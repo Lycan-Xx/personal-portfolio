@@ -9,7 +9,7 @@ import LoadingScreen from '../components/LoadingScreen';
 import About from '../components/about/About';
 import { Works } from '../components/works/Works';
 import ContentHub from '../components/content/ContentHub';
-import Contact from '../components/contact/Contact';
+import { Contact } from '../components/contact/Contact';
 import VideoBackground from '../components/background/VideoBackground';
 import { Admin } from '../pages/Admin';
 
