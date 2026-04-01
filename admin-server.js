@@ -8,7 +8,7 @@ import dotenv from 'dotenv';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Load environment variables from .env file
-dotenv.config({ path: path.join(__dirname, 'frontend/.env') });
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -19,7 +19,7 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Path to projects.json
-const PROJECTS_FILE = path.join(__dirname, 'frontend/src/components/works/projects.json');
+const PROJECTS_FILE = path.join(__dirname, 'src/components/works/projects.json');
 
 // Middleware to check if request is from localhost
 const localhostOnly = (req, res, next) => {

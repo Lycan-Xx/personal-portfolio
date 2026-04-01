@@ -6,8 +6,9 @@ import {
   FaCode, FaLinux, FaShieldAlt, FaWrench
 } from 'react-icons/fa';
 import { SlChemistry } from 'react-icons/sl';
+import { FaCss3 } from 'react-icons/fa';
 import {
-  SiReact, SiJavascript, SiHtml5, SiCss3, SiTailwindcss,
+  SiReact, SiJavascript, SiHtml5, SiTailwindcss,
   SiMongodb, SiSupabase, SiRender, SiCloudinary, SiGithub
 } from 'react-icons/si';
 import { VscTerminalBash } from 'react-icons/vsc';
@@ -44,7 +45,7 @@ const techStack = [
   { icon: <SiReact />, name: "React" },
   { icon: <SiJavascript />, name: "JavaScript" },
   { icon: <SiHtml5 />, name: "HTML5" },
-  { icon: <SiCss3 />, name: "CSS3" },
+  { icon: <FaCss3 />, name: "CSS3" },
   { icon: <SiTailwindcss />, name: "Tailwind CSS" },
   { icon: <SiMongodb />, name: "MongoDB" },
   { icon: <SiSupabase />, name: "Supabase" },

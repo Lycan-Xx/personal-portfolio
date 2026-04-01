@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { visualizer } from 'rollup-plugin-visualizer';
+import path from 'path';
 
 export default defineConfig({
 	plugins: [
@@ -26,6 +27,20 @@ export default defineConfig({
 		},
 	},
 	resolve: {
-		extensions: ['.js', '.jsx']
-	}
+		alias: {
+			'@': path.resolve(__dirname, './src'),
+		},
+		extensions: ['.js', '.jsx', '.json']
+	},
+	build: {
+		outDir: 'dist',
+		rollupOptions: {
+			output: {
+				manualChunks: {
+					vendor: ['react', 'react-dom'],
+					motion: ['framer-motion'],
+				},
+			},
+		},
+	},
 });

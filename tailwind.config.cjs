@@ -2,13 +2,12 @@
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
-    "./public/index.html",
+    "./index.html",
   ],
-  darkMode: ['selector', '[data-theme="dark"]'], // Use data-theme attribute for dark mode
+  darkMode: ['selector', '[data-theme="dark"]'],
   theme: {
     extend: {
       colors: {
-        // Theme-aware semantic colors with alpha support
         "theme-background": "rgb(var(--color-background) / <alpha-value>)",
         "theme-card": "rgb(var(--color-card) / <alpha-value>)",
         "theme-text-primary": "rgb(var(--color-text-primary) / <alpha-value>)",
@@ -24,8 +23,6 @@ module.exports = {
         "theme-surface": "rgb(var(--color-surface) / <alpha-value>)",
         "theme-surface-elevated": "rgb(var(--color-surface-elevated) / <alpha-value>)",
         "theme-primary": "rgb(var(--color-primary) / <alpha-value>)",
-
-        // Keep existing custom colors for specific use cases
         primary: "#42bcbc",
         secondary: "#ec704c",
         loader: "#20c9e2",
@@ -39,7 +36,7 @@ module.exports = {
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],
-        "choco-cooky": ["ChocoCooky", "cursive"], // Add ChocoCooky
+        "choco-cooky": ["ChocoCooky", "cursive"],
       },
       animation: {
         gradient: "gradient 15s ease infinite",
