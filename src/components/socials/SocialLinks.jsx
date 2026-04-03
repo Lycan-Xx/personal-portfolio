@@ -4,7 +4,7 @@ import { FaLinkedin, FaGithub, FaTwitter, FaTelegram, FaDiscord, FaClipboard, Fa
 const profiles = [
   { network: "LinkedIn", username: "mohammad-bello", url: "https://www.linkedin.com/in/mohammad-bello/", icon: FaLinkedin },
   { network: "GitHub", username: "Lycan-Xx", url: "https://github.com/Lycan-Xx", icon: FaGithub },
-  { network: "Twitter", username: "LycanXx2", url: "https://x.com/LycanXx0", icon: FaTwitter },
+  { network: "X (formerly twitter)", username: "LycanXx0", url: "https://x.com/LycanXx0", icon: FaTwitter },
   { network: "Discord", username: "lycan_xx0", url: "https://discord.com/users/lycan_xx0", icon: FaDiscord },
 ];
 

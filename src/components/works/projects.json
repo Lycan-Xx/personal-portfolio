@@ -27,17 +27,14 @@
     "title": "eVault Landing Page",
     "description": "The website serves as the landing page for a startup subscription provider, with a focus on offering internet subscriptions, TV subscriptions, airtime, and instant payment solutions for schools and businesses. The platform aims to streamline the subscription management process, providing customers with a user-friendly interface to easily sign up, manage, and pay for their various subscription services.",
     "image": "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891725/evault_2_kybs9j.png",
-    "images": [
-      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891725/evault_2_kybs9j.png",
-      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891724/evault_1_h0ikbv.png"
-    ],
+    "images": [],
     "tags": [
       "React",
       "Redux",
       "Material-UI",
       "Firebase"
     ],
-    "link": "https://evault.com.ng",
+    "link": "https://evaultmoney.com",
     "status": "active",
     "featured": true,
     "displayOrder": 1,
@@ -106,7 +103,7 @@
     "repo": "https://github.com/Lycan-Xx/personal-portfolio",
     "status": "archived",
     "featured": false,
-    "displayOrder": 6,
+    "displayOrder": 3,
     "completedDate": null
   },
   {

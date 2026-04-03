@@ -1,0 +1,6 @@
+name = "msbello"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "./dist"
+
+[vars]
+YOUTUBE_CHANNEL_ID = "UCcGgfqebSy8yIGlnhW0qT_g"
