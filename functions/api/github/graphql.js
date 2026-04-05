@@ -26,8 +26,8 @@ export async function onRequest(request) {
   try {
     // Get the GitHub token from environment variables
     const githubToken = request.headers.get('Authorization')?.replace('Bearer ', '')
-      || process.env.GITHUB_TOKEN
-      || process.env.VITE_GITHUB_TOKEN;
+      || import.meta.env.GITHUB_TOKEN
+      || import.meta.env.VITE_GITHUB_TOKEN;
 
     if (!githubToken) {
       return new Response(JSON.stringify({ error: 'GitHub token not configured' }), {

@@ -24,8 +24,8 @@ export async function onRequest(request) {
 
   try {
     // Get the YouTube API key from environment variables
-    const apiKey = process.env.YOUTUBE_API_KEY
-      || process.env.VITE_YOUTUBE_API_KEY;
+    const apiKey = import.meta.env.YOUTUBE_API_KEY
+      || import.meta.env.VITE_YOUTUBE_API_KEY;
 
     if (!apiKey) {
       return new Response(JSON.stringify({ error: 'YouTube API key not configured' }), {
