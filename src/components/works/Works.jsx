@@ -12,15 +12,16 @@ import {
   FaExternalLinkAlt,
   FaClock,
   FaCodeBranch,
-  FaCircle,
+  FaTimes,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 import { useProjects } from "../../hooks/useProjects";
 import { formatLastUpdated } from "../../utils/dateHelpers";
 
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
-const SLIDE_DIRECTIONS = ["left", "right", "up", "down"];
 const CAROUSEL_INTERVAL = 4000;
-const SLIDE_DURATION = 0.65; // was 1.2s — halved so the gap is imperceptible
+const SLIDE_DURATION = 0.55;
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
 const getImageUrl = (image) => {
@@ -32,9 +33,6 @@ const getImageUrl = (image) => {
 const FALLBACK_IMG =
   "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop";
 
-// ─── IMAGE PRELOADER ──────────────────────────────────────────────────────────
-// Loads all image URLs for a project silently so the browser has them cached
-// before the carousel tries to display them — eliminates the gap.
 const preloadImages = (images = []) => {
   images.forEach((img) => {
     const url = getImageUrl(img);
@@ -45,382 +43,561 @@ const preloadImages = (images = []) => {
   });
 };
 
-// Build slide variants once — avoids recalculating on every render
-const buildSlideVariants = (direction) => {
-  const axis = direction === "left" || direction === "right" ? "x" : "y";
-  const sign = direction === "right" || direction === "down" ? 1 : -1;
-
-  return {
-    enter: { [axis]: `${sign * 100}%`, opacity: 0 },
-    center: { [axis]: "0%", opacity: 1 },
-    exit: { [axis]: `${sign * -100}%`, opacity: 0 },
-  };
-};
-
 // ─── STATUS CONFIG ────────────────────────────────────────────────────────────
 const STATUS_CONFIG = {
   active: {
-    color: "text-emerald-400",
-    bgColor: "bg-emerald-400/10",
-    borderColor: "border-secondary",
-    label: "Active",
+    dot: "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]",
+    text: "text-emerald-400",
+    badge: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
+    label: "active",
   },
   dormant: {
-    color: "text-gray-400",
-    bgColor: "bg-gray-500/10",
-    borderColor: "border-secondary",
-    label: "Dormant",
+    dot: "bg-slate-500",
+    text: "text-slate-400",
+    badge: "text-slate-400 bg-slate-400/10 border-slate-400/20",
+    label: "dormant",
   },
   experimental: {
-    color: "text-purple-400",
-    bgColor: "bg-purple-400/10",
-    borderColor: "border-secondary",
-    label: "Experimental",
+    dot: "bg-violet-400 shadow-[0_0_8px_rgba(167,139,250,0.8)]",
+    text: "text-violet-400",
+    badge: "text-violet-400 bg-violet-400/10 border-violet-400/20",
+    label: "experimental",
   },
   archived: {
-    color: "text-red-400",
-    bgColor: "bg-red-400/10",
-    borderColor: "border-secondary",
-    label: "Archived",
+    dot: "bg-rose-500",
+    text: "text-rose-400",
+    badge: "text-rose-400 bg-rose-400/10 border-rose-400/20",
+    label: "archived",
   },
 };
 
-// ─── IMAGE CAROUSEL ───────────────────────────────────────────────────────────
-// Isolated into its own component so only the carousel re-renders on tick,
-// not the entire ProjectCard.
-const ImageCarousel = React.memo(({ images, isInView, title }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection]       = useState("right");
-  // Store direction in a ref too so we can read it inside the interval
-  // without adding it to the dependency array.
-  const directionRef = useRef(direction);
-  directionRef.current = direction;
+// ─── IMAGE CAROUSEL (drawer version — large) ─────────────────────────────────
+const DrawerCarousel = React.memo(({ images, title }) => {
+  const [current, setCurrent] = useState(0);
+  const [dir, setDir] = useState(1);
 
-  // Preload all images as soon as the card becomes visible
   useEffect(() => {
-    if (isInView) preloadImages(images);
-  }, [isInView, images]);
+    preloadImages(images);
+  }, [images]);
 
-  // Single interval per carousel instance
   useEffect(() => {
-    if (!isInView || images.length <= 1) return;
-
-    const timer = setInterval(() => {
-      const nextDir =
-        SLIDE_DIRECTIONS[Math.floor(Math.random() * SLIDE_DIRECTIONS.length)];
-      setDirection(nextDir);
-      setCurrentIndex((prev) => (prev + 1) % images.length);
+    if (images.length <= 1) return;
+    const t = setInterval(() => {
+      setDir(1);
+      setCurrent((p) => (p + 1) % images.length);
     }, CAROUSEL_INTERVAL);
+    return () => clearInterval(t);
+  }, [images.length]);
 
-    return () => clearInterval(timer);
-  }, [isInView, images.length]);
+  const goTo = useCallback((idx) => {
+    setDir(idx > current ? 1 : -1);
+    setCurrent(idx);
+  }, [current]);
 
-  const variants = useMemo(() => buildSlideVariants(direction), [direction]);
-  const currentUrl = getImageUrl(images[currentIndex]) || FALLBACK_IMG;
+  const prev = () => {
+    setDir(-1);
+    setCurrent((p) => (p - 1 + images.length) % images.length);
+  };
+  const next = () => {
+    setDir(1);
+    setCurrent((p) => (p + 1) % images.length);
+  };
+
+  const currentUrl = getImageUrl(images[current]) || FALLBACK_IMG;
 
   return (
-    <div className="absolute inset-0 overflow-hidden">
-      {/*
-        mode="sync" so enter and exit animations overlap — no gap.
-        The exiting image slides out while the entering one slides in simultaneously,
-        exactly like the Windows 8 tile motion you're going for.
-      */}
-      <AnimatePresence mode="sync" initial={false}>
+    <div className="relative w-full h-56 rounded-xl overflow-hidden group">
+      <AnimatePresence mode="sync" initial={false} custom={dir}>
         <motion.div
-          key={currentIndex}
-          variants={variants}
+          key={current}
+          custom={dir}
+          variants={{
+            enter: (d) => ({ x: d > 0 ? "100%" : "-100%", opacity: 0 }),
+            center: { x: "0%", opacity: 1 },
+            exit: (d) => ({ x: d > 0 ? "-100%" : "100%", opacity: 0 }),
+          }}
           initial="enter"
           animate="center"
           exit="exit"
-          transition={{
-            duration: SLIDE_DURATION,
-            ease: [0.25, 0.46, 0.45, 0.94],
-          }}
+          transition={{ duration: SLIDE_DURATION, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="absolute inset-0"
         >
           <img
             src={currentUrl}
-            alt={images[currentIndex]?.alt || title}
+            alt={images[current]?.alt || title}
             className="w-full h-full object-cover"
-            loading="lazy"
-            onError={(e) => {
-              e.currentTarget.src = FALLBACK_IMG;
-            }}
+            onError={(e) => { e.currentTarget.src = FALLBACK_IMG; }}
           />
-          <div className="absolute inset-0 bg-black/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
         </motion.div>
       </AnimatePresence>
 
-      {/* Dot indicators */}
+      {/* Prev / Next arrows */}
       {images.length > 1 && (
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
-          {images.map((_, i) => (
-            <div
-              key={i}
-              className={`rounded-full transition-all duration-300 ${
-                i === currentIndex
-                  ? "w-5 h-2.5 bg-cyan-400"
-                  : "w-2.5 h-2.5 bg-white/30"
-              }`}
-            />
-          ))}
-        </div>
+        <>
+          <button
+            onClick={prev}
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7
+                       rounded-full bg-black/50 flex items-center justify-center
+                       opacity-0 group-hover:opacity-100 transition-opacity
+                       hover:bg-black/70 text-white"
+          >
+            <FaChevronLeft size={10} />
+          </button>
+          <button
+            onClick={next}
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7
+                       rounded-full bg-black/50 flex items-center justify-center
+                       opacity-0 group-hover:opacity-100 transition-opacity
+                       hover:bg-black/70 text-white"
+          >
+            <FaChevronRight size={10} />
+          </button>
+
+          {/* Dot strip */}
+          <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+            {images.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => goTo(i)}
+                className={`rounded-full transition-all duration-300 ${
+                  i === current
+                    ? "w-4 h-1.5 bg-[var(--color-accent)]"
+                    : "w-1.5 h-1.5 bg-white/30 hover:bg-white/50"
+                }`}
+              />
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
 });
+DrawerCarousel.displayName = "DrawerCarousel";
 
-ImageCarousel.displayName = "ImageCarousel";
+// ─── SMALL CARD THUMBNAIL ─────────────────────────────────────────────────────
+const CardThumbnail = React.memo(({ images, isVisible, title }) => {
+  const [current, setCurrent] = useState(0);
 
-// ─── PROJECT CARD ─────────────────────────────────────────────────────────────
-const ProjectCard = React.memo(
-  ({ project, index, isFlipped, onFlip, isInView, onClickOutside }) => {
-    const cardRef = useRef(null);
+  useEffect(() => {
+    if (!isVisible || images.length <= 1) return;
+    const t = setInterval(() => {
+      setCurrent((p) => (p + 1) % images.length);
+    }, CAROUSEL_INTERVAL + 800);
+    return () => clearInterval(t);
+  }, [isVisible, images.length]);
 
-    // Click-outside to close
-    useEffect(() => {
-      if (!isFlipped) return;
-      const handler = (e) => {
-        if (cardRef.current && !cardRef.current.contains(e.target)) {
-          onClickOutside(index);
-        }
-      };
-      document.addEventListener("mousedown", handler);
-      return () => document.removeEventListener("mousedown", handler);
-    }, [isFlipped, index, onClickOutside]);
+  const url = getImageUrl(images[current]) || FALLBACK_IMG;
 
-    const formattedDate = useMemo(
-      () => formatLastUpdated(project.lastUpdated || project._updatedAt),
-      [project.lastUpdated, project._updatedAt]
-    );
+  return (
+    <div className="absolute inset-0 overflow-hidden rounded-t-xl">
+      <AnimatePresence mode="sync" initial={false}>
+        <motion.img
+          key={current}
+          src={url}
+          alt={title}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.6 }}
+          className="absolute inset-0 w-full h-full object-cover"
+          onError={(e) => { e.currentTarget.src = FALLBACK_IMG; }}
+        />
+      </AnimatePresence>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+    </div>
+  );
+});
+CardThumbnail.displayName = "CardThumbnail";
 
-    const statusConfig = STATUS_CONFIG[project.status] || STATUS_CONFIG.dormant;
-    const isLeft = index % 2 === 0;
-    const images = project.images || [];
+// ─── PROJECT WALL CARD ────────────────────────────────────────────────────────
+const ProjectCard = React.memo(({ project, index, isSelected, onClick, isVisible, inView }) => {
+  const status = STATUS_CONFIG[project.status] || STATUS_CONFIG.dormant;
+  const images = project.images || [];
+  const formattedDate = useMemo(
+    () => formatLastUpdated(project.lastUpdated || project._updatedAt),
+    [project.lastUpdated, project._updatedAt]
+  );
 
-    return (
-      <div
-        ref={cardRef}
-        className={`w-full max-w-2xl mx-auto mb-16 md:mb-32 snap-start ${
-          isLeft ? "md:ml-8" : "md:mr-8 md:ml-auto"
-        }`}
-      >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.85 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: index * 0.12, duration: 0.45 }}
-          className="relative cursor-pointer group h-80 md:h-96"
-          onClick={onFlip}
-          style={{
-            perspective: "1200px",
-            transformStyle: "preserve-3d",
-          }}
-        >
-          {/*
-            The flip container must be a plain div — NOT a motion.div.
-            Framer Motion's transform reconciliation overwrites transformStyle,
-            which collapses the 3D context and makes both faces visible at once.
-          */}
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.4, delay: index * 0.06 }}
+      onClick={onClick}
+      className={`relative rounded-xl cursor-pointer overflow-hidden
+                  border transition-all duration-300 group
+                  ${isSelected
+                    ? "border-[var(--color-accent)]/60 shadow-[0_0_20px_rgba(66,188,188,0.15)]"
+                    : "border-[var(--color-accent)]/15 hover:border-[var(--color-accent)]/35"
+                  }`}
+      style={{ background: "rgba(15,23,42,0.85)" }}
+    >
+      {/* Thumbnail area */}
+      <div className="relative h-36 overflow-hidden rounded-t-xl bg-slate-900">
+        {images.length > 0 ? (
+          <CardThumbnail images={images} isVisible={isVisible} title={project.title} />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900" />
+        )}
+
+        {/* Featured badge */}
+        {project.featured && (
           <div
-            className="w-full h-full relative"
-            style={{
-              transformStyle: "preserve-3d",
-              transition: "transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-              transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
-            }}
+            className="absolute top-2 left-2 z-10 text-[8px] px-2 py-0.5 rounded
+                       text-[var(--color-secondary)] bg-[var(--color-secondary)]/10
+                       border border-[var(--color-secondary)]/25"
+            style={{ fontFamily: "JetBrains Mono, monospace" }}
           >
-            {/* ── FRONT ── */}
-            <div
-              className="absolute inset-0 rounded-xl"
-              style={{
-                backfaceVisibility: "hidden",
-                WebkitBackfaceVisibility: "hidden",
-                transformStyle: "preserve-3d",
-              }}
-            >
-              {/*
-                backdrop-blur creates a new stacking context which breaks
-                backface-visibility. Replaced with a solid bg + manual blur
-                on a pseudo-layer so the 3D isolation is preserved.
-              */}
-              <div className="w-full h-full bg-gray-800/90 relative overflow-hidden shadow-2xl hover:shadow-cyan-400/10 transition-shadow duration-300 border border-white/[0.08] hover:border-cyan-400/35 rounded-xl">
-
-                {/* Carousel — only rendered when there are images */}
-                {images.length > 0 ? (
-                  <ImageCarousel
-                    images={images}
-                    isInView={isInView}
-                    title={project.title}
-                  />
-                ) : (
-                  <div className="absolute inset-0 bg-gray-900" />
-                )}
-
-                {/* Status badge */}
-                <div className="absolute top-4 right-4 z-10">
-                  <div
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-xl ${statusConfig.bgColor} ${statusConfig.borderColor} border backdrop-blur-sm`}
-                  >
-                    <div
-                      className={`w-2 h-2 ${statusConfig.color.replace(
-                        "text-",
-                        "bg-"
-                      )} rounded-full animate-pulse`}
-                    />
-                    <span className={`text-xs font-medium ${statusConfig.color}`}>
-                      {statusConfig.label}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Featured badge */}
-                {project.featured && (
-                  <div className="absolute top-4 left-4 z-10">
-                    <div className="px-3 py-1.5 rounded-xl bg-yellow-500/20 border border-secondary backdrop-blur-sm">
-                      <span className="text-xs font-medium text-yellow-400">
-                        Featured
-                      </span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Content overlay */}
-                <div className="absolute inset-0 p-6 flex flex-col justify-end z-10">
-                  <div className="space-y-3">
-                    <h3 className="text-2xl md:text-3xl font-light font-mono text-white drop-shadow-lg">
-                      {project.title}
-                    </h3>
-                    <p className="text-white/90 text-sm md:text-base line-clamp-2 font-mono drop-shadow">
-                      {project.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {project.tags?.slice(0, 3).map((tag, i) => (
-                        <span
-                          key={i}
-                          className="px-2 py-0.5 rounded text-xs font-mono bg-cyan-400/[0.08] text-cyan-400/65"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                      {project.tags?.length > 3 && (
-                        <span className="px-2 py-1 rounded-xl text-xs font-mono bg-white/10 backdrop-blur-sm text-white/70 border border-secondary">
-                          +{project.tags.length - 3}
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center justify-between text-xs text-white/70 font-mono">
-                      <div className="flex items-center gap-1">
-                        <FaClock className="w-3 h-3" />
-                        <span>{formattedDate}</span>
-                      </div>
-                      <span>Click to view details</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Hover shimmer */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent shimmer-anim" />
-                </div>
-              </div>
-            </div>
-
-            {/* ── BACK ── */}
-            <div
-              className="absolute inset-0 bg-gray-900 border border-secondary rounded-xl"
-              style={{
-                backfaceVisibility: "hidden",
-                WebkitBackfaceVisibility: "hidden",
-                transformStyle: "preserve-3d",
-                transform: "rotateY(180deg)",
-              }}
-            >
-              <div className="w-full h-full p-4 md:p-6 flex flex-col overflow-hidden">
-                <div className="flex items-center justify-between mb-3 flex-shrink-0">
-                  <h3 className="text-lg md:text-2xl font-light text-white font-mono truncate pr-2">
-                    {project.title}
-                  </h3>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); onFlip(); }}
-                    className="text-gray-400 hover:text-white transition-colors flex-shrink-0 p-1"
-                  >
-                    ✕
-                  </button>
-                </div>
-
-                <div className="flex-1 overflow-y-auto mb-3 min-h-0">
-                  <p className="text-gray-300 text-xs md:text-sm font-mono leading-relaxed">
-                    {project.description}
-                  </p>
-                </div>
-
-                <div className="mb-3 flex-shrink-0">
-                  <h4 className="text-cyan-400 text-xs md:text-sm font-medium font-mono mb-2">
-                    Stack Used
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags?.map((tag, i) => (
-                      <span
-                        key={i}
-                        className="px-2 md:px-3 py-1 rounded-xl text-xs font-mono bg-cyan-400/10 text-cyan-400 border border-secondary"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex gap-2 md:gap-3 flex-shrink-0">
-                  {(project.link || project.liveLink) && (
-                    <a
-                      href={project.link || project.liveLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="flex-1 rounded-xl flex items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3 bg-cyan-400/10 hover:bg-cyan-400/20 border border-secondary hover:border-secondary text-cyan-400 font-medium transition-colors no-underline text-xs md:text-sm"
-                    >
-                      <FaExternalLinkAlt className="w-4 h-4" />
-                      <span className="hidden sm:inline">Live Demo</span>
-                      <span className="sm:hidden">Demo</span>
-                    </a>
-                  )}
-                  {(project.repo || project.repoLink) && (
-                    <a
-                      href={project.repo || project.repoLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="flex-1 rounded-xl flex items-center justify-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3 bg-gray-800/50 hover:bg-gray-700/50 border border-secondary hover:border-secondary text-gray-300 hover:text-white font-medium transition-colors no-underline text-xs md:text-sm"
-                    >
-                      <FaGithub className="w-4 h-4" />
-                      <span className="hidden sm:inline">Source Code</span>
-                      <span className="sm:hidden">Code</span>
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
+            featured
           </div>
-        </motion.div>
-      </div>
-    );
-  }
-);
+        )}
 
+        {/* Status dot */}
+        <div className="absolute top-2 right-2 z-10 flex items-center gap-1.5">
+          <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${status.dot}`} />
+        </div>
+
+        {/* Selected indicator — cyan left border glow */}
+        {isSelected && (
+          <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-[var(--color-accent)] z-20" />
+        )}
+      </div>
+
+      {/* Card body */}
+      <div className="p-3" style={{ fontFamily: "JetBrains Mono, monospace" }}>
+        <div className="flex items-start justify-between gap-2 mb-1.5">
+          <h3
+            className="text-white leading-tight line-clamp-1 flex-1"
+            style={{ fontFamily: "ChocoCooky", fontSize: "13px" }}
+          >
+            {project.title}
+          </h3>
+          <span className={`text-[8px] flex-shrink-0 px-1.5 py-0.5 rounded border ${status.badge}`}>
+            {status.label}
+          </span>
+        </div>
+
+        <p className="text-[9px] text-slate-500 line-clamp-2 leading-relaxed mb-2.5">
+          {project.description}
+        </p>
+
+        {/* Tags — first 2 only */}
+        <div className="flex gap-1.5 flex-wrap">
+          {(project.tags || []).slice(0, 2).map((tag) => (
+            <span
+              key={tag}
+              className="text-[8px] px-1.5 py-0.5 rounded
+                         text-[var(--color-accent)]/70 bg-[var(--color-accent)]/5
+                         border border-[var(--color-accent)]/15"
+            >
+              {tag}
+            </span>
+          ))}
+          {(project.tags || []).length > 2 && (
+            <span className="text-[8px] px-1.5 py-0.5 rounded text-slate-600 bg-slate-800/50 border border-slate-700/30">
+              +{project.tags.length - 2}
+            </span>
+          )}
+        </div>
+
+        {/* Date */}
+        <div className="flex items-center gap-1 mt-2.5 pt-2 border-t border-[var(--color-accent)]/8">
+          <FaClock size={8} className="text-slate-700" />
+          <span className="text-[8px] text-slate-700">{formattedDate}</span>
+        </div>
+      </div>
+    </motion.div>
+  );
+});
 ProjectCard.displayName = "ProjectCard";
 
-// ─── WORKS SECTION ────────────────────────────────────────────────────────────
+// ─── DETAIL DRAWER ────────────────────────────────────────────────────────────
+const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
+  const status = STATUS_CONFIG[project?.status] || STATUS_CONFIG.dormant;
+  const images = project?.images || [];
+  const currentIdx = projects.findIndex((p) => (p._id || p.id) === (project?._id || project?.id));
+  const formattedDate = useMemo(
+    () => formatLastUpdated(project?.lastUpdated || project?._updatedAt),
+    [project?.lastUpdated, project?._updatedAt]
+  );
+
+  return (
+    <motion.div
+      key={project?._id || project?.id}
+      initial={{ opacity: 0, x: 40 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 40 }}
+      transition={{ duration: 0.28, ease: "easeOut" }}
+      className="flex flex-col h-full"
+      style={{ fontFamily: "JetBrains Mono, monospace" }}
+    >
+      {/* Drawer top bar */}
+      <div className="flex items-center justify-between mb-4 flex-shrink-0">
+        <div className="flex items-center gap-2">
+          <span className={`w-2 h-2 rounded-full flex-shrink-0 ${status.dot}`} />
+          <span className="text-[9px] text-slate-600">
+            {currentIdx + 1} / {projects.length}
+          </span>
+        </div>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => currentIdx > 0 && onNavigate(projects[currentIdx - 1])}
+            disabled={currentIdx === 0}
+            className="w-6 h-6 rounded flex items-center justify-center
+                       text-[var(--color-accent)]/40 border border-[var(--color-accent)]/10
+                       hover:text-[var(--color-accent)] hover:border-[var(--color-accent)]/30
+                       hover:bg-[var(--color-accent)]/5 disabled:opacity-20 disabled:cursor-not-allowed
+                       transition-all duration-150"
+          >
+            <FaChevronLeft size={9} />
+          </button>
+          <button
+            onClick={() => currentIdx < projects.length - 1 && onNavigate(projects[currentIdx + 1])}
+            disabled={currentIdx === projects.length - 1}
+            className="w-6 h-6 rounded flex items-center justify-center
+                       text-[var(--color-accent)]/40 border border-[var(--color-accent)]/10
+                       hover:text-[var(--color-accent)] hover:border-[var(--color-accent)]/30
+                       hover:bg-[var(--color-accent)]/5 disabled:opacity-20 disabled:cursor-not-allowed
+                       transition-all duration-150"
+          >
+            <FaChevronRight size={9} />
+          </button>
+          <button
+            onClick={onClose}
+            className="w-6 h-6 rounded flex items-center justify-center ml-1
+                       text-slate-600 border border-slate-700/40
+                       hover:text-slate-300 hover:border-slate-500
+                       transition-all duration-150"
+          >
+            <FaTimes size={9} />
+          </button>
+        </div>
+      </div>
+
+      {/* Carousel */}
+      {images.length > 0 && (
+        <div className="flex-shrink-0 mb-4">
+          <DrawerCarousel images={images} title={project.title} />
+        </div>
+      )}
+
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto min-h-0 pr-1 space-y-4
+                      scrollbar-thin scrollbar-thumb-[var(--color-accent)]/20
+                      scrollbar-track-transparent">
+
+        {/* Title block */}
+        <div>
+          {/* Commit-style hash line */}
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-[9px] text-slate-700">
+              commit{" "}
+              <span className="text-[var(--color-accent)]/40">
+                {(project._id || project.id || "").toString().slice(0, 7) || "a1b2c3d"}
+              </span>
+            </span>
+            <div className="flex-1 h-px bg-[var(--color-accent)]/8" />
+          </div>
+
+          {/* Status + type badges */}
+          <div className="flex items-center gap-2 flex-wrap mb-2">
+            <span className={`text-[9px] px-2 py-0.5 rounded border ${status.badge}`}>
+              {status.label}
+            </span>
+            {project.featured && (
+              <span
+                className="text-[9px] px-2 py-0.5 rounded border
+                           text-[var(--color-secondary)] bg-[var(--color-secondary)]/8
+                           border-[var(--color-secondary)]/25"
+              >
+                featured
+              </span>
+            )}
+          </div>
+
+          <h2
+            className="text-white leading-tight mb-1"
+            style={{ fontFamily: "ChocoCooky", fontSize: "clamp(18px, 2vw, 22px)" }}
+          >
+            {project.title}
+          </h2>
+
+          <div className="flex items-center gap-3 mt-1.5">
+            <div className="flex items-center gap-1 text-[9px] text-slate-600">
+              <FaClock size={8} />
+              <span>{formattedDate}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="h-px bg-[var(--color-accent)]/8" />
+
+        {/* Description */}
+        <p className="text-[11px] text-slate-300 leading-relaxed">
+          {project.description}
+        </p>
+
+        {/* Full stack */}
+        {(project.tags || []).length > 0 && (
+          <div>
+            <p className="text-[9px] text-slate-600 uppercase tracking-widest mb-2">
+              stack
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {project.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-[9px] px-2 py-0.5 rounded border
+                             text-[var(--color-accent)] bg-[var(--color-accent)]/5
+                             border-[var(--color-accent)]/20"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Links */}
+        <div className="flex gap-2 pt-1">
+          {(project.link || project.liveLink) && (
+            <a
+              href={project.link || project.liveLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg
+                         text-[10px] font-medium no-underline transition-all duration-200
+                         text-[var(--color-accent)] bg-[var(--color-accent)]/8
+                         border border-[var(--color-accent)]/20
+                         hover:bg-[var(--color-accent)]/15 hover:border-[var(--color-accent)]/40"
+            >
+              <FaExternalLinkAlt size={10} />
+              Live Demo
+            </a>
+          )}
+          {(project.repo || project.repoLink) && (
+            <a
+              href={project.repo || project.repoLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg
+                         text-[10px] font-medium no-underline transition-all duration-200
+                         text-slate-400 bg-slate-800/50
+                         border border-slate-700/40
+                         hover:bg-slate-700/50 hover:text-white hover:border-slate-600"
+            >
+              <FaGithub size={10} />
+              Source Code
+            </a>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+// ─── MOBILE CARD (full-width stacked) ────────────────────────────────────────
+const MobileProjectCard = ({ project, index, inView }) => {
+  const [open, setOpen] = useState(false);
+  const status = STATUS_CONFIG[project.status] || STATUS_CONFIG.dormant;
+  const images = project.images || [];
+  const formattedDate = useMemo(
+    () => formatLastUpdated(project.lastUpdated || project._updatedAt),
+    [project.lastUpdated, project._updatedAt]
+  );
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.4, delay: index * 0.07 }}
+      className="rounded-xl border border-[var(--color-accent)]/15 overflow-hidden mb-4"
+      style={{ background: "rgba(15,23,42,0.85)", fontFamily: "JetBrains Mono, monospace" }}
+    >
+      {/* Image */}
+      {images.length > 0 && (
+        <div className="relative h-40 bg-slate-900">
+          <DrawerCarousel images={images} title={project.title} />
+        </div>
+      )}
+
+      <div className="p-4">
+        {/* Header */}
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <h3 className="text-white" style={{ fontFamily: "ChocoCooky", fontSize: "16px" }}>
+            {project.title}
+          </h3>
+          <span className={`text-[8px] px-2 py-0.5 rounded border flex-shrink-0 ${status.badge}`}>
+            {status.label}
+          </span>
+        </div>
+
+        <p className="text-[10px] text-slate-400 leading-relaxed mb-3">
+          {project.description}
+        </p>
+
+        {/* Tags */}
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          {(project.tags || []).slice(0, 4).map((tag) => (
+            <span
+              key={tag}
+              className="text-[8px] px-1.5 py-0.5 rounded
+                         text-[var(--color-accent)]/70 bg-[var(--color-accent)]/5
+                         border border-[var(--color-accent)]/15"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        {/* Links */}
+        <div className="flex gap-2">
+          {(project.link || project.liveLink) && (
+            <a
+              href={project.link || project.liveLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg
+                         text-[9px] no-underline
+                         text-[var(--color-accent)] bg-[var(--color-accent)]/8
+                         border border-[var(--color-accent)]/20"
+            >
+              <FaExternalLinkAlt size={9} /> Live Demo
+            </a>
+          )}
+          {(project.repo || project.repoLink) && (
+            <a
+              href={project.repo || project.repoLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg
+                         text-[9px] no-underline
+                         text-slate-400 bg-slate-800/50 border border-slate-700/40"
+            >
+              <FaGithub size={9} /> Source Code
+            </a>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+// ─── MAIN WORKS COMPONENT ────────────────────────────────────────────────────
 export const Works = () => {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const [sectionRef, sectionInView] = useInView({ triggerOnce: true, threshold: 0.05 });
+  const [gridRef, gridInView] = useInView({ triggerOnce: true, threshold: 0.05 });
+  const [mobileRef, mobileInView] = useInView({ triggerOnce: true, threshold: 0.05 });
   const { projects, loading, error } = useProjects();
-  const [flippedCards, setFlippedCards]   = useState(new Set());
-  const [visibleCards, setVisibleCards]   = useState(new Set());
+  const [selected, setSelected] = useState(null);
+  const [visibleCards, setVisibleCards] = useState(new Set());
   const cardRefs = useRef([]);
 
-  // Track per-card visibility for carousel pause-when-offscreen
+  // Track per-card visibility for carousel throttling
   useEffect(() => {
     if (!projects?.length) return;
-
     const observers = cardRefs.current.map((el, i) => {
       if (!el) return null;
       const obs = new IntersectionObserver(
@@ -431,38 +608,40 @@ export const Works = () => {
             return next;
           });
         },
-        { threshold: 0.3 }
+        { threshold: 0.2 }
       );
       obs.observe(el);
       return obs;
     });
-
     return () => observers.forEach((o) => o?.disconnect());
   }, [projects]);
 
-  const handleFlip = useCallback((index) => {
-    setFlippedCards((prev) => {
-      const next = new Set(prev);
-      next.has(index) ? next.delete(index) : next.add(index);
-      return next;
-    });
+  // Auto-select first project on desktop
+  useEffect(() => {
+    if (projects?.length && !selected) {
+      setSelected(projects[0]);
+    }
+  }, [projects]);
+
+  // Close drawer on Escape
+  useEffect(() => {
+    const handler = (e) => e.key === "Escape" && setSelected(null);
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  const handleClickOutside = useCallback((index) => {
-    setFlippedCards((prev) => {
-      const next = new Set(prev);
-      next.delete(index);
-      return next;
-    });
-  }, []);
-
-  // ── States ──────────────────────────────────────────────────────────────────
+  // ── Loading / error / empty ──────────────────────────────────────────────
   if (loading) {
     return (
       <section className="relative min-h-screen py-20 z-20 flex items-center justify-center">
-          <div className="text-center">
-          <div className="animate-spin rounded-full h-20 w-20 border-b-2 border-secondary mx-auto mb-4" />
-          <p className="text-gray-400 font-mono text-sm">Loading projects…</p>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b border-[var(--color-accent)] mx-auto mb-4" />
+          <p
+            className="text-slate-500 text-[11px]"
+            style={{ fontFamily: "JetBrains Mono, monospace" }}
+          >
+            loading projects…
+          </p>
         </div>
       </section>
     );
@@ -471,14 +650,20 @@ export const Works = () => {
   if (error) {
     return (
       <section className="relative min-h-screen py-20 z-20 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-400 mb-2">Error loading projects</p>
-          <p className="text-gray-500 text-sm mb-4">{error.message}</p>
+        <div
+          className="text-center"
+          style={{ fontFamily: "JetBrains Mono, monospace" }}
+        >
+          <p className="text-rose-400 text-[11px] mb-2">error loading projects</p>
+          <p className="text-slate-600 text-[10px] mb-4">{error.message}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-cyan-400/10 border border-secondary hover:border-secondary text-cyan-400 rounded-xl hover:bg-cyan-400/20 transition-colors text-sm"
+            className="text-[10px] px-4 py-2 rounded-lg
+                       text-[var(--color-accent)] bg-[var(--color-accent)]/8
+                       border border-[var(--color-accent)]/20
+                       hover:bg-[var(--color-accent)]/15 transition-colors"
           >
-            Retry
+            retry
           </button>
         </div>
       </section>
@@ -488,9 +673,12 @@ export const Works = () => {
   if (!projects?.length) {
     return (
       <section className="relative min-h-screen py-20 z-20 flex items-center justify-center">
-        <div className="text-center">
-          <FaCodeBranch className="text-cyan-400 text-4xl mx-auto mb-4" />
-          <p className="text-gray-400">No projects found</p>
+        <div
+          className="text-center"
+          style={{ fontFamily: "JetBrains Mono, monospace" }}
+        >
+          <FaCodeBranch className="text-[var(--color-accent)] text-3xl mx-auto mb-3 opacity-40" />
+          <p className="text-slate-600 text-[11px]">no projects found</p>
         </div>
       </section>
     );
@@ -498,86 +686,172 @@ export const Works = () => {
 
   return (
     <section
-      ref={ref}
+      ref={sectionRef}
       id="works"
       className="relative min-h-screen py-16 sm:py-20 px-0 md:px-4 z-20"
     >
       <div className="w-full max-w-[86rem] mx-auto relative">
 
-        {/* Glassmorphism backdrop */}
-        <div className="absolute inset-0 bg-black/20 backdrop-blur-md rounded-none md:rounded-3xl shadow-lg shadow-cyan-400/5" />
+        {/* Glass backdrop */}
+        <div className="absolute inset-0 bg-black/20 backdrop-blur-md rounded-none md:rounded-3xl" />
+        <div className="absolute inset-0 bg-black/50 rounded-none md:rounded-3xl" />
 
         <div className="relative p-6 md:p-10 z-10">
 
-          {/* Header */}
+          {/* ── Header ── */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            animate={sectionInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            className="mb-10"
           >
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <FaCodeBranch className="text-cyan-400 text-2xl animate-pulse" />
-              <h2 className="text-4xl md:text-5xl font-light text-white font-mono">
-                Featured Works
-              </h2>
-            </div>
-            <div className="w-24 h-1 bg-cyan-400 mx-auto mb-6" />
-            <p className="text-gray-300 max-w-2xl mx-auto text-lg font-mono">
-              These are collections of my top projects. They showcase my best
-              work, and the lengths I went while learning solo.
+            <h2
+              className="text-white relative inline-block pb-2
+                         after:content-[''] after:absolute after:bottom-0 after:left-0
+                         after:w-2/3 after:h-[2px] after:bg-[var(--color-accent)]"
+              style={{ fontFamily: "ChocoCooky", fontSize: "clamp(28px, 4vw, 40px)" }}
+            >
+              {"< Works />"}
+            </h2>
+            <p
+              className="mt-3 text-slate-500 text-[10px]"
+              style={{ fontFamily: "JetBrains Mono, monospace" }}
+            >
+              {`// ${projects.filter((p) => p.status === "active").length} active · ${projects.length} total`}
             </p>
           </motion.div>
 
-          {/* Cards */}
-          <div className="space-y-8 md:space-y-16">
-            {projects.map((project, index) => (
+          {/* ── DESKTOP: Card Wall + Drawer ── */}
+          <div className="hidden md:flex gap-0 rounded-2xl overflow-hidden
+                          border border-[var(--color-accent)]/15 min-h-[640px]">
+
+            {/* LEFT: Scrollable card wall */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={sectionInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              ref={gridRef}
+              className={`transition-all duration-300 ease-in-out overflow-y-auto
+                          bg-black/40 border-r border-[var(--color-accent)]/12
+                          ${selected ? "w-[52%]" : "w-full"}`}
+            >
+              {/* Wall header */}
               <div
-                key={project._id || project.id}
-                ref={(el) => (cardRefs.current[index] = el)}
+                className="sticky top-0 z-10 px-5 py-3 border-b border-[var(--color-accent)]/10
+                           bg-black/60 backdrop-blur-sm flex items-center justify-between"
+                style={{ fontFamily: "JetBrains Mono, monospace" }}
               >
-                <ProjectCard
-                  project={project}
-                  index={index}
-                  isFlipped={flippedCards.has(index)}
-                  onFlip={() => handleFlip(index)}
-                  onClickOutside={handleClickOutside}
-                  isInView={visibleCards.has(index)}
-                />
+                <p className="text-[10px] text-slate-500 tracking-widest uppercase">
+                  repository
+                </p>
+                <div className="flex items-center gap-3">
+                  {Object.entries(STATUS_CONFIG).map(([key, cfg]) => {
+                    const count = projects.filter((p) => p.status === key).length;
+                    if (!count) return null;
+                    return (
+                      <div key={key} className="flex items-center gap-1">
+                        <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
+                        <span className={`text-[8px] ${cfg.text}`}>{count}</span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
+
+              {/* Grid */}
+              <div
+                className={`p-4 grid gap-3 transition-all duration-300
+                            ${selected
+                              ? "grid-cols-1 lg:grid-cols-2"
+                              : "grid-cols-2 lg:grid-cols-3"
+                            }`}
+              >
+                {projects.map((project, i) => (
+                  <div
+                    key={project._id || project.id}
+                    ref={(el) => (cardRefs.current[i] = el)}
+                  >
+                    <ProjectCard
+                      project={project}
+                      index={i}
+                      isSelected={
+                        selected &&
+                        (selected._id || selected.id) === (project._id || project.id)
+                      }
+                      onClick={() =>
+                        setSelected(
+                          selected &&
+                          (selected._id || selected.id) === (project._id || project.id)
+                            ? null
+                            : project
+                        )
+                      }
+                      isVisible={visibleCards.has(i)}
+                      inView={gridInView}
+                    />
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* RIGHT: Detail Drawer */}
+            <AnimatePresence>
+              {selected && (
+                <motion.div
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{ width: "48%", opacity: 1 }}
+                  exit={{ width: 0, opacity: 0 }}
+                  transition={{ duration: 0.28, ease: "easeInOut" }}
+                  className="flex-shrink-0 overflow-hidden bg-black/25"
+                >
+                  <div className="w-full h-full p-5 overflow-hidden">
+                    <AnimatePresence mode="wait">
+                      <DetailDrawer
+                        key={selected._id || selected.id}
+                        project={selected}
+                        onClose={() => setSelected(null)}
+                        projects={projects}
+                        onNavigate={(p) => setSelected(p)}
+                      />
+                    </AnimatePresence>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* ── MOBILE: Stacked cards ── */}
+          <div ref={mobileRef} className="md:hidden">
+            {projects.map((project, i) => (
+              <MobileProjectCard
+                key={project._id || project.id}
+                project={project}
+                index={i}
+                inView={mobileInView}
+              />
             ))}
           </div>
 
-          {/* Footer note */}
+          {/* Footer count */}
           <motion.div
             initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ delay: 0.8 }}
-            className="text-center mt-16 text-gray-400"
+            animate={sectionInView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.9 }}
+            className="mt-8 flex items-center gap-2"
+            style={{ fontFamily: "JetBrains Mono, monospace" }}
           >
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <FaCircle className="text-cyan-400 text-xs animate-pulse" />
-              <span className="font-mono text-sm">
-                {projects.length} projects loaded
-              </span>
-            </div>
-            <p className="text-sm font-mono">
-              Windows 8 tile motion inspired · Click any card to flip
-            </p>
+            <span
+              className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] animate-pulse"
+            />
+            <span className="text-[9px] text-slate-700">
+              {projects.length} projects · click any card to inspect
+            </span>
           </motion.div>
+
         </div>
-
       </div>
-
-      <style>{`
-        @keyframes shimmer-slide {
-          0%   { transform: skewX(-12deg) translateX(-150%); }
-          100% { transform: skewX(-12deg) translateX(250%); }
-        }
-        .shimmer-anim {
-          animation: shimmer-slide 2.5s ease-in-out infinite;
-        }
-      `}</style>
     </section>
   );
 };
+
+export default Works;
