@@ -238,7 +238,15 @@ const YouTubeFeed = () => {
     }
 
     try {
-      const url = `/api/youtube/videos?channelId=${getChannelId()}&maxResults=${MAX_VIDEOS}`;
+      const apiKey = getYouTubeApiKey();
+      if (!apiKey) {
+        setError('YouTube API key not configured');
+        setLoading(false);
+        return;
+      }
+
+      const channelId = getChannelId();
+      const url = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=${MAX_VIDEOS}&type=video`;
       const res = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json();
