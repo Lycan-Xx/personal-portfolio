@@ -328,8 +328,29 @@ const GitHubStats = ({ token }) => {
               <span className="text-cyan-400">{'/>'}</span>
             </h2>
 
-            {/* contribution calendar - removed temporarily */}
-            <div ref={calRef} className="mb-2">
+            {/* contribution calendar */}
+            <div ref={calRef} className="mb-6">
+              <div className="flex flex-wrap gap-1 justify-center">
+                {data.contributions?.slice(-52 * 7).map((day, i) => {
+                  const level = day.count === 0 ? 0 : day.count < 3 ? 1 : day.count < 6 ? 2 : 3;
+                  const colors = ['bg-gray-800', 'bg-cyan-900', 'bg-cyan-700', 'bg-cyan-500'];
+                  return (
+                    <div
+                      key={i}
+                      className={`w-2.5 h-2.5 rounded-sm ${colors[level]} transition-colors`}
+                      title={`${day.date}: ${day.count} contributions`}
+                    />
+                  );
+                })}
+              </div>
+              <div className="flex items-center justify-end gap-2 mt-2 text-xs text-gray-600 font-mono">
+                <span>Less</span>
+                <div className="w-2.5 h-2.5 rounded-sm bg-gray-800" />
+                <div className="w-2.5 h-2.5 rounded-sm bg-cyan-900" />
+                <div className="w-2.5 h-2.5 rounded-sm bg-cyan-700" />
+                <div className="w-2.5 h-2.5 rounded-sm bg-cyan-500" />
+                <span>More</span>
+              </div>
             </div>
 
             {/* ── Activity ── */}
