@@ -12,6 +12,7 @@ import ContentHub from '../components/content/ContentHub';
 import { Contact } from '../components/contact/Contact';
 import VideoBackground from '../components/background/VideoBackground';
 import { Admin } from '../pages/Admin';
+import Experience from '../components/experience/Experience';
 
 // Simple loading fallback
 const SuspenseFallback = () => (
@@ -41,13 +42,14 @@ export const App = () => {
 		<LoadingScreen>
 			<ErrorBoundary>
 				<CustomThemeProvider>
-					<Navbar />
+					{/* <Navbar /> */}
 					<main>
 						<Home />
 						<div className="relative">
 							<Suspense fallback={<SuspenseFallback />}>
 								<VideoBackground />
 								<About />
+								<Experience />
 								<Works />
 								<ContentHub />
 								<Contact />

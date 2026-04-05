@@ -507,4 +507,24 @@ section {
   :root .border-themed-strong {
     @apply border border-secondary;
   }
+
+  /* ── Add these to your existing globals.css ─────────────────────────────── */
+
+/* Gentle float for Today card — 6px travel, 4s cycle */
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0px);  }
+  50%       { transform: translateY(-6px); }
+}
+
+.today-card-float {
+  animation: float-gentle 4s ease-in-out infinite;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .today-card-float {
+    animation: none;
+  }
+}
+
 }
