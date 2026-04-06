@@ -586,7 +586,7 @@ const Experience = () => {
                 <p className="text-[10px] text-slate-500 tracking-widest uppercase">
                   git log --graph
                 </p>
-                <p className="text-[8.5px] text-slate-700 mt-0.5">
+                <p className="text-[8.5px] text-slate-500 mt-0.5">
                   {`// ${experiences.filter(e => e.status === 'active').length} active · ${TOTAL} entries`}
                 </p>
               </div>
