@@ -391,7 +391,7 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
         <div>
           {/* Commit-style hash line */}
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-[9px] text-slate-700">
+            <span className="text-[9px] text-slate-500">
               commit{" "}
               <span className="text-[var(--color-accent)]/40">
                 {(project._id || project.id || "").toString().slice(0, 7) || "a1b2c3d"}
