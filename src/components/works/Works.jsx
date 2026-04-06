@@ -424,7 +424,7 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
           </h2>
 
           <div className="flex items-center gap-3 mt-1.5">
-            <div className="flex items-center gap-1 text-[9px] text-slate-600">
+            <div className="flex items-center gap-1 text-[9px] text-slate-400">
               <FaClock size={8} />
               <span>{formattedDate}</span>
             </div>
