@@ -304,7 +304,7 @@ const BranchItem = ({ item, index, isActive, onClick, isEdu = false }) => {
         {item.status === 'active' && (
           <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
         )}
-        <span className="text-[8px] text-slate-600 whitespace-nowrap">
+        <span className="text-[8px] text-slate-400 whitespace-nowrap">
           {isEdu ? item.periodShort : item.periodShort}
         </span>
       </div>
