@@ -353,7 +353,7 @@ const DetailPanel = ({ item, globalIndex, onNavigate, inView }) => {
           {/* Role / Degree */}
           <h3
             className="text-white leading-tight mb-1"
-            style={{ fontFamily: 'ChocoCooky', fontSize: 'clamp(18px, 2.5vw, 26px)' }}
+            style={{ fontFamily: 'ChocoCooky', fontSize: 'clamp(28px, 3vw, 32px)' }}
           >
             {isEdu ? item.degree : item.role}
           </h3>
