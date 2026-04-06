@@ -500,7 +500,7 @@ const MobileCard = ({ item, index, inView }) => {
           {isEdu ? item.institution : item.org}
         </p>
 
-        <p className="text-[9px] text-slate-600 mb-3">
+        <p className="text-[9px] text-slate-400 mb-3">
           {item.period}{!isEdu && ` · ${item.duration}`}
         </p>
 
