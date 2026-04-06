@@ -492,7 +492,7 @@ const MobileCard = ({ item, index, inView }) => {
 
         <h4
           className="text-white leading-tight mb-1"
-          style={{ fontFamily: 'ChocoCooky', fontSize: '15px' }}
+          style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '14px', fontWeight: 600 }}
         >
           {isEdu ? item.degree : item.role}
         </h4>
