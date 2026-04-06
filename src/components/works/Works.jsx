@@ -269,7 +269,7 @@ const ProjectCard = React.memo(({ project, index, isSelected, onClick, isVisible
         <div className="flex items-start justify-between gap-2 mb-1.5">
           <h3
             className="text-white leading-tight line-clamp-1 flex-1"
-            style={{ fontFamily: "ChocoCooky", fontSize: "13px" }}
+            style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "13px", fontWeight: 600 }}
           >
             {project.title}
           </h3>
