@@ -442,7 +442,7 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
         {/* Full stack */}
         {(project.tags || []).length > 0 && (
           <div>
-            <p className="text-[9px] text-slate-600 uppercase tracking-widest mb-2">
+            <p className="text-[9px] text-slate-400 uppercase tracking-widest mb-2">
               stack
             </p>
             <div className="flex flex-wrap gap-1.5">
