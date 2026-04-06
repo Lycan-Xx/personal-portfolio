@@ -223,7 +223,7 @@ const About = () => {
                 >
                   <span
                     className="text-2xl text-cyan-400 leading-none"
-                    style={{ fontFamily: 'ChocoCooky', fontSize: '26px' }}
+                    style={{ fontFamily: 'ChocoCooky', fontSize: '28px' }}
                   >
                     {t.value}
                   </span>

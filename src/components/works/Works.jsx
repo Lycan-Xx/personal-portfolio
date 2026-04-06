@@ -843,7 +843,7 @@ export const Works = () => {
             <span
               className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] animate-pulse"
             />
-            <span className="text-[9px] text-slate-700">
+            <span className="text-[9px] text-slate-500">
               {projects.length} projects · click any card to inspect
             </span>
           </motion.div>

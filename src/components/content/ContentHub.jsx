@@ -36,6 +36,7 @@ const ContentHub = () => {
     >
       <div className="w-full max-w-[86rem] mx-auto relative">
         <div className="absolute inset-0 bg-black/20 backdrop-blur-md rounded-none md:rounded-3xl shadow-lg shadow-cyan-400/5" />
+        <div className="absolute inset-0 bg-black/50 rounded-none md:rounded-3xl" />
 
         <div className="relative p-6 md:p-10 z-10">
           {/* Section heading */}

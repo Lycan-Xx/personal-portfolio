@@ -620,7 +620,7 @@ const Experience = () => {
                   style={{ background: 'var(--color-accent)' }}
                 />
                 <p
-                  className="px-3.5 pb-1.5 text-[8.5px] text-slate-700 tracking-widest uppercase"
+                  className="px-3.5 pb-1.5 text-[8.5px] text-slate-500 tracking-widest uppercase"
                   style={{ fontFamily: 'JetBrains Mono, monospace' }}
                 >
                   education
