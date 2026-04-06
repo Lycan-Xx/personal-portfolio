@@ -137,7 +137,7 @@ const TechCategory = ({ cat, index, inView }) => (
   >
     <h4
       className="text-base text-white mb-4"
-      style={{ fontFamily: 'ChocoCooky', fontSize: '18px' }}
+      style={{ fontFamily: 'ChocoCooky', fontSize: '28px' }}
     >
       {cat.label}
     </h4>
