@@ -526,7 +526,7 @@ const MobileProjectCard = ({ project, index, inView }) => {
       <div className="p-4">
         {/* Header */}
         <div className="flex items-start justify-between gap-2 mb-2">
-          <h3 className="text-white" style={{ fontFamily: "ChocoCooky", fontSize: "16px" }}>
+          <h3 className="text-white" style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "14px", fontWeight: 600 }}>
             {project.title}
           </h3>
           <span className={`text-[8px] px-2 py-0.5 rounded border flex-shrink-0 ${status.badge}`}>
