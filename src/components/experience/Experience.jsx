@@ -365,12 +365,12 @@ const DetailPanel = ({ item, globalIndex, onNavigate, inView }) => {
 
           {/* Meta row */}
           <div className="flex items-center gap-4 flex-wrap">
-            <span className="text-[9px] text-slate-500">{item.period}</span>
+            <span className="text-[9px] text-slate-400">{item.period}</span>
             {!isEdu && (
-              <span className="text-[9px] text-slate-600">{item.duration}</span>
+              <span className="text-[9px] text-slate-400">{item.duration}</span>
             )}
             {!isEdu && item.location && (
-              <span className="text-[9px] text-slate-600">{item.location}</span>
+              <span className="text-[9px] text-slate-400">{item.location}</span>
             )}
           </div>
         </div>
