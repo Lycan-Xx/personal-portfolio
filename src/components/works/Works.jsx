@@ -269,7 +269,7 @@ const ProjectCard = React.memo(({ project, index, isSelected, onClick, isVisible
         <div className="flex items-start justify-between gap-2 mb-1.5">
           <h3
             className="text-white leading-tight line-clamp-1 flex-1"
-            style={{ fontFamily: "ChocoCooky", fontSize: "13px" }}
+            style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "13px", fontWeight: 600 }}
           >
             {project.title}
           </h3>
@@ -278,7 +278,7 @@ const ProjectCard = React.memo(({ project, index, isSelected, onClick, isVisible
           </span>
         </div>
 
-        <p className="text-[9px] text-slate-500 line-clamp-2 leading-relaxed mb-2.5">
+        <p className="text-[9px] text-slate-400 line-clamp-2 leading-relaxed mb-2.5">
           {project.description}
         </p>
 
@@ -303,8 +303,8 @@ const ProjectCard = React.memo(({ project, index, isSelected, onClick, isVisible
 
         {/* Date */}
         <div className="flex items-center gap-1 mt-2.5 pt-2 border-t border-[var(--color-accent)]/8">
-          <FaClock size={8} className="text-slate-700" />
-          <span className="text-[8px] text-slate-700">{formattedDate}</span>
+          <FaClock size={8} className="text-slate-500" />
+          <span className="text-[8px] text-slate-500">{formattedDate}</span>
         </div>
       </div>
     </motion.div>
@@ -336,7 +336,7 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
       <div className="flex items-center justify-between mb-4 flex-shrink-0">
         <div className="flex items-center gap-2">
           <span className={`w-2 h-2 rounded-full flex-shrink-0 ${status.dot}`} />
-          <span className="text-[9px] text-slate-600">
+          <span className="text-[9px] text-slate-400">
             {currentIdx + 1} / {projects.length}
           </span>
         </div>
@@ -391,7 +391,7 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
         <div>
           {/* Commit-style hash line */}
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-[9px] text-slate-700">
+            <span className="text-[9px] text-slate-500">
               commit{" "}
               <span className="text-[var(--color-accent)]/40">
                 {(project._id || project.id || "").toString().slice(0, 7) || "a1b2c3d"}
@@ -418,13 +418,13 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
 
           <h2
             className="text-white leading-tight mb-1"
-            style={{ fontFamily: "ChocoCooky", fontSize: "clamp(18px, 2vw, 22px)" }}
+            style={{ fontFamily: "ChocoCooky", fontSize: "clamp(28px, 3vw, 32px)" }}
           >
             {project.title}
           </h2>
 
           <div className="flex items-center gap-3 mt-1.5">
-            <div className="flex items-center gap-1 text-[9px] text-slate-600">
+            <div className="flex items-center gap-1 text-[9px] text-slate-400">
               <FaClock size={8} />
               <span>{formattedDate}</span>
             </div>
@@ -442,7 +442,7 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
         {/* Full stack */}
         {(project.tags || []).length > 0 && (
           <div>
-            <p className="text-[9px] text-slate-600 uppercase tracking-widest mb-2">
+            <p className="text-[9px] text-slate-400 uppercase tracking-widest mb-2">
               stack
             </p>
             <div className="flex flex-wrap gap-1.5">
@@ -526,7 +526,7 @@ const MobileProjectCard = ({ project, index, inView }) => {
       <div className="p-4">
         {/* Header */}
         <div className="flex items-start justify-between gap-2 mb-2">
-          <h3 className="text-white" style={{ fontFamily: "ChocoCooky", fontSize: "16px" }}>
+          <h3 className="text-white" style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "14px", fontWeight: 600 }}>
             {project.title}
           </h3>
           <span className={`text-[8px] px-2 py-0.5 rounded border flex-shrink-0 ${status.badge}`}>
@@ -843,7 +843,7 @@ export const Works = () => {
             <span
               className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] animate-pulse"
             />
-            <span className="text-[9px] text-slate-700">
+            <span className="text-[9px] text-slate-500">
               {projects.length} projects · click any card to inspect
             </span>
           </motion.div>

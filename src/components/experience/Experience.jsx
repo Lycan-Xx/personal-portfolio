@@ -304,7 +304,7 @@ const BranchItem = ({ item, index, isActive, onClick, isEdu = false }) => {
         {item.status === 'active' && (
           <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
         )}
-        <span className="text-[8px] text-slate-600 whitespace-nowrap">
+        <span className="text-[8px] text-slate-400 whitespace-nowrap">
           {isEdu ? item.periodShort : item.periodShort}
         </span>
       </div>
@@ -332,11 +332,11 @@ const DetailPanel = ({ item, globalIndex, onNavigate, inView }) => {
       >
         {/* Commit hash row */}
         <div className="flex items-center gap-3 mb-5">
-          <p className="text-[10px] text-slate-600 whitespace-nowrap">
+          <p className="text-[10px] text-slate-400 whitespace-nowrap">
             commit{' '}
-            <span className="text-[var(--color-accent)]/50">{item.commitHash}</span>
+            <span className="text-[var(--color-accent)]/70">{item.commitHash}</span>
             {' · '}
-            <span className="text-slate-500">{item.branch}</span>
+            <span className="text-slate-400">{item.branch}</span>
           </p>
           <div className="flex-1 h-px bg-[var(--color-accent)]/8" />
         </div>
@@ -353,7 +353,7 @@ const DetailPanel = ({ item, globalIndex, onNavigate, inView }) => {
           {/* Role / Degree */}
           <h3
             className="text-white leading-tight mb-1"
-            style={{ fontFamily: 'ChocoCooky', fontSize: 'clamp(18px, 2.5vw, 26px)' }}
+            style={{ fontFamily: 'ChocoCooky', fontSize: 'clamp(28px, 3vw, 32px)' }}
           >
             {isEdu ? item.degree : item.role}
           </h3>
@@ -365,12 +365,12 @@ const DetailPanel = ({ item, globalIndex, onNavigate, inView }) => {
 
           {/* Meta row */}
           <div className="flex items-center gap-4 flex-wrap">
-            <span className="text-[9px] text-slate-500">{item.period}</span>
+            <span className="text-[9px] text-slate-400">{item.period}</span>
             {!isEdu && (
-              <span className="text-[9px] text-slate-600">{item.duration}</span>
+              <span className="text-[9px] text-slate-400">{item.duration}</span>
             )}
             {!isEdu && item.location && (
-              <span className="text-[9px] text-slate-600">{item.location}</span>
+              <span className="text-[9px] text-slate-400">{item.location}</span>
             )}
           </div>
         </div>
@@ -426,7 +426,7 @@ const DetailPanel = ({ item, globalIndex, onNavigate, inView }) => {
           >
             ← prev
           </button>
-          <span className="text-[9px] text-slate-700">
+          <span className="text-[9px] text-slate-500">
             {globalIndex + 1} / {TOTAL}
           </span>
           <button
@@ -492,7 +492,7 @@ const MobileCard = ({ item, index, inView }) => {
 
         <h4
           className="text-white leading-tight mb-1"
-          style={{ fontFamily: 'ChocoCooky', fontSize: '15px' }}
+          style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '14px', fontWeight: 600 }}
         >
           {isEdu ? item.degree : item.role}
         </h4>
@@ -500,7 +500,7 @@ const MobileCard = ({ item, index, inView }) => {
           {isEdu ? item.institution : item.org}
         </p>
 
-        <p className="text-[9px] text-slate-600 mb-3">
+        <p className="text-[9px] text-slate-400 mb-3">
           {item.period}{!isEdu && ` · ${item.duration}`}
         </p>
 
@@ -586,7 +586,7 @@ const Experience = () => {
                 <p className="text-[10px] text-slate-500 tracking-widest uppercase">
                   git log --graph
                 </p>
-                <p className="text-[8.5px] text-slate-700 mt-0.5">
+                <p className="text-[8.5px] text-slate-500 mt-0.5">
                   {`// ${experiences.filter(e => e.status === 'active').length} active · ${TOTAL} entries`}
                 </p>
               </div>
@@ -620,7 +620,7 @@ const Experience = () => {
                   style={{ background: 'var(--color-accent)' }}
                 />
                 <p
-                  className="px-3.5 pb-1.5 text-[8.5px] text-slate-700 tracking-widest uppercase"
+                  className="px-3.5 pb-1.5 text-[8.5px] text-slate-500 tracking-widest uppercase"
                   style={{ fontFamily: 'JetBrains Mono, monospace' }}
                 >
                   education
