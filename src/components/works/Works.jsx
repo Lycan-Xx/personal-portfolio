@@ -278,7 +278,7 @@ const ProjectCard = React.memo(({ project, index, isSelected, onClick, isVisible
           </span>
         </div>
 
-        <p className="text-[9px] text-slate-500 line-clamp-2 leading-relaxed mb-2.5">
+        <p className="text-[9px] text-slate-400 line-clamp-2 leading-relaxed mb-2.5">
           {project.description}
         </p>
 
