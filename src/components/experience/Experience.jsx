@@ -332,11 +332,11 @@ const DetailPanel = ({ item, globalIndex, onNavigate, inView }) => {
       >
         {/* Commit hash row */}
         <div className="flex items-center gap-3 mb-5">
-          <p className="text-[10px] text-slate-600 whitespace-nowrap">
+          <p className="text-[10px] text-slate-400 whitespace-nowrap">
             commit{' '}
-            <span className="text-[var(--color-accent)]/50">{item.commitHash}</span>
+            <span className="text-[var(--color-accent)]/70">{item.commitHash}</span>
             {' · '}
-            <span className="text-slate-500">{item.branch}</span>
+            <span className="text-slate-400">{item.branch}</span>
           </p>
           <div className="flex-1 h-px bg-[var(--color-accent)]/8" />
         </div>
