@@ -418,7 +418,7 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
 
           <h2
             className="text-white leading-tight mb-1"
-            style={{ fontFamily: "ChocoCooky", fontSize: "clamp(18px, 2vw, 22px)" }}
+            style={{ fontFamily: "ChocoCooky", fontSize: "clamp(28px, 3vw, 32px)" }}
           >
             {project.title}
           </h2>
