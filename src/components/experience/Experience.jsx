@@ -426,7 +426,7 @@ const DetailPanel = ({ item, globalIndex, onNavigate, inView }) => {
           >
             ← prev
           </button>
-          <span className="text-[9px] text-slate-700">
+          <span className="text-[9px] text-slate-500">
             {globalIndex + 1} / {TOTAL}
           </span>
           <button
