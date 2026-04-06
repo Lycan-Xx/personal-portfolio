@@ -336,7 +336,7 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
       <div className="flex items-center justify-between mb-4 flex-shrink-0">
         <div className="flex items-center gap-2">
           <span className={`w-2 h-2 rounded-full flex-shrink-0 ${status.dot}`} />
-          <span className="text-[9px] text-slate-600">
+          <span className="text-[9px] text-slate-400">
             {currentIdx + 1} / {projects.length}
           </span>
         </div>
