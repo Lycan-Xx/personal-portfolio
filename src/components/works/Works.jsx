@@ -303,8 +303,8 @@ const ProjectCard = React.memo(({ project, index, isSelected, onClick, isVisible
 
         {/* Date */}
         <div className="flex items-center gap-1 mt-2.5 pt-2 border-t border-[var(--color-accent)]/8">
-          <FaClock size={8} className="text-slate-700" />
-          <span className="text-[8px] text-slate-700">{formattedDate}</span>
+          <FaClock size={8} className="text-slate-500" />
+          <span className="text-[8px] text-slate-500">{formattedDate}</span>
         </div>
       </div>
     </motion.div>
