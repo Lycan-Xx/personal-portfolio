@@ -208,8 +208,8 @@ const StatusBadge = ({ status }) =>
 
 const TypeBadge = ({ label }) => (
   <span
-    className="text-[9px] text-theme-text-muted bg-theme-text-muted/5
-               border border-theme-text-muted/15 px-2 py-0.5 rounded"
+    className="text-[9px] text-slate-400 bg-slate-400/5
+               border border-slate-400/15 px-2 py-0.5 rounded"
     style={{ fontFamily: 'JetBrains Mono, monospace' }}
   >
     {label}
@@ -283,16 +283,16 @@ const BranchItem = ({ item, index, isActive, onClick, isEdu = false }) => {
       {/* text */}
       <div className="flex-1 min-w-0">
         <p
-          className={`text-[10px] truncate font-medium leading-tight transition-colors
-            ${isActive ? 'text-theme-text-primary' : 'text-theme-text-secondary'}`}
+          className={`text-[12px] truncate font-semibold leading-tight transition-colors
+            ${isActive ? 'text-white' : 'text-slate-400'}`}
         >
           {isEdu ? item.degree : item.role}
         </p>
         <p
-          className={`text-[8.5px] truncate mt-0.5 transition-colors
+          className={`text-[9.5px] truncate mt-0.5 transition-colors
             ${isActive
               ? isOrange ? 'text-[var(--color-secondary)]' : 'text-[var(--color-accent)]'
-              : 'text-theme-text-muted'
+              : 'text-slate-500'
             }`}
         >
           {isEdu ? item.institution.split(',')[0] : item.org}
@@ -331,12 +331,12 @@ const DetailPanel = ({ item, globalIndex, onNavigate, inView }) => {
         style={{ fontFamily: 'JetBrains Mono, monospace' }}
       >
         {/* Commit hash row */}
-        <div className="flex items-center gap-3 mb-5">
-          <p className="text-[10px] text-slate-400 whitespace-nowrap">
+        <div className="flex items-center gap-3 mb-3">
+          <p className="text-[9px] text-slate-500 whitespace-nowrap">
             commit{' '}
-            <span className="text-[var(--color-accent)]/70">{item.commitHash}</span>
+            <span className="text-[var(--color-accent)]/40">{item.commitHash}</span>
             {' · '}
-            <span className="text-slate-400">{item.branch}</span>
+            <span className="text-[var(--color-accent)]/40">{item.branch}</span>
           </p>
           <div className="flex-1 h-px bg-[var(--color-accent)]/8" />
         </div>
@@ -351,12 +351,12 @@ const DetailPanel = ({ item, globalIndex, onNavigate, inView }) => {
           </div>
 
           {/* Role / Degree */}
-          <h3
-            className="text-white leading-tight mb-1"
-            style={{ fontFamily: 'ChocoCooky', fontSize: 'clamp(28px, 3vw, 32px)' }}
+          <h2
+            className="text-white leading-tight mb-2"
+            style={{ fontFamily: 'ChocoCooky', fontSize: 'clamp(36px, 4vw, 44px)', textShadow: '0 0 15px rgba(66, 188, 188, 0.1)' }}
           >
             {isEdu ? item.degree : item.role}
-          </h3>
+          </h2>
 
           {/* Org / Institution */}
           <p className={`text-xs mb-2 ${orgColor}`}>
@@ -376,23 +376,23 @@ const DetailPanel = ({ item, globalIndex, onNavigate, inView }) => {
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-[var(--color-accent)]/8 mb-5" />
+        <div className="h-px bg-[var(--color-accent)]/8 mb-4" />
 
         {/* Description */}
-        <p className="text-[11.5px] text-theme-text-secondary leading-relaxed mb-5">
+        <p className="text-[11px] text-slate-300 leading-relaxed mb-4">
           {item.description}
         </p>
 
         {/* Bullets */}
         {item.bullets && item.bullets.length > 0 && (
-          <ul className="space-y-2 mb-5">
+          <ul className="space-y-2 mb-4">
             {item.bullets.map((b, i) => (
               <motion.li
                 key={i}
                 initial={{ opacity: 0, x: -6 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.2, delay: i * 0.06 }}
-                className="flex items-start gap-2.5 text-[11px] text-theme-text-muted"
+                className="flex items-start gap-2.5 text-[11px] text-slate-400"
               >
                 <span className={`flex-shrink-0 mt-0.5 ${arrowColor}`}>▸</span>
                 {b}
@@ -481,26 +481,26 @@ const MobileCard = ({ item, index, inView }) => {
 
       {/* Card */}
       <div
-        className={`flex-1 ml-3 mb-4 rounded-xl border p-3.5
-                    bg-theme-card backdrop-blur-md ${borderColor}`}
+        className={`flex-1 ml-3 mb-4 rounded-xl border p-5
+                    bg-slate-900/85 md:backdrop-blur-md transition-all duration-300 ${borderColor}`}
         style={{ fontFamily: 'JetBrains Mono, monospace' }}
       >
-        <div className="flex items-center gap-2 flex-wrap mb-2">
+        <div className="flex items-center gap-2 flex-wrap mb-2.5">
           <StatusBadge status={item.status} />
           {!isEdu && <TypeBadge label={item.type} />}
         </div>
 
-        <h4
-          className="text-white leading-tight mb-1"
-          style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '14px', fontWeight: 600 }}
+        <h3
+          className="text-white leading-tight mb-1.5"
+          style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '16px', fontWeight: 600 }}
         >
           {isEdu ? item.degree : item.role}
-        </h4>
-        <p className={`text-[10px] mb-1.5 ${orgColor}`}>
+        </h3>
+        <p className={`text-[10px] mb-2 ${orgColor}`}>
           {isEdu ? item.institution : item.org}
         </p>
 
-        <p className="text-[9px] text-slate-400 mb-3">
+        <p className="text-[9px] text-slate-400 mb-4 leading-relaxed">
           {item.period}{!isEdu && ` · ${item.duration}`}
         </p>
 
@@ -535,32 +535,32 @@ const Experience = () => {
     <section
       ref={sectionRef}
       id="experience"
-      className="relative min-h-screen py-16 sm:py-20 px-0 md:px-4 z-20"
+      className="relative min-h-screen py-20 sm:py-32 px-0 md:px-4 z-20"
     >
-      <div className="w-full max-w-[86rem] mx-auto relative">
+      <div className="w-full max-w-[90rem] mx-auto relative">
         {/* Glass container */}
         <div className="absolute inset-0 bg-black/20 backdrop-blur-md rounded-none md:rounded-3xl" />
         <div className="absolute inset-0 bg-black/50 rounded-none md:rounded-3xl" />
 
-        <div className="relative p-6 md:p-10 z-10">
+        <div className="relative p-8 md:p-12 z-10">
 
           {/* ── Header ── */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={sectionInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="mb-10"
+            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="mb-12"
           >
             <h2
-              className="text-white relative inline-block pb-2
+              className="text-white relative inline-block pb-3
                          after:content-[''] after:absolute after:bottom-0 after:left-0
-                         after:w-2/3 after:h-[2px] after:bg-[var(--color-accent)]"
-              style={{ fontFamily: 'ChocoCooky', fontSize: 'clamp(28px, 4vw, 40px)' }}
+                         after:w-2/3 after:h-[3px] after:bg-[var(--color-accent)]"
+              style={{ fontFamily: 'ChocoCooky', fontSize: 'clamp(36px, 6vw, 52px)', textShadow: '0 0 20px rgba(66, 188, 188, 0.15)' }}
             >
               {'< Experience />'}
             </h2>
             <p
-              className="mt-3 text-slate-500 text-[10px]"
+              className="mt-4 text-cyan-400/80 text-[11px]"
               style={{ fontFamily: 'JetBrains Mono, monospace' }}
             >
               {`// ${experiences.filter(e => e.status === 'active').length} active roles · ${experiences.length} total entries`}
@@ -568,15 +568,15 @@ const Experience = () => {
           </motion.div>
 
           {/* ── DESKTOP LAYOUT ── */}
-          <div className="hidden md:flex rounded-2xl overflow-hidden border border-[var(--color-accent)]/20 min-h-[600px]">
+          <div className="hidden md:flex gap-0 rounded-3xl overflow-hidden border border-[var(--color-accent)]/15 min-h-[700px]">
 
             {/* LEFT: Branch Map */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={sectionInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.15 }}
-              className="w-[220px] xl:w-[240px] flex-shrink-0 flex flex-col
-                         bg-black/40 border-r border-[var(--color-accent)]/15"
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="w-[240px] xl:w-[280px] flex-shrink-0 flex flex-col
+                         bg-black/40 border-r border-[var(--color-accent)]/12"
             >
               {/* Panel header */}
               <div

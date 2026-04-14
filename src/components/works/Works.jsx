@@ -71,6 +71,40 @@ const STATUS_CONFIG = {
   },
 };
 
+// ─── STATUS ROTATOR (like JobRotator) ────────────────────────────────────────────
+const StatusRotator = ({ status }) => {
+  const [index, setIndex] = useState(0);
+  const statuses = [status, status === 'active' ? 'shipping' : status, status === 'dormant' ? 'resting' : status];
+
+  useEffect(() => {
+    if (statuses.length <= 1) return;
+    const interval = setInterval(() => {
+      setIndex(i => (i + 1) % statuses.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, [statuses.length]);
+
+  return (
+    <div className="relative h-6 overflow-hidden inline-block">
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={index}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -16 }}
+          transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="absolute inset-0 flex items-center justify-center"
+          style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "10px", fontWeight: 600 }}
+        >
+          <span className={`px-2 py-0.5 rounded border ${STATUS_CONFIG[statuses[index]]?.badge}`}>
+            {statuses[index]}
+          </span>
+        </motion.span>
+      </AnimatePresence>
+    </div>
+  );
+};
+
 // ─── IMAGE CAROUSEL (drawer version — large) ─────────────────────────────────
 const DrawerCarousel = React.memo(({ images, title }) => {
   const [current, setCurrent] = useState(0);
@@ -160,11 +194,10 @@ const DrawerCarousel = React.memo(({ images, title }) => {
               <button
                 key={i}
                 onClick={() => goTo(i)}
-                className={`rounded-full transition-all duration-300 ${
-                  i === current
+                className={`rounded-full transition-all duration-300 ${i === current
                     ? "w-4 h-1.5 bg-[var(--color-accent)]"
                     : "w-1.5 h-1.5 bg-white/30 hover:bg-white/50"
-                }`}
+                  }`}
               />
             ))}
           </div>
@@ -228,9 +261,9 @@ const ProjectCard = React.memo(({ project, index, isSelected, onClick, isVisible
       className={`relative rounded-xl cursor-pointer overflow-hidden
                   border transition-all duration-300 group
                   ${isSelected
-                    ? "border-[var(--color-accent)]/60 shadow-[0_0_20px_rgba(66,188,188,0.15)]"
-                    : "border-[var(--color-accent)]/15 hover:border-[var(--color-accent)]/35"
-                  }`}
+          ? "border-[var(--color-accent)]/60 shadow-[0_0_20px_rgba(66,188,188,0.15)]"
+          : "border-[var(--color-accent)]/15 hover:border-[var(--color-accent)]/35"
+        }`}
       style={{ background: "rgba(15,23,42,0.85)" }}
     >
       {/* Thumbnail area */}
@@ -265,20 +298,20 @@ const ProjectCard = React.memo(({ project, index, isSelected, onClick, isVisible
       </div>
 
       {/* Card body */}
-      <div className="p-3" style={{ fontFamily: "JetBrains Mono, monospace" }}>
-        <div className="flex items-start justify-between gap-2 mb-1.5">
+      <div className="p-4" style={{ fontFamily: "JetBrains Mono, monospace" }}>
+        <div className="flex items-start justify-between gap-4 mb-2.5">
           <h3
             className="text-white leading-tight line-clamp-1 flex-1"
-            style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "13px", fontWeight: 600 }}
+            style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "16px", fontWeight: 600 }}
           >
             {project.title}
           </h3>
-          <span className={`text-[8px] flex-shrink-0 px-1.5 py-0.5 rounded border ${status.badge}`}>
-            {status.label}
+          <span className={`text-[10px] flex-shrink-0 px-2 py-0.5 rounded border ${status.badge}`}>
+            <StatusRotator status={project.status} />
           </span>
         </div>
 
-        <p className="text-[9px] text-slate-400 line-clamp-2 leading-relaxed mb-2.5">
+        <p className="text-[10px] text-slate-400 line-clamp-2 leading-relaxed mb-3">
           {project.description}
         </p>
 
@@ -288,14 +321,14 @@ const ProjectCard = React.memo(({ project, index, isSelected, onClick, isVisible
             <span
               key={tag}
               className="text-[8px] px-1.5 py-0.5 rounded
-                         text-[var(--color-accent)]/70 bg-[var(--color-accent)]/5
-                         border border-[var(--color-accent)]/15"
+                         text-[var(--color-accent)] bg-[var(--color-accent)]/10
+                         border border-[var(--color-accent)]/20"
             >
               {tag}
             </span>
           ))}
           {(project.tags || []).length > 2 && (
-            <span className="text-[8px] px-1.5 py-0.5 rounded text-slate-600 bg-slate-800/50 border border-slate-700/30">
+            <span className="text-[8px] px-1.5 py-0.5 rounded text-slate-400 bg-slate-800 border border-slate-700/50">
               +{project.tags.length - 2}
             </span>
           )}
@@ -403,13 +436,13 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
           {/* Status + type badges */}
           <div className="flex items-center gap-2 flex-wrap mb-2">
             <span className={`text-[9px] px-2 py-0.5 rounded border ${status.badge}`}>
-              {status.label}
+              <StatusRotator status={status.label} />
             </span>
             {project.featured && (
               <span
                 className="text-[9px] px-2 py-0.5 rounded border
-                           text-[var(--color-secondary)] bg-[var(--color-secondary)]/8
-                           border-[var(--color-secondary)]/25"
+                            text-[var(--color-secondary)] bg-[var(--color-secondary)]/8
+                            border-[var(--color-secondary)]/25"
               >
                 featured
               </span>
@@ -417,17 +450,20 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
           </div>
 
           <h2
-            className="text-white leading-tight mb-1"
-            style={{ fontFamily: "ChocoCooky", fontSize: "clamp(28px, 3vw, 32px)" }}
+            className="text-white leading-tight mb-2"
+            style={{ fontFamily: "ChocoCooky", fontSize: "clamp(36px, 4vw, 44px)", textShadow: "0 0 15px rgba(66, 188, 188, 0.1)" }}
           >
             {project.title}
           </h2>
 
-          <div className="flex items-center gap-3 mt-1.5">
-            <div className="flex items-center gap-1 text-[9px] text-slate-400">
-              <FaClock size={8} />
+          <div className="flex items-center gap-4 mt-2">
+            <div className="flex items-center gap-1.5 text-[10px] text-slate-400">
+              <FaClock size={9} />
               <span>{formattedDate}</span>
             </div>
+            <span className={`text-[10px] flex-shrink-0 px-2 py-0.5 rounded border ${status.badge}`}>
+              {status.label}
+            </span>
           </div>
         </div>
 
@@ -435,7 +471,7 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
         <div className="h-px bg-[var(--color-accent)]/8" />
 
         {/* Description */}
-        <p className="text-[11px] text-slate-300 leading-relaxed">
+        <p className="text-[11px] text-slate-300 leading-relaxed mb-4">
           {project.description}
         </p>
 
@@ -450,8 +486,8 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
                 <span
                   key={tag}
                   className="text-[9px] px-2 py-0.5 rounded border
-                             text-[var(--color-accent)] bg-[var(--color-accent)]/5
-                             border-[var(--color-accent)]/20"
+                             text-[var(--color-accent)] bg-[var(--color-accent)]/10
+                             border-[var(--color-accent)]/25"
                 >
                   {tag}
                 </span>
@@ -523,29 +559,29 @@ const MobileProjectCard = ({ project, index, inView }) => {
         </div>
       )}
 
-      <div className="p-4">
+      <div className="p-5">
         {/* Header */}
-        <div className="flex items-start justify-between gap-2 mb-2">
-          <h3 className="text-white" style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "14px", fontWeight: 600 }}>
+        <div className="flex items-start justify-between gap-3 mb-2.5">
+          <h3 className="text-white" style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "16px", fontWeight: 600 }}>
             {project.title}
           </h3>
-          <span className={`text-[8px] px-2 py-0.5 rounded border flex-shrink-0 ${status.badge}`}>
-            {status.label}
+          <span className={`text-[10px] flex-shrink-0 px-2 py-0.5 rounded border flex-shrink-0 ${status.badge}`}>
+            <StatusRotator status={project.status} />
           </span>
         </div>
 
-        <p className="text-[10px] text-slate-400 leading-relaxed mb-3">
+        <p className="text-[10px] text-slate-400 leading-relaxed mb-4">
           {project.description}
         </p>
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-1.5 mb-3">
+        <div className="flex flex-wrap gap-2 mb-4">
           {(project.tags || []).slice(0, 4).map((tag) => (
             <span
               key={tag}
-              className="text-[8px] px-1.5 py-0.5 rounded
-                         text-[var(--color-accent)]/70 bg-[var(--color-accent)]/5
-                         border border-[var(--color-accent)]/15"
+              className="text-[9px] px-2 py-0.5 rounded
+                         text-[var(--color-accent)] bg-[var(--color-accent)]/10
+                         border border-[var(--color-accent)]/20"
             >
               {tag}
             </span>
@@ -633,15 +669,24 @@ export const Works = () => {
   // ── Loading / error / empty ──────────────────────────────────────────────
   if (loading) {
     return (
-      <section className="relative min-h-screen py-20 z-20 flex items-center justify-center">
+      <section className="relative min-h-screen py-32 z-20 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b border-[var(--color-accent)] mx-auto mb-4" />
-          <p
-            className="text-slate-500 text-[11px]"
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            <div className="w-20 h-20 mx-auto mb-6 border-4 border-[var(--color-accent)] border-t-transparent rounded-full animate-spin" />
+          </motion.div>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-cyan-400/80 text-[11px]"
             style={{ fontFamily: "JetBrains Mono, monospace" }}
           >
             loading projects…
-          </p>
+          </motion.p>
         </div>
       </section>
     );
@@ -649,22 +694,39 @@ export const Works = () => {
 
   if (error) {
     return (
-      <section className="relative min-h-screen py-20 z-20 flex items-center justify-center">
+      <section className="relative min-h-screen py-32 z-20 flex items-center justify-center">
         <div
           className="text-center"
           style={{ fontFamily: "JetBrains Mono, monospace" }}
         >
-          <p className="text-rose-400 text-[11px] mb-2">error loading projects</p>
-          <p className="text-slate-600 text-[10px] mb-4">{error.message}</p>
-          <button
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-rose-400 text-[11px] mb-2"
+          >
+            error loading projects
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-slate-600 text-[10px] mb-4 max-w-md"
+          >
+            {error.message}
+          </motion.p>
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
             onClick={() => window.location.reload()}
             className="text-[10px] px-4 py-2 rounded-lg
-                       text-[var(--color-accent)] bg-[var(--color-accent)]/8
-                       border border-[var(--color-accent)]/20
-                       hover:bg-[var(--color-accent)]/15 transition-colors"
+                      text-[var(--color-accent)] bg-[var(--color-accent)]/8
+                      border border-[var(--color-accent)]/20
+                      hover:bg-[var(--color-accent)]/15 transition-colors"
           >
             retry
-          </button>
+          </motion.button>
         </div>
       </section>
     );
@@ -672,13 +734,26 @@ export const Works = () => {
 
   if (!projects?.length) {
     return (
-      <section className="relative min-h-screen py-20 z-20 flex items-center justify-center">
+      <section className="relative min-h-screen py-32 z-20 flex items-center justify-center">
         <div
           className="text-center"
           style={{ fontFamily: "JetBrains Mono, monospace" }}
         >
-          <FaCodeBranch className="text-[var(--color-accent)] text-3xl mx-auto mb-3 opacity-40" />
-          <p className="text-slate-600 text-[11px]">no projects found</p>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            <FaCodeBranch className="text-cyan-400/60 text-4xl mx-auto mb-4" />
+          </motion.div>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="text-slate-600 text-[11px]"
+          >
+            no projects found
+          </motion.p>
         </div>
       </section>
     );
@@ -688,42 +763,49 @@ export const Works = () => {
     <section
       ref={sectionRef}
       id="works"
-      className="relative min-h-screen py-16 sm:py-20 px-0 md:px-4 z-20"
+      className="relative min-h-screen py-20 sm:py-32 px-0 md:px-4 z-20"
     >
-      <div className="w-full max-w-[86rem] mx-auto relative">
+      {/* Animated background glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-cyan-400/5 animate-pulse" />
+      </div>
+      <div className="w-full max-w-[90rem] mx-auto relative">
 
         {/* Glass backdrop */}
         <div className="absolute inset-0 bg-black/20 backdrop-blur-md rounded-none md:rounded-3xl" />
         <div className="absolute inset-0 bg-black/50 rounded-none md:rounded-3xl" />
 
-        <div className="relative p-6 md:p-10 z-10">
+        <div className="relative p-8 md:p-12 z-10">
 
           {/* ── Header ── */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={sectionInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="mb-10"
+            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="mb-12"
           >
             <h2
-              className="text-white relative inline-block pb-2
-                         after:content-[''] after:absolute after:bottom-0 after:left-0
-                         after:w-2/3 after:h-[2px] after:bg-[var(--color-accent)]"
-              style={{ fontFamily: "ChocoCooky", fontSize: "clamp(28px, 4vw, 40px)" }}
+              className="text-white relative inline-block pb-3
+                          after:content-[''] after:absolute after:bottom-0 after:left-0
+                          after:w-2/3 after:h-[3px] after:bg-[var(--color-accent)]"
+              style={{ fontFamily: "ChocoCooky", fontSize: "clamp(36px, 6vw, 52px)", textShadow: "0 0 20px rgba(66, 188, 188, 0.15)" }}
             >
               {"< Works />"}
             </h2>
-            <p
-              className="mt-3 text-slate-500 text-[10px]"
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="mt-4 text-cyan-400/80 text-[11px]"
               style={{ fontFamily: "JetBrains Mono, monospace" }}
             >
               {`// ${projects.filter((p) => p.status === "active").length} active · ${projects.length} total`}
-            </p>
+            </motion.p>
           </motion.div>
 
           {/* ── DESKTOP: Card Wall + Drawer ── */}
-          <div className="hidden md:flex gap-0 rounded-2xl overflow-hidden
-                          border border-[var(--color-accent)]/15 min-h-[640px]">
+          <div className="hidden md:flex gap-0 rounded-3xl overflow-hidden
+                       border border-[var(--color-accent)]/15 min-h-[700px]">
 
             {/* LEFT: Scrollable card wall */}
             <motion.div
@@ -760,11 +842,11 @@ export const Works = () => {
 
               {/* Grid */}
               <div
-                className={`p-4 grid gap-3 transition-all duration-300
-                            ${selected
-                              ? "grid-cols-1 lg:grid-cols-2"
-                              : "grid-cols-2 lg:grid-cols-3"
-                            }`}
+                className={`p-5 grid gap-4 transition-all duration-300
+                          ${selected
+                    ? "grid-cols-1 lg:grid-cols-2"
+                    : "grid-cols-2 lg:grid-cols-3"
+                  }`}
               >
                 {projects.map((project, i) => (
                   <div
@@ -781,7 +863,7 @@ export const Works = () => {
                       onClick={() =>
                         setSelected(
                           selected &&
-                          (selected._id || selected.id) === (project._id || project.id)
+                            (selected._id || selected.id) === (project._id || project.id)
                             ? null
                             : project
                         )
@@ -837,11 +919,11 @@ export const Works = () => {
             initial={{ opacity: 0 }}
             animate={sectionInView ? { opacity: 1 } : {}}
             transition={{ delay: 0.9 }}
-            className="mt-8 flex items-center gap-2"
+            className="mt-10 flex items-center gap-2"
             style={{ fontFamily: "JetBrains Mono, monospace" }}
           >
             <span
-              className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] animate-pulse"
+              className="w-2 h-2 rounded-full bg-[var(--color-accent)] animate-pulse"
             />
             <span className="text-[9px] text-slate-500">
               {projects.length} projects · click any card to inspect
