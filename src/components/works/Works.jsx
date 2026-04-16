@@ -106,7 +106,7 @@ const StatusRotator = ({ status }) => {
 };
 
 // ─── IMAGE CAROUSEL (drawer version — large) ─────────────────────────────────
-const DrawerCarousel = React.memo(({ images, title }) => {
+const DrawerCarousel = React.memo(({ images, title, autoPlay = true }) => {
   const [current, setCurrent] = useState(0);
   const [dir, setDir] = useState(1);
 
@@ -115,13 +115,13 @@ const DrawerCarousel = React.memo(({ images, title }) => {
   }, [images]);
 
   useEffect(() => {
-    if (images.length <= 1) return;
+    if (!autoPlay || images.length <= 1) return;
     const t = setInterval(() => {
       setDir(1);
       setCurrent((p) => (p + 1) % images.length);
     }, CAROUSEL_INTERVAL);
     return () => clearInterval(t);
-  }, [images.length]);
+  }, [images.length, autoPlay]);
 
   const goTo = useCallback((idx) => {
     setDir(idx > current ? 1 : -1);
@@ -159,7 +159,7 @@ const DrawerCarousel = React.memo(({ images, title }) => {
           <img
             src={currentUrl}
             alt={images[current]?.alt || title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
             onError={(e) => { e.currentTarget.src = FALLBACK_IMG; }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
@@ -209,16 +209,16 @@ const DrawerCarousel = React.memo(({ images, title }) => {
 DrawerCarousel.displayName = "DrawerCarousel";
 
 // ─── SMALL CARD THUMBNAIL ─────────────────────────────────────────────────────
-const CardThumbnail = React.memo(({ images, isVisible, title }) => {
+const CardThumbnail = React.memo(({ images, isSliding, title }) => {
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
-    if (!isVisible || images.length <= 1) return;
+    if (!isSliding || images.length <= 1) return;
     const t = setInterval(() => {
       setCurrent((p) => (p + 1) % images.length);
     }, CAROUSEL_INTERVAL + 800);
     return () => clearInterval(t);
-  }, [isVisible, images.length]);
+  }, [isSliding, images.length]);
 
   const url = getImageUrl(images[current]) || FALLBACK_IMG;
 
@@ -245,6 +245,7 @@ CardThumbnail.displayName = "CardThumbnail";
 
 // ─── PROJECT WALL CARD ────────────────────────────────────────────────────────
 const ProjectCard = React.memo(({ project, index, isSelected, onClick, isVisible, inView }) => {
+  const [isHovered, setIsHovered] = useState(false);
   const status = STATUS_CONFIG[project.status] || STATUS_CONFIG.dormant;
   const images = project.images || [];
   const formattedDate = useMemo(
@@ -254,6 +255,8 @@ const ProjectCard = React.memo(({ project, index, isSelected, onClick, isVisible
 
   return (
     <motion.div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.4, delay: index * 0.06 }}
@@ -269,7 +272,7 @@ const ProjectCard = React.memo(({ project, index, isSelected, onClick, isVisible
       {/* Thumbnail area */}
       <div className="relative h-36 overflow-hidden rounded-t-xl bg-slate-900">
         {images.length > 0 ? (
-          <CardThumbnail images={images} isVisible={isVisible} title={project.title} />
+          <CardThumbnail images={images} isSliding={isHovered || isSelected} title={project.title} />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900" />
         )}
@@ -536,6 +539,7 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
 
 // ─── MOBILE CARD (full-width stacked) ────────────────────────────────────────
 const MobileProjectCard = ({ project, index, inView }) => {
+  const [isFocused, setIsFocused] = useState(false);
   const [open, setOpen] = useState(false);
   const status = STATUS_CONFIG[project.status] || STATUS_CONFIG.dormant;
   const images = project.images || [];
@@ -546,6 +550,9 @@ const MobileProjectCard = ({ project, index, inView }) => {
 
   return (
     <motion.div
+      onMouseEnter={() => setIsFocused(true)}
+      onMouseLeave={() => setIsFocused(false)}
+      onTouchStart={() => setIsFocused(true)}
       initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.4, delay: index * 0.07 }}
@@ -555,7 +562,7 @@ const MobileProjectCard = ({ project, index, inView }) => {
       {/* Image */}
       {images.length > 0 && (
         <div className="relative h-40 bg-slate-900">
-          <DrawerCarousel images={images} title={project.title} />
+          <DrawerCarousel images={images} title={project.title} autoPlay={isFocused} />
         </div>
       )}
 
@@ -844,8 +851,8 @@ export const Works = () => {
               <div
                 className={`p-5 grid gap-4 transition-all duration-300
                           ${selected
-                    ? "grid-cols-1 lg:grid-cols-2"
-                    : "grid-cols-2 lg:grid-cols-3"
+                    ? "grid-cols-1"
+                    : "grid-cols-2"
                   }`}
               >
                 {projects.map((project, i) => (
