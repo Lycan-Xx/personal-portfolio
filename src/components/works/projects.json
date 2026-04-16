@@ -1,38 +1,18 @@
 [
   {
-    "id": 2,
-    "title": "Mailcreak newsletter manager",
-    "description": "A full-stack web app built with React and Node.js, designed to streamline newsletter creation, subscriber management, and performance tracking. Styled with Tailwind CSS for a modern, responsive interface.",
-    "image": "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891728/mailcreak_2_hzdknh.png",
-    "images": [
-      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891728/mailcreak_2_hzdknh.png",
-      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891729/mailcreak_3_ctfems.png",
-      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891727/mailcreak_1_iwx0db.png"
-    ],
-    "tags": [
-      "Javascript",
-      "React",
-      "TailwindCSS",
-      "Node.js"
-    ],
-    "link": "https://lycan-xx.github.io/Mailcreak/",
-    "repo": "https://github.com/Lycan-Xx/Mailcreak",
-    "status": "dormant",
-    "featured": false,
-    "displayOrder": 2,
-    "completedDate": null
-  },
-  {
     "id": 3,
     "title": "eVault Landing Page",
     "description": "The website serves as the landing page for a startup subscription provider, with a focus on offering internet subscriptions, TV subscriptions, airtime, and instant payment solutions for schools and businesses. The platform aims to streamline the subscription management process, providing customers with a user-friendly interface to easily sign up, manage, and pay for their various subscription services.",
     "image": "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891725/evault_2_kybs9j.png",
-    "images": [],
+    "images": [
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776267305/portfolio/bxdsz9lwmtjscnqsybfb.png"
+    ],
     "tags": [
-      "React",
       "Redux",
       "Material-UI",
-      "Firebase"
+      "PostgreSQL",
+      "Javascript",
+      "Tailwind CSS"
     ],
     "link": "https://evaultmoney.com",
     "status": "active",
@@ -43,45 +23,32 @@
   {
     "id": 4,
     "title": "ABKHD online market place",
-    "description": "A simple yet effective mini e-commerce platform built using the MEVN (MongoDB, Express, Vue.js, Node.js) stack. The platform features a clean and intuitive product listing interface, allowing users to browse and explore the available offerings. When a user is interested in a product, they are seamlessly redirected to the company's WhatsApp Business profile, where they can directly chat with a representative to discuss the product details and make payments. The platform also includes a dedicated admin interface, empowering the startup team to easily upload, manage, and update the product catalog. This MEVN stack-based project showcases the team's proficiency in implementing CRUD (Create, Read, Update, Delete) functionalities, demonstrating their technical expertise and ability to deliver a user-friendly e-commerce solution.",
+    "description": "# ABKHD Store Project Overview\n\nABKHD Store is a modern, high-performance ecommerce platform purpose-built for tech enthusiasts operating in the Nigerian market. Developed with Astro 5 and Appwrite backend infrastructure, this open-source project delivers a premium shopping experience that combines static site generation speed with dynamic server-side capabilities.\n\n## How It Works\nThis platform leverages Astro's hybrid rendering architecture to deliver lightning-fast static pages while maintaining dynamic functionality for cart operations, checkout workflows, and administrative functions. Appwrite provides all backend services including database management, secure file storage, and user authentication without requiring custom server code. The platform integrates the Squad payment gateway natively to support local Nigerian payment methods including cards, bank transfers, and USSD transactions.\n\n## Relevance\nABKHD Store addresses critical gaps in African ecommerce solutions by providing a fully open-source, production-ready platform optimized for local payment infrastructure, regional delivery logistics, and mobile-first user experiences. Unlike generic international ecommerce platforms, it includes region-specific features that eliminate the need for extensive customization for Nigerian businesses.\n\n## Latest Features (April 2026 Update)\nThe most recent release introduces a completely redesigned multi-step checkout flow that improves conversion rates by breaking the purchase process into logical stages. New delivery zone support with configurable fees for Yola and Jimeta areas enables accurate shipping calculations. Customers can now alternatively place orders directly through WhatsApp for manual processing. Technical improvements include proper stock management to prevent overselling, enhanced payment webhook reliability, and fixed Cloudflare Pages deployment configuration that resolves environment variable issues.\n\nAdditional standout features include product video previews with automatic thumbnail generation, robust upload caching that prevents media loss during network failures, bulk product management operations, system-aware dark mode, persistent shopping cart functionality, and a full-featured administrative dashboard for complete store management.",
     "image": "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891724/abkhd_2_nuhtkg.png",
     "images": [
-      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891724/abkhd_2_nuhtkg.png",
-      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891724/abkhd_3_bckqqm.png",
-      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1746891723/abkhd_1_dwzx97.png"
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776307450/portfolio/kysz44anwcszjo90zygl.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776307474/portfolio/la2pdovcvzrupbf5bhnk.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776307471/portfolio/duwggmpfbsxa429sp2wd.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776307470/portfolio/pwzzezhspcrwns3v6gp0.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776307470/portfolio/qvtmv43vbmymizvu7ntj.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776307469/portfolio/fqwipu0lono4badrjzdw.png"
     ],
     "tags": [
-      "Vue.js",
-      "MongoDB",
-      "Express",
-      "Node.js"
+      "Appwrite",
+      "Astro",
+      "squadco-SDK",
+      "checkout",
+      "cart-management",
+      "tailwind CSS",
+      "meta-OG tags",
+      "cloudflare DNS"
     ],
-    "link": "https://abkhd-online-store.onrender.com/",
-    "status": "experimental",
+    "link": "https://abkhdstores.com.ng/",
+    "status": "active",
     "featured": false,
     "displayOrder": 3,
-    "completedDate": null
-  },
-  {
-    "id": 5,
-    "title": "LaCalle Cafe",
-    "description": "A website project for the La Calle Cafe business built using Wordpress and PHP with integrated SEO tools.",
-    "image": "https://picsum.photos/seed/lacalle/800/600",
-    "images": [
-      "https://picsum.photos/seed/lacalle/800/600",
-      "https://picsum.photos/seed/lacalle2/800/600",
-      "https://picsum.photos/seed/lacalle3/800/600"
-    ],
-    "tags": [
-      "WordPress",
-      "PHP",
-      "SEO",
-      "MySQL"
-    ],
-    "status": "experimental",
-    "featured": false,
-    "displayOrder": 4,
-    "completedDate": null
+    "completedDate": null,
+    "repo": "https://github.com/Lycan-Xx/ABKHD-online-store"
   },
   {
     "id": 6,
@@ -132,25 +99,154 @@
   },
   {
     "id": 8,
-    "title": "Resume Forge",
-    "description": "An intuitive resume builder web app enabling users to craft professional resumes and download them as PDFs. Developed with React and Node.js, and styled with Tailwind CSS for a sleek user experience.",
+    "title": "ResumeForge",
+    "description": "ResumeForge is a modern, open-source offline-first resume builder application designed to help job seekers create professional, ATS-optimized resumes with real-time PDF generation. Built with React 18, Vite, and Firebase, this application solves the common pain points of resume creation by providing an intuitive interface, instant visual feedback, and reliable data persistence.\n\nThis project operates on an offline-first architecture where all resume changes are first saved locally to the browser's storage, with automatic background syncing to Firebase Firestore when an internet connection becomes available. It implements a queue-based sync system with timestamp conflict resolution, ensuring users never lose their work even when working without network connectivity. The application features real-time PDF preview using @react-pdf/renderer, with debounced state updates and memoized components to maintain smooth performance even with large resume documents.\n\nResumeForge includes 3 professional template designs (Minimalist, Modern Blue, Professional Red), multiple resume management through the Resume Stash panel, Google OAuth authentication for cloud sync, full mobile responsiveness, and automatic background saving. Recent development has added Firebase Analytics integration, comprehensive loading states throughout the interface, improved modal dialogs, UX optimizations, and fixes for sync logic issues.\n\nThis project is particularly relevant in today's job market where well-formatted, ATS-friendly resumes are critical for getting past applicant tracking systems. Unlike many commercial resume builders that hide PDF export behind paywalls, ResumeForge is fully open source under the Boost Software License, providing unlimited PDF exports completely free with no watermarks or artificial limitations.\n",
     "image": "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1747077276/resume_1_cokt6g.png",
     "images": [
-      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1747077276/resume_1_cokt6g.png",
-      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1747077276/resume_1_httvvd.jpg",
-      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1747077273/resume_2_ptgkrh.png"
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776306711/portfolio/bkplbp5zbmr72elrbnjn.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776306781/portfolio/ayc9tifuza7ipybttbgw.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776306780/portfolio/mazulm9jhrion5to6eca.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776306779/portfolio/iiiah5d4xrfmnxkykqlh.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776306779/portfolio/xnpup79cubf8m2eqgw2t.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776306778/portfolio/pooiummhlqfgro6qntnj.png"
     ],
     "tags": [
       "React",
       "Javascript",
       "TailwindCSS",
-      "React Router"
+      "pdf.js",
+      "Google-Oauth",
+      "Cloud sync",
+      "Firebase",
+      "shadcn"
     ],
-    "link": "https://resume-forge-pdf.netlify.app/",
+    "link": "https://resumeforge.pages.dev/",
     "repo": "https://github.com/Lycan-Xx/Resume-Builder-PDF-generate",
-    "status": "dormant",
-    "featured": false,
+    "status": "experimental",
+    "featured": true,
     "displayOrder": 7,
+    "completedDate": null
+  },
+  {
+    "id": 9,
+    "title": "eVault Web App",
+    "description": "eVault is a comprehensive fintech platform I architected and developed, featuring a modern three-tier architecture designed for optimal security, scalability, and maintainability.\n\nThe system delivers secure account onboarding with multi-tier KYC verification, banking integrations for official accounts, OTP phone verification, and instant payments for utilities including airtime, data bundles, electricity bills, and cable TV subscriptions.\n\nLeveraging advanced authentication mechanisms and real-time capabilities, eVault ensures regulatory compliance, robust security features such as PIN-based transaction verification and comprehensive audit logging, supporting high-volume transactions while maintaining a seamless, production-ready user experience.",
+    "status": "active",
+    "tags": [
+      "React",
+      "Tailwind CSS",
+      "node.js",
+      "MUI",
+      "Javascript",
+      "CSS",
+      "React-icons",
+      "lucide-react"
+    ],
+    "link": "app.evaultmoney.com",
+    "repo": "",
+    "images": [
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776274188/portfolio/kmeds0qarbqt3xdxzlt5.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776274241/portfolio/kbdhk1pju0brdoazj7yd.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776274239/portfolio/tvi1wvmq5orqzuksaezw.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776305829/portfolio/swioy9opldeeakr65u17.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776274227/portfolio/zuhpargbq1thggggg3j2.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776274222/portfolio/z1nxwceswt0jnpizpnik.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776274224/portfolio/jccdqmulskjj6zfkrdlw.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776274220/portfolio/qp1j0xwn4xojheqjhiqt.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776274229/portfolio/sfvduvehylkoaltxp9sh.png"
+    ],
+    "featured": true,
+    "displayOrder": 8,
+    "completedDate": null
+  },
+  {
+    "id": 10,
+    "title": "Kugal jobs",
+    "description": "Kugals Jobs is a modern, privacy-first job board platform built specifically for the Northern Nigerian tech and professional community, designed to solve the fundamental friction points that plague traditional hiring systems. Unlike conventional job boards that force mandatory account creation just to browse opportunities, this platform enables job seekers to search, view, and apply for positions using only an email address completely eliminating registration barriers while still maintaining full application tracking through secure tokenized links.\n\nBuilt with React, TypeScript, and Tailwind CSS on a modern Vite stack, the platform implements a three-tier ecosystem: anonymous job seekers with zero-onboarding application flows, verified employer accounts with custom application form builders and real-time analytics dashboards, and a comprehensive administration system with automated fraud detection, scam prevention, and 24-hour job review SLA guarantees.\n\nThis project is uniquely relevant because it addresses regional hiring challenges with context-aware features like dual Email+SMS notifications optimized for local connectivity, local currency pricing tiers, and a deliberate focus on trust and platform integrity through multi-layer verification systems. Latest implemented features include GDPR-style data deletion rights, guaranteed application status updates within 14 days, automated quality checks with domain validation and spam detection, progressive web app support, and a complete end-to-end employer onboarding workflow with verification badges.\n\nWith a phased revenue model starting with free listings to build community traction, Kugals Jobs represents a thoughtful approach to building inclusive hiring infrastructure that prioritizes user privacy, reduces friction for job seekers, and establishes trusted verification for employers in an underserved regional market.\n",
+    "status": "active",
+    "tags": [
+      "radix-ui",
+      "Typescript",
+      "supabase",
+      "PostgreSQL",
+      "vite-react",
+      "tailwind CSS",
+      "Resend",
+      "cloudflare DNS"
+    ],
+    "link": "https://kugaljobs.com",
+    "repo": "",
+    "images": [
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776308721/portfolio/tqjcvk4tsjzhn0h6ulgs.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776308719/portfolio/tgk5bibgaf9a6vchqsqy.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776308716/portfolio/tl7mwjbodgzof5oqlh7d.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776308712/portfolio/djyn3ehtdhgeiu9d9wud.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776308703/portfolio/vpnht2tfpqbhtitjmnwq.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776308694/portfolio/o2bmbobpuonrkvfrslyq.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776308699/portfolio/vpmqatr6bgqkiz0pkhxf.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776308702/portfolio/cfpybfhvoymbpl3lbw2j.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776308688/portfolio/igfrwvtqv8kav7ndklbo.png"
+    ],
+    "featured": true,
+    "displayOrder": 7,
+    "completedDate": null
+  },
+  {
+    "id": 11,
+    "title": "Jalolink",
+    "description": "Jalolink is a modern, mobile-first e-commerce platform purpose-built for campus communities, designed to eliminate friction in student purchasing while providing robust administrative controls. This full-stack React application enables students to browse products, manage shopping carts, and complete secure payments without requiring account creation, drastically reducing barriers to entry for casual campus shoppers.\n\nThe platform operates using Appwrite backend-as-a-service for database, authentication, and storage, with Paystack payment integration for secure card processing. A unique Cloudflare Worker implementation runs at the edge to inject dynamic Open Graph meta tags, ensuring perfect social previews across WhatsApp, Telegram, and Twitter when sharing product links - a critical feature for viral campus sharing patterns.\n\nWhat makes Jalolink particularly relevant for educational environments is its privacy-first design: customer data is only retained for 48 hours after purchase, addressing student privacy concerns while still enabling proper order fulfillment. The system includes anti-forgery PNG receipts generated entirely client-side with Canvas API, featuring unique visual fingerprint patterns and scannable QR codes for order verification.\n\nLatest implemented features include client-side image compression before upload, real-time inventory management with automatic stock reduction, persistent localStorage shopping carts, admin dashboard analytics, and native mobile sharing capabilities. The entire architecture is optimized for low-bandwidth campus networks, with CDN hosting on Cloudflare Pages and minimal external dependencies, making it highly reliable even during peak usage periods.\n\nBuilt with React 18, TypeScript, Tailwind CSS, and shadcn/ui components, Jalolink represents a new generation of campus marketplaces that prioritize user experience, privacy, and administrative efficiency over feature bloat. The project demonstrates modern web development best practices including edge computing, webhook verification, client-side rendering optimizations, and canvas-based image generation.",
+    "status": "active",
+    "tags": [
+      "react",
+      "Typescript",
+      "Appwrite",
+      "inventory and stock management",
+      "CRUD",
+      "node.js",
+      "Paystack",
+      "tailwind CSS",
+      "meta-OG tags"
+    ],
+    "link": "https://jalolink.com",
+    "repo": "",
+    "images": [
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776309532/portfolio/s2vyc2qlyignixzwmvvb.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776309587/portfolio/stywkt8lnv25inrwyqs9.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776309529/portfolio/kb2ijbqa1tdzzwspbrdr.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776309528/portfolio/dph80keigiogg2xtorwj.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776309528/portfolio/dg1wwgywg6qdme0zn9e7.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776309527/portfolio/bkakklbbthewrvtxbrie.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776309526/portfolio/ziuymlcx6cvnchybyp9c.png"
+    ],
+    "featured": true,
+    "displayOrder": 8,
+    "completedDate": null
+  },
+  {
+    "id": 12,
+    "title": "studywise AI",
+    "description": "StudyWise AI is a modern full-stack intelligent test generator built for modern learners, leveraging multi-provider artificial intelligence to transform any text content into personalized study materials.\n\nThis open-source application enables users to upload documents (PDF, DOCX, TXT, Markdown), paste text, or import learning content and automatically generate high-quality tests, flashcards, and practice questions aligned with learning science principles.\n\nBuilt with React 18, TypeScript, and Express.js, it implements a resilient multi-AI system that intelligently fails over between Google Gemini, OpenRouter, Claude, and GPT models ensuring reliability and consistent performance. The platform features source-linked questions that trace every generated question back to its exact origin in source material, AI-powered performance insights, comprehensive learning analytics, real-time test taking with auto-save, and mobile-first responsive design.\n\nAuthentication and data security are handled with Supabase PostgreSQL using Row-Level Security and OAuth integration.\n\nThis project is highly relevant as it addresses critical gaps in modern learning tools by providing accessible, AI-accelerated study capabilities that respect source context and track learning progression objectively. Recent updates include a complete course-centric architecture refactor, fixed document parsing for PDF and Word files, freemium beta pricing model, enhanced minimalistic UI, improved authentication flows, and extensive deployment stability fixes. The project follows modern development best practices with automated deployment testing, proper state management using Zustand, and comprehensive technical documentation.",
+    "status": "active",
+    "tags": [
+      "Zustand",
+      "node.js",
+      "PDF.js",
+      "Typescript",
+      "Document-parser",
+      "Gemini 2.5"
+    ],
+    "link": "https://studywiseai.netlify.app",
+    "repo": "https://github.com/Lycan-Xx/studywise-ai",
+    "images": [
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776321919/portfolio/xj43drv44jvb2rt0y60b.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776321917/portfolio/ezdosrbvv9amrj5gkypf.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776321913/portfolio/x2qdszswjfbk3g239qo0.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776321896/portfolio/gzcwckflch9flcvijzkw.png",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776321893/portfolio/gugkeemrjrdjpokclojl.jpg",
+      "https://res.cloudinary.com/cloudinary-lycan-xx/image/upload/v1776321894/portfolio/qgt62ajonllg3jmors5k.jpg"
+    ],
+    "featured": true,
+    "displayOrder": 9,
     "completedDate": null
   }
 ]
