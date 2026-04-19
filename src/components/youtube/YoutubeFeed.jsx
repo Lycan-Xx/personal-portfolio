@@ -268,20 +268,14 @@ const YouTubeFeed = () => {
   const [featured, ...rest] = videos;
 
   return (
-    <section ref={ref} className="max-w-4xl mx-auto mt-20 px-4" id="youtube">
+    <section ref={ref} className="max-w-5xl mx-auto mt-4 px-4" id="youtube">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.5 }}
       >
-        {/* heading */}
-        <div className="mb-8 text-center">
-          <h2 className="text-2xl font-bold text-white font-mono">
-            <span className="text-cyan-400">{'<'}</span>
-            {' '}Videos{' '}
-            <span className="text-cyan-400">{'/>'}</span>
-          </h2>
-          <p className="text-gray-500 text-sm mt-2 font-mono">
+        <div className="mb-6 text-center">
+          <p className="text-gray-500 text-sm font-mono">
             latest from the channel
           </p>
         </div>

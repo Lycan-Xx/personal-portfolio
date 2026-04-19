@@ -242,20 +242,14 @@ const BlogFeed = () => {
   const filtered = filter === 'All' ? posts : posts.filter(p => p.source === filter);
 
   return (
-    <section ref={ref} className="max-w-4xl mx-auto mt-20 px-4" id="blog">
+    <section ref={ref} className="max-w-5xl mx-auto mt-4 px-4" id="blog">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.5 }}
       >
-        {/* heading */}
-        <div className="mb-8 text-center">
-          <h2 className="text-2xl font-bold text-white font-mono">
-            <span className="text-cyan-400">{'<'}</span>
-            {' '}Writing{' '}
-            <span className="text-cyan-400">{'/>'}</span>
-          </h2>
-          <p className="text-gray-500 text-sm mt-2 font-mono">
+        <div className="mb-6 text-center">
+          <p className="text-gray-500 text-sm font-mono">
             thoughts from Medium &amp; Dev.to
           </p>
         </div>
@@ -301,7 +295,7 @@ const BlogFeed = () => {
 
         {/* posts grid */}
         {!loading && !error && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
             {filtered.map((post, i) => <PostCard key={post.id} post={post} index={i} />)}
           </div>
         )}
