@@ -7,15 +7,14 @@ import React, {
 } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import {
-  FaGithub,
-  FaExternalLinkAlt,
-  FaClock,
-  FaCodeBranch,
-  FaTimes,
-  FaChevronLeft,
-  FaChevronRight,
-} from "react-icons/fa";
+import { Icons } from "../../utils/iconMap";
+const FaGithub = (p) => <Icons.github {...p} />;
+const FaExternalLinkAlt = (p) => <Icons.external {...p} />;
+const FaClock = (p) => <Icons.clock {...p} />;
+const FaCodeBranch = (p) => <Icons.branch {...p} />;
+const FaTimes = (p) => <Icons.close {...p} />;
+const FaChevronLeft = (p) => <Icons.prev {...p} />;
+const FaChevronRight = (p) => <Icons.next {...p} />;
 import { useProjects } from "../../hooks/useProjects";
 import { formatLastUpdated } from "../../utils/dateHelpers";
 
@@ -270,7 +269,7 @@ const ProjectCard = React.memo(({ project, index, isSelected, onClick, isVisible
       style={{ background: "rgba(15,23,42,0.85)" }}
     >
       {/* Thumbnail area */}
-      <div className="relative h-36 overflow-hidden rounded-t-xl bg-slate-900">
+      <div className="relative h-32 md:h-36 overflow-hidden rounded-t-xl bg-slate-900">
         {images.length > 0 ? (
           <CardThumbnail images={images} isSliding={isHovered || isSelected} title={project.title} />
         ) : (
@@ -304,8 +303,8 @@ const ProjectCard = React.memo(({ project, index, isSelected, onClick, isVisible
       <div className="p-4" style={{ fontFamily: "JetBrains Mono, monospace" }}>
         <div className="flex items-start justify-between gap-4 mb-2.5">
           <h3
-            className="text-white leading-tight line-clamp-1 flex-1"
-            style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "16px", fontWeight: 600 }}
+            className="text-white leading-tight line-clamp-1 flex-1 text-sm md:text-base font-semibold"
+            style={{ fontFamily: "JetBrains Mono, monospace" }}
           >
             {project.title}
           </h3>
@@ -538,15 +537,17 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
 };
 
 // ─── MOBILE CARD (full-width stacked) ────────────────────────────────────────
-const MobileProjectCard = ({ project, index, inView }) => {
+const MobileProjectCard = ({ project, index, inView, onOpenDetail }) => {
   const [isFocused, setIsFocused] = useState(false);
-  const [open, setOpen] = useState(false);
   const status = STATUS_CONFIG[project.status] || STATUS_CONFIG.dormant;
   const images = project.images || [];
-  const formattedDate = useMemo(
-    () => formatLastUpdated(project.lastUpdated || project._updatedAt),
-    [project.lastUpdated, project._updatedAt]
-  );
+
+  const { short, isTruncated } = useMemo(() => {
+    const text = project.description || "";
+    const words = text.trim().split(/\s+/);
+    if (words.length <= 40) return { short: text, isTruncated: false };
+    return { short: words.slice(0, 40).join(" ") + "…", isTruncated: true };
+  }, [project.description]);
 
   return (
     <motion.div
@@ -566,23 +567,35 @@ const MobileProjectCard = ({ project, index, inView }) => {
         </div>
       )}
 
-      <div className="p-5">
+      <div className="p-4">
         {/* Header */}
-        <div className="flex items-start justify-between gap-3 mb-2.5">
-          <h3 className="text-white" style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "16px", fontWeight: 600 }}>
+        <div className="flex items-start justify-between gap-3 mb-2">
+          <h3 className="text-white text-[15px] font-semibold leading-tight">
             {project.title}
           </h3>
-          <span className={`text-[10px] flex-shrink-0 px-2 py-0.5 rounded border flex-shrink-0 ${status.badge}`}>
+          <span className={`text-[10px] flex-shrink-0 px-2 py-0.5 rounded border ${status.badge}`}>
             <StatusRotator status={project.status} />
           </span>
         </div>
 
-        <p className="text-[10px] text-slate-400 leading-relaxed mb-4">
-          {project.description}
+        <p className="text-[11px] text-slate-400 leading-relaxed mb-2">
+          {short}
+          {isTruncated && (
+            <>
+              {" "}
+              <button
+                type="button"
+                onClick={() => onOpenDetail?.(project)}
+                className="text-[var(--color-accent)] hover:underline font-medium"
+              >
+                Read more →
+              </button>
+            </>
+          )}
         </p>
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="flex flex-wrap gap-2 mt-3 mb-3">
           {(project.tags || []).slice(0, 4).map((tag) => (
             <span
               key={tag}
@@ -603,11 +616,11 @@ const MobileProjectCard = ({ project, index, inView }) => {
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg
-                         text-[9px] no-underline
+                         text-[10px] no-underline
                          text-[var(--color-accent)] bg-[var(--color-accent)]/8
                          border border-[var(--color-accent)]/20"
             >
-              <FaExternalLinkAlt size={9} /> Live Demo
+              <FaExternalLinkAlt size={10} /> Live Demo
             </a>
           )}
           {(project.repo || project.repoLink) && (
@@ -616,10 +629,10 @@ const MobileProjectCard = ({ project, index, inView }) => {
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg
-                         text-[9px] no-underline
+                         text-[10px] no-underline
                          text-slate-400 bg-slate-800/50 border border-slate-700/40"
             >
-              <FaGithub size={9} /> Source Code
+              <FaGithub size={10} /> Source Code
             </a>
           )}
         </div>
@@ -635,6 +648,7 @@ export const Works = () => {
   const [mobileRef, mobileInView] = useInView({ triggerOnce: true, threshold: 0.05 });
   const { projects, loading, error } = useProjects();
   const [selected, setSelected] = useState(null);
+  const [mobileSelected, setMobileSelected] = useState(null);
   const [visibleCards, setVisibleCards] = useState(new Set());
   const cardRefs = useRef([]);
 
@@ -852,7 +866,7 @@ export const Works = () => {
                 className={`p-5 grid gap-4 transition-all duration-300
                           ${selected
                     ? "grid-cols-1"
-                    : "grid-cols-2"
+                    : "grid-cols-2 xl:grid-cols-3"
                   }`}
               >
                 {projects.map((project, i) => (
@@ -917,9 +931,41 @@ export const Works = () => {
                 project={project}
                 index={i}
                 inView={mobileInView}
+                onOpenDetail={(p) => setMobileSelected(p)}
               />
             ))}
           </div>
+
+          {/* Mobile Detail Overlay */}
+          <AnimatePresence>
+            {mobileSelected && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="fixed inset-0 z-[100] md:hidden bg-black/85 backdrop-blur-sm overflow-y-auto"
+                onClick={() => setMobileSelected(null)}
+              >
+                <motion.div
+                  initial={{ y: 30, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 30, opacity: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="min-h-screen p-4 pt-6"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <DetailDrawer
+                    key={mobileSelected._id || mobileSelected.id}
+                    project={mobileSelected}
+                    onClose={() => setMobileSelected(null)}
+                    projects={projects}
+                    onNavigate={(p) => setMobileSelected(p)}
+                  />
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Footer count */}
           <motion.div

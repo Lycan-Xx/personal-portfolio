@@ -75,7 +75,7 @@ export const Today = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.3 }}
-      className="today-card today-card-float p-4 sm:p-6 w-[95vw] sm:w-[400px] mx-auto rounded-2xl"
+      className="today-card today-card-float p-4 sm:p-6 w-full max-w-[360px] sm:max-w-[400px] mx-auto rounded-2xl"
       style={{
         background:     'rgba(18, 26, 42, 0.55)',
         border:         '1px solid rgba(66, 188, 188, 0.25)',

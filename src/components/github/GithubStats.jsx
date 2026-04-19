@@ -164,7 +164,7 @@ const StatCard = ({ label, value, sub, accent = '#22d3ee', delay, href }) => {
         </span>
       </div>
       <p
-        className="text-3xl font-bold font-mono my-1 tabular-nums"
+        className="text-2xl md:text-3xl font-bold font-mono my-1 tabular-nums"
         style={{ color: accent }}
       >
         {value ?? '—'}
@@ -273,8 +273,8 @@ const GitHubStats = ({ token }) => {
 
   // ── loading ──
   if (loading) return (
-    <div className="max-w-4xl mx-auto mt-16 px-4">
-      <div className="glass-card p-8 animate-pulse">
+    <div className="max-w-5xl mx-auto mt-8 px-4">
+      <div className="p-6 md:p-8 animate-pulse">
         <div className="h-5 bg-gray-700 rounded w-48 mx-auto mb-8" />
         <div className="h-32 bg-gray-800 rounded-lg mb-6" />
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -288,8 +288,8 @@ const GitHubStats = ({ token }) => {
 
   // ── error ──
   if (error) return (
-    <div className="max-w-4xl mx-auto mt-16 px-4">
-      <div className="glass-card p-8 text-center">
+    <div className="max-w-5xl mx-auto mt-8 px-4">
+      <div className="p-6 text-center">
         <h2 className="text-xl font-bold text-white mb-4 font-mono">GitHub Stats</h2>
         <div className="bg-red-900/20 border border-secondary rounded-lg p-4 mb-4">
           <p className="text-red-300 text-sm font-mono">Failed to load GitHub data</p>
@@ -312,7 +312,7 @@ const GitHubStats = ({ token }) => {
     <ErrorBoundary>
       <section
         ref={ref}
-        className="max-w-4xl mx-auto mt-16 px-4 font-mono"
+        className="max-w-5xl mx-auto mt-4 px-4 font-mono"
         id="github"
       >
         <motion.div
@@ -320,14 +320,7 @@ const GitHubStats = ({ token }) => {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
         >
-          <div className="glass-card p-6 md:p-8">
-            {/* heading */}
-            <h2 className="text-2xl font-bold text-white mb-6 text-center">
-              <span className="text-cyan-400">{'<'}</span>
-              {' '}GitHub Stats{' '}
-              <span className="text-cyan-400">{'/>'}</span>
-            </h2>
-
+          <div className="p-2 md:p-4">
             {/* contribution calendar */}
             <div ref={calRef} className="mb-6">
               <div className="flex flex-wrap gap-1 justify-center">
@@ -414,30 +407,30 @@ const GitHubStats = ({ token }) => {
                 <div className="space-y-2">
                   {data.topRepos.map((repo, idx) => (
                     <motion.div
-                      key={repo.name}
-                      className="flex items-center justify-between p-3 bg-black/30 rounded-xl border border-cyan-400/15 hover:border-cyan-400/30 transition-colors"
+                      key={idx}
+                      className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 p-3 bg-black/30 rounded-xl border border-cyan-400/15 hover:border-cyan-400/30 transition-colors"
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.3, delay: 0.4 + idx * 0.05 }}
                     >
-                      <div className="flex items-center gap-3">
-                        <span className="text-xs font-mono text-gray-600 w-4">{idx + 1}.</span>
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className="text-xs font-mono text-gray-600 w-4 flex-shrink-0">{idx + 1}.</span>
                         {repo.isPrivate ? (
-                          <span className="text-sm text-gray-400 font-mono">
-                            <span className="text-xs text-slate-500">[private]</span> {repo.name}
+                          <span className="text-sm text-gray-400 font-mono truncate">
+                            <span className="text-xs text-slate-500">[private repo]</span>
                           </span>
                         ) : (
                           <a
                             href={repo.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-sm text-cyan-400 font-mono hover:text-cyan-300 no-underline"
+                            className="text-sm text-cyan-400 font-mono hover:text-cyan-300 no-underline truncate"
                           >
                             {repo.name}
                           </a>
                         )}
                       </div>
-                      <span className="text-xs font-mono text-gray-500">
+                      <span className="text-xs font-mono text-gray-500 flex-shrink-0">
                         {repo.commits} commits
                       </span>
                     </motion.div>

@@ -8,37 +8,35 @@
 	"contributor": "Lycan_Xx msbello514@gmail.com",
 	"license": "MIT",
 	"type": "module",
-
-
-
-        "scripts": {
-                "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:server\"",
-                "dev:frontend": "vite",
-                "dev:server": "node admin-server.js",
-                "start": "vite preview",
+	"scripts": {
+		"dev": "concurrently \"npm run dev:frontend\" \"npm run dev:server\"",
+		"dev:frontend": "vite",
+		"dev:server": "node admin-server.js",
+		"start": "vite preview",
                 "build": "vite build",
+                "build:dev": "vite build --mode development",
                 "preview": "vite preview",
-                "predeploy": "npm run build",
-                "deploy": "gh-pages -d dist",
-                "analyze": "vite build --mode analyze",
-                "admin": "node admin-server.js"
-        }, 
-
+		"predeploy": "npm run build",
+		"deploy": "gh-pages -d dist",
+		"analyze": "vite build --mode analyze",
+		"admin": "node admin-server.js"
+	},
 	"dependencies": {
 		"@emailjs/browser": "^4.4.1",
+		"concurrently": "^8.2.2",
 		"cors": "^2.8.5",
 		"date-fns": "^4.1.0",
 		"dotenv": "^16.4.7",
 		"emailjs": "^4.0.3",
 		"express": "^4.21.2",
 		"framer-motion": "^12.5.0",
+		"hugeicons-react": "^0.4.0",
 		"react": "^18.0.0",
 		"react-dom": "^18.0.0",
 		"react-icons": "^5.5.0",
 		"react-intersection-observer": "^9.8.1",
 		"react-scroll": "^1.9.3",
-		"sweetalert2": "^11.16.0",
-		"concurrently": "^8.2.2"
+		"sweetalert2": "^11.16.0"
 	},
 	"devDependencies": {
 		"@vitejs/plugin-react": "^4.2.1",

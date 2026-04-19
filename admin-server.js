@@ -20,6 +20,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Path to projects.json
 const PROJECTS_FILE = path.join(__dirname, 'src/components/works/projects.json');
+const EXPERIENCE_FILE = path.join(__dirname, 'src/components/experience/experience.json');
 
 // Middleware to check if request is from localhost
 const localhostOnly = (req, res, next) => {
@@ -231,6 +232,39 @@ app.put('/api/projects/:id', localhostOnly, (req, res) => {
       message: 'Failed to update project',
       error: error.message
     });
+  }
+});
+
+// ================================================
+// Experience JSON (read/write)
+// ================================================
+app.get('/api/experience', localhostOnly, (req, res) => {
+  try {
+    const data = fs.readFileSync(EXPERIENCE_FILE, 'utf-8');
+    res.json({ success: true, data: JSON.parse(data) });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+app.post('/api/experience', localhostOnly, (req, res) => {
+  try {
+    const { experiences, education } = req.body || {};
+    if (!Array.isArray(experiences) || !Array.isArray(education)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Body must contain { experiences: [], education: [] }',
+      });
+    }
+    fs.writeFileSync(
+      EXPERIENCE_FILE,
+      JSON.stringify({ experiences, education }, null, 2),
+      'utf-8'
+    );
+    console.log(`✓ Experience saved (${experiences.length} roles, ${education.length} edu)`);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 });
 

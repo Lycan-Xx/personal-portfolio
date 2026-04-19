@@ -22,6 +22,14 @@
 		
 		/* Keep existing for compatibility */
 		--color-primary: #42bcbc;
+
+		/* Global responsive type scale */
+		--fs-display: clamp(32px, 5.2vw, 56px);
+		--fs-h2:      clamp(24px, 3.6vw, 36px);
+		--fs-h3:      clamp(16px, 2vw, 20px);
+		--fs-body:    clamp(13px, 1.4vw, 15px);
+		--fs-meta:    clamp(10px, 1.1vw, 12px);
+		--fs-tag:     clamp(9px, 1vw, 10px);
 	}
 
 	[data-theme='dark'] {
