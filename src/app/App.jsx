@@ -42,7 +42,7 @@ export const App = () => {
 		<LoadingScreen>
 			<ErrorBoundary>
 				<CustomThemeProvider>
-					{/* <Navbar /> */}
+					<Navbar />
 					<main>
 						<Home />
 						<div className="relative">

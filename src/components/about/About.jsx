@@ -253,7 +253,7 @@ const About = () => {
                   className="ml-3 text-[10px] text-slate-500"
                   style={{ fontFamily: 'JetBrains Mono, monospace' }}
                 >
-                  sani@lycan-xx ~ about.md
+                  lycan-xx ~ about.md
                 </span>
               </div>
 

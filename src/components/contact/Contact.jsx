@@ -181,7 +181,7 @@ export const Contact = () => {
                   className="ml-3 text-[10px] text-slate-500"
                   style={{ fontFamily: 'JetBrains Mono, monospace' }}
                 >
-                  sani@lycan-xx ~ contact.sh
+                  lycan-xx ~ contact.sh
                 </span>
               </div>
 
@@ -304,7 +304,7 @@ export const Contact = () => {
                   className="ml-3 text-[10px] text-slate-500"
                   style={{ fontFamily: 'JetBrains Mono, monospace' }}
                 >
-                  sani@lycan-xx ~ socials.conf
+                  lycan-xx ~ socials.conf
                 </span>
               </div>
 

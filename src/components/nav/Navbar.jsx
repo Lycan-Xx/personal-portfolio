@@ -33,9 +33,13 @@ const Navbar = () => {
 		return () => window.removeEventListener('scroll', handleScroll);
 	}, [scrolled]);
 
-	const handleSetActive = (to) => {
-		setActiveNav(to);
+	const handleNavClick = (path) => {
+		// Update active nav state
+		setActiveNav(path);
+		// Close mobile menu
 		setShowMobileMenu(false);
+		// For admin route, we'll handle it via the App component's routing
+		// The link will naturally cause a navigation
 	};
 
 	const NavWrapper = isHighPerformance ? motion.nav : 'nav';
@@ -44,10 +48,10 @@ const Navbar = () => {
 		animate: { y: 0 },
 		transition: { duration: 0.3 },
 		className: `fixed top-0 left-0 right-0 z-50 px-2 sm:px-4 py-2 sm:py-4 transition-all duration-300 ${scrolled ? 'bg-dark-DEFAULT/80 backdrop-blur-[1px]' : 'bg-transparent'
-			}`
+		}`
 	} : {
 		className: `fixed top-0 left-0 right-0 z-50 px-2 sm:px-4 py-2 sm:py-4 transition-all duration-300 ${scrolled ? 'bg-dark-DEFAULT/80 backdrop-blur-[1px]' : 'bg-transparent'
-			}`
+		}`
 	};
 
 	return (
@@ -62,23 +66,33 @@ const Navbar = () => {
 
 						<div className="hidden md:flex items-center space-x-6 lg:space-x-10">
 							{navItems.map((item) => (
-								<Link
-									key={item.id}
-									to={item.id}
-									spy={true}
-									smooth={true}
-									offset={-80}
-									duration={500}
-									onSetActive={handleSetActive}
-								className={`px-3 sm:px-4 py-2 text-base lg:text-lg font-semibold font-mono transition-all duration-300 cursor-pointer
-                    ${activeNav === item.id
-										? "text-cyan-400 border-b-2 border-cyan-400"
-										: "text-gray-400 hover:text-cyan-400"
-									}`}
-								>
-									{item.label}
-								</Link>
-							))}
+								item.id === "admin" ? (
+									<a
+										href="/admin"
+										key={item.id}
+										onClick={(e) => {
+											e.preventDefault();
+											handleNavClick(item.id);
+										}}
+										className={`px-3 sm:px-4 py-2 text-base lg:text-lg font-semibold font-mono transition-all duration-300 cursor-pointer ${activeNav === item.id ? "text-cyan-400 border-b-2 border-cyan-400" : "text-gray-400 hover:text-cyan-400"}`}
+									>
+										{item.label}
+									</a>
+								) : (
+									<Link
+										key={item.id}
+										to={item.id}
+										spy={true}
+										smooth={true}
+										offset={-80}
+										duration={500}
+										onSetActive={(to) => setActiveNav(to)}
+									className={`px-3 sm:px-4 py-2 text-base lg:text-lg font-semibold font-mono transition-all duration-300 cursor-pointer ${activeNav === item.id ? "text-cyan-400 border-b-2 border-cyan-400" : "text-gray-400 hover:text-cyan-400"}`}
+									>
+										{item.label}
+									</Link>
+								))
+							)}
 						</div>
 
 						<button
@@ -105,24 +119,38 @@ const Navbar = () => {
 					<div className="mt-2 glass-card p-3 sm:p-4 md:hidden mx-auto max-w-[90%] border border-cyan-400/20">
 						<div className="flex flex-col space-y-2 sm:space-y-3">
 							{navItems.map((item) => (
-								<Link
-									key={item.id}
-									to={item.id}
-									spy={true}
-									smooth={true}
-									offset={-80}
-									duration={500}
-									onSetActive={handleSetActive}
-									onClick={() => setShowMobileMenu(false)}
-								className={`px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-mono font-semibold text-left w-full transition-all duration-300 block min-h-[44px]
-                    ${activeNav === item.id
-										? "text-cyan-400 border-b-2 border-cyan-400"
-										: "text-gray-400 hover:text-cyan-400"
-									}`}
-								>
-									{item.label}
-								</Link>
-							))}
+								item.id === "admin" ? (
+									<a
+										href="/admin"
+										key={item.id}
+										onClick={(e) => {
+											e.preventDefault();
+											handleNavClick(item.id);
+											setShowMobileMenu(false);
+										}}
+										className={`px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-mono font-semibold text-left w-full transition-all duration-300 block min-h-[44px] ${activeNav === item.id ? "text-cyan-400 border-b-2 border-cyan-400" : "text-gray-400 hover:text-cyan-400"}`}
+									>
+										{item.label}
+									</a>
+								) : (
+									<Link
+										key={item.id}
+										to={item.id}
+										spy={true}
+										smooth={true}
+										offset={-80}
+										duration={500}
+										onSetActive={(to) => {
+											setActiveNav(to);
+											setShowMobileMenu(false);
+										}}
+										onClick={() => setShowMobileMenu(false)}
+									className={`px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-mono font-semibold text-left w-full transition-all duration-300 block min-h-[44px] ${activeNav === item.id ? "text-cyan-400 border-b-2 border-cyan-400" : "text-gray-400 hover:text-cyan-400"}`}
+									>
+										{item.label}
+									</Link>
+								))
+							)}
 						</div>
 					</div>
 				)}
