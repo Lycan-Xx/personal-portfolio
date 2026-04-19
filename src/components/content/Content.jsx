@@ -166,7 +166,7 @@ export const Content = () => {
         </div>
 
         {/* ── Right: Today card ── */}
-        <div className="order-1 md:order-2 w-full sm:w-[80%] md:w-1/3 mt-20 md:mt-0">
+        <div className="order-1 md:order-2 w-full md:w-1/3 mt-20 md:mt-0 flex justify-center">
           <Today />
         </div>
 

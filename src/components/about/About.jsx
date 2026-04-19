@@ -199,9 +199,9 @@ const About = () => {
                 className="text-white relative inline-block pb-2
                            after:content-[''] after:absolute after:bottom-0 after:left-0
                            after:w-2/3 after:h-[2px] after:bg-cyan-400"
-                style={{ fontFamily: 'ChocoCooky', fontSize: 'clamp(28px, 4vw, 40px)' }}
+                style={{ fontFamily: 'ChocoCooky', fontSize: 'var(--fs-h2)' }}
               >
-                {'< About Me />'}
+                {'< Who Am I />'}
               </h2>
               <p
                 className="mt-3 text-slate-400 text-xs"
@@ -238,11 +238,11 @@ const About = () => {
             </div>
           </motion.div>
 
-          {/* ── Main grid: Bio + Identity card ── */}
-          <div ref={bioRef} className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8">
+          {/* ── Bio (full width about.md card) ── */}
+          <div ref={bioRef} className="grid grid-cols-1 gap-6 mb-8">
 
-            {/* Bio accordion — 3 cols */}
-            <div className="lg:col-span-3 bg-black/20 backdrop-blur-md rounded-2xl
+            {/* Bio accordion — full width */}
+            <div className="bg-black/20 backdrop-blur-md rounded-2xl
                             border border-cyan-400/15 overflow-hidden">
               {/* Card header */}
               <div className="flex items-center gap-2 px-4 py-3 border-b border-cyan-400/10 bg-black/20">
@@ -262,67 +262,9 @@ const About = () => {
                 {bioBlocks.map((block, i) => (
                   <BioBlock key={i} block={block} index={i} inView={bioInView} />
                 ))}
-              </div>
-            </div>
 
-            {/* Identity card — 2 cols */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={bioInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="lg:col-span-2 flex flex-col gap-4"
-            >
-              {/* Currently card */}
-              <div className="bg-black/20 backdrop-blur-md rounded-2xl border border-cyan-400/15 p-5 flex-1">
-                <p
-                  className="text-[10px] text-cyan-400/60 mb-3 uppercase tracking-widest"
-                  style={{ fontFamily: 'JetBrains Mono, monospace' }}
-                >
-                  // currently
-                </p>
-                <ul className="space-y-3">
-                  {[
-                    { role: 'Technical Co-Founder', org: 'Kugal Jobs', dot: 'bg-green-400' },
-                    { role: 'Chief Technology Officer', org: 'Hacksat Tech', dot: 'bg-cyan-400' },
-                    { role: 'Full Stack Lead', org: 'eVault', dot: 'bg-cyan-400' },
-                    { role: 'Chemistry Student', org: 'Modibbo Adama University', dot: 'bg-slate-400' },
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-2.5">
-                      <span className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${item.dot}`} />
-                      <div>
-                        <p
-                          className="text-xs text-white leading-tight"
-                          style={{ fontFamily: 'JetBrains Mono, monospace' }}
-                        >
-                          {item.role}
-                        </p>
-                        <p
-                          className="text-[10px] text-slate-500 mt-0.5"
-                          style={{ fontFamily: 'JetBrains Mono, monospace' }}
-                        >
-                          {item.org}
-                        </p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Philosophy card */}
-              <div className="bg-black/20 backdrop-blur-md rounded-2xl border border-cyan-400/15 p-5">
-                <p
-                  className="text-[10px] text-cyan-400/60 mb-3 uppercase tracking-widest"
-                  style={{ fontFamily: 'JetBrains Mono, monospace' }}
-                >
-                  // open source · linux · knowledge sharing
-                </p>
-                <p
-                  className="text-xs text-slate-400 leading-relaxed"
-                  style={{ fontFamily: 'JetBrains Mono, monospace' }}
-                >
-                  Backend-focused. Problem-first. I care more about solving the right problem than shipping the prettiest interface. But I do both.
-                </p>
-                <div className="mt-4 flex flex-wrap gap-2">
+                {/* Tags footer (moved from removed identity card) */}
+                <div className="pt-5 mt-2 border-t border-cyan-400/10 flex flex-wrap gap-2">
                   {['#linux', '#oss', '#backend', '#infosec', '#chemistry'].map(tag => (
                     <span
                       key={tag}
@@ -335,7 +277,7 @@ const About = () => {
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
 
           {/* ── Tech Stack ── */}

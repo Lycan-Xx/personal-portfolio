@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { FaLinkedin, FaGithub, FaTwitter, FaTelegram, FaDiscord, FaClipboard, FaExternalLinkAlt, FaWhatsapp } from 'react-icons/fa';
+import { Icons } from '../../utils/iconMap';
 
 const profiles = [
-  { network: "LinkedIn", username: "mohammad-bello", url: "https://www.linkedin.com/in/mohammad-bello/", icon: FaLinkedin },
-  { network: "GitHub", username: "Lycan-Xx", url: "https://github.com/Lycan-Xx", icon: FaGithub },
-  { network: "X (formerly twitter)", username: "LycanXx0", url: "https://x.com/LycanXx0", icon: FaTwitter },
-  { network: "Discord", username: "lycan_xx0", url: "https://discord.com/users/lycan_xx0", icon: FaDiscord },
+  { network: "LinkedIn", username: "mohammad-bello", url: "https://www.linkedin.com/in/mohammad-bello/", icon: Icons.linkedin },
+  { network: "GitHub", username: "Lycan-Xx", url: "https://github.com/Lycan-Xx", icon: Icons.github },
+  { network: "X (formerly twitter)", username: "LycanXx0", url: "https://x.com/LycanXx0", icon: Icons.twitter },
+  { network: "Discord", username: "lycan_xx0", url: "https://discord.com/users/lycan_xx0", icon: Icons.discord },
 ];
 
 
@@ -14,18 +14,6 @@ export default function SocialLinks({ className = '' }) {
 
   const handleOpen = (url) => {
     window.open(url, '_blank', 'noopener,noreferrer');
-  };
-
-  const handleCopy = async (url, network) => {
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopied(network);
-      setTimeout(() => setCopied(null), 1600);
-    } catch {
-      // fallback: show a small UI change if clipboard fails (rare)
-      setCopied('err');
-      setTimeout(() => setCopied(null), 1400);
-    }
   };
 
   return (
@@ -41,7 +29,7 @@ export default function SocialLinks({ className = '' }) {
               className="flex items-center justify-between bg-gray-900/50 border border-secondary rounded-lg px-3 py-2"
             >
               <div className="flex items-center gap-3">
-                <Icon className="text-[var(--color-primary)] w-5 h-5" />
+                <Icon size={20} className="text-[var(--color-primary)]" />
                 <div>
                   <div className="text-sm font-mono text-white">{p.network}</div>
                   <a
@@ -61,11 +49,9 @@ export default function SocialLinks({ className = '' }) {
                   onClick={() => handleOpen(p.url)}
                   className="p-2 rounded-md hover:bg-white/5 transition"
                 >
-                  <FaExternalLinkAlt className="w-4 h-4 text-gray-200" />
+                  <Icons.external size={16} className="text-gray-200" />
                 </button>
               </div>
-
-              
             </div>
           );
         })}
