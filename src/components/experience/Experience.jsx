@@ -481,7 +481,7 @@ const Experience = () => {
           </div>
 
           {/* ── MOBILE LAYOUT ── */}
-          <div ref={mobileRef} className="md:hidden pl-2 pr-1">
+          <div ref={mobileRef} className="md:hidden pl-3 pr-3">
             {allItems.map((item, i) => (
               <MobileCard
                 key={item.id}
