@@ -4,12 +4,12 @@ import Resume from "../../settings/resume.json";
 import { FirstName, LastName } from "../../utils/getName";
 import { Today } from "./Today";
 import { usePerformance } from '../../hooks/usePerformance';
+import { Icons } from "../../utils/iconMap";
 
 /* ─── Quick-link pills ──────────────────────────────────── */
 const quickLinks = [
-  { label: 'GitHub', href: 'https://github.com/Lycan-Xx', icon: '⌥' },
-  { label: 'LinkedIn', href: 'https://linkedin.com/in/mohammad-bello', icon: '⌘' },
-  { label: 'Resume', href: '#', icon: '↓', download: true },
+  { label: 'GitHub', href: 'https://github.com/Lycan-Xx', icon: <Icons.github className="w-4 h-4" /> },
+  { label: 'LinkedIn', href: 'https://linkedin.com/in/mohammad-bello', icon: <Icons.linkedin className="w-4 h-4" /> },
 ];
 
 /* ─── Job title rotator ─────────────────────────────────── */

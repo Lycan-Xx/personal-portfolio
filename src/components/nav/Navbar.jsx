@@ -6,7 +6,8 @@ const navItems = [
 	{ id: "home", label: "Lycan_Xx" },
 	{ id: "works", label: "Projects" },
 	{ id: "about", label: "About" },
-	{ id: "contact", label: "Contact" }
+	{ id: "contact", label: "Contact" },
+	{ id: "admin", label: "Admin" }
 ];
 
 const Navbar = () => {

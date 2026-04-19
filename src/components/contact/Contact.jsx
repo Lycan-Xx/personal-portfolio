@@ -3,16 +3,17 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import emailjs from "@emailjs/browser";
 import Swal from "sweetalert2";
+import { Icons } from "../../utils/iconMap";
 
 /* ─── Social links data ─────────────────────────────────── */
 // Replace SocialLinks component dump with explicit pill rows
 const socials = [
-  { platform: 'GitHub',   handle: 'Lycan-Xx',        href: 'https://github.com/Lycan-Xx',                   icon: '⌥' },
-  { platform: 'LinkedIn', handle: 'mohammad-bello',  href: 'https://linkedin.com/in/mohammad-bello',         icon: '⌘' },
-  { platform: 'Twitter',  handle: 'LycanXx2',        href: 'https://twitter.com/LycanXx2',                  icon: '✦' },
-  { platform: 'Discord',  handle: 'lycan_xx0',       href: 'https://discord.com/users/lycan_xx0',            icon: '◈' },
-  { platform: 'Medium',   handle: '@lycan-xx',       href: 'https://medium.com/@lycan-xx',                  icon: '◉' },
-  { platform: 'Dev.to',   handle: 'lycan_xx',        href: 'https://dev.to/lycan_xx',                       icon: '◎' },
+  { platform: 'GitHub',   handle: 'Lycan-Xx',        href: 'https://github.com/Lycan-Xx',                   icon: <Icons.github className="w-4 h-4" /> },
+  { platform: 'LinkedIn', handle: 'mohammad-bello',  href: 'https://linkedin.com/in/mohammad-bello',         icon: <Icons.linkedin className="w-4 h-4" /> },
+  { platform: 'X (twitter)',  handle: 'LycanXx0',        href: 'https://x.com/LycanXx0',                  icon: <Icons.twitter className="w-4 h-4" /> },
+  { platform: 'Discord',  handle: 'lycan_xx0',       href: 'https://discord.com/users/lycan_xx0',            icon: <Icons.discord className="w-4 h-4" /> },
+  { platform: 'Medium',   handle: '@lycan-xx',       href: 'https://medium.com/@lycan-xx',                  icon: <Icons.telegram className="w-4 h-4" /> },
+  { platform: 'Dev.to',   handle: 'lycan_xx',        href: 'https://dev.to/lycan_xx',                       icon: <Icons.code className="w-4 h-4" /> },
 ];
 
 /* ─── Shared motion variants ────────────────────────────── */
