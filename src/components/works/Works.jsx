@@ -7,15 +7,14 @@ import React, {
 } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import {
-  FaGithub,
-  FaExternalLinkAlt,
-  FaClock,
-  FaCodeBranch,
-  FaTimes,
-  FaChevronLeft,
-  FaChevronRight,
-} from "react-icons/fa";
+import { Icons } from "../../utils/iconMap";
+const FaGithub = (p) => <Icons.github {...p} />;
+const FaExternalLinkAlt = (p) => <Icons.external {...p} />;
+const FaClock = (p) => <Icons.clock {...p} />;
+const FaCodeBranch = (p) => <Icons.branch {...p} />;
+const FaTimes = (p) => <Icons.close {...p} />;
+const FaChevronLeft = (p) => <Icons.prev {...p} />;
+const FaChevronRight = (p) => <Icons.next {...p} />;
 import { useProjects } from "../../hooks/useProjects";
 import { formatLastUpdated } from "../../utils/dateHelpers";
 
