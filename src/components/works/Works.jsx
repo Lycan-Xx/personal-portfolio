@@ -648,6 +648,7 @@ export const Works = () => {
   const [mobileRef, mobileInView] = useInView({ triggerOnce: true, threshold: 0.05 });
   const { projects, loading, error } = useProjects();
   const [selected, setSelected] = useState(null);
+  const [mobileSelected, setMobileSelected] = useState(null);
   const [visibleCards, setVisibleCards] = useState(new Set());
   const cardRefs = useRef([]);
 
@@ -865,7 +866,7 @@ export const Works = () => {
                 className={`p-5 grid gap-4 transition-all duration-300
                           ${selected
                     ? "grid-cols-1"
-                    : "grid-cols-2"
+                    : "grid-cols-2 xl:grid-cols-3"
                   }`}
               >
                 {projects.map((project, i) => (
@@ -930,9 +931,41 @@ export const Works = () => {
                 project={project}
                 index={i}
                 inView={mobileInView}
+                onOpenDetail={(p) => setMobileSelected(p)}
               />
             ))}
           </div>
+
+          {/* Mobile Detail Overlay */}
+          <AnimatePresence>
+            {mobileSelected && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="fixed inset-0 z-[100] md:hidden bg-black/85 backdrop-blur-sm overflow-y-auto"
+                onClick={() => setMobileSelected(null)}
+              >
+                <motion.div
+                  initial={{ y: 30, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 30, opacity: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="min-h-screen p-4 pt-6"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <DetailDrawer
+                    key={mobileSelected._id || mobileSelected.id}
+                    project={mobileSelected}
+                    onClose={() => setMobileSelected(null)}
+                    projects={projects}
+                    onNavigate={(p) => setMobileSelected(p)}
+                  />
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Footer count */}
           <motion.div
