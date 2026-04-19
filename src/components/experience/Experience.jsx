@@ -292,7 +292,7 @@ const MobileCard = ({ item, index, inView }) => {
       className="flex items-start gap-0"
     >
       {/* Spine + dot */}
-      <div className="flex flex-col items-center w-5 flex-shrink-0 pt-2.5">
+      <div className="flex flex-col items-center w-4 flex-shrink-0 pt-2.5">
         <CommitDot color={isEdu ? 'cyan' : item.color} size="sm" />
         {index < allItems.length - 1 && (
           <div
@@ -307,26 +307,26 @@ const MobileCard = ({ item, index, inView }) => {
 
       {/* Card */}
       <div
-        className={`flex-1 ml-3 mb-4 rounded-xl border p-5
+        className={`flex-1 ml-3 mb-4 rounded-xl border p-4
                     bg-slate-900/85 md:backdrop-blur-md transition-all duration-300 ${borderColor}`}
         style={{ fontFamily: 'JetBrains Mono, monospace' }}
       >
-        <div className="flex items-center gap-2 flex-wrap mb-2.5">
+        <div className="flex items-center gap-2 flex-wrap mb-2">
           <StatusBadge status={item.status} />
           {!isEdu && <TypeBadge label={item.type} />}
         </div>
 
         <h3
-          className="text-white leading-tight mb-1.5"
-          style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '16px', fontWeight: 600 }}
+          className="text-white leading-tight mb-1 text-[15px] font-semibold"
+          style={{ fontFamily: 'JetBrains Mono, monospace' }}
         >
           {isEdu ? item.degree : item.role}
         </h3>
-        <p className={`text-[10px] mb-2 ${orgColor}`}>
+        <p className={`text-[10px] mb-1.5 ${orgColor}`}>
           {isEdu ? item.institution : item.org}
         </p>
 
-        <p className="text-[9px] text-slate-400 mb-4 leading-relaxed">
+        <p className="text-[9px] text-slate-400 mb-3 leading-relaxed">
           {item.period}{!isEdu && ` · ${item.duration}`}
         </p>
 
