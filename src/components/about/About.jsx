@@ -4,7 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import {
   Code2, Atom, FileType2, Braces, Triangle, Wind, Zap,
   Flame, Database, Server, Cloud, Coins,
-  Terminal, ShieldCheck, Github, Wrench, FlaskConical,
+  Terminal, ShieldCheck, GitBranch, Wrench, FlaskConical,
 } from 'lucide-react';
 
 // Icon aliases mapped from react-icons → lucide-react
@@ -21,7 +21,7 @@ const SiTailwindcss = Wind;
 const SiFirebase = Flame;
 const SiSupabase = Database;
 const SiPostgresql = Database;
-const SiGithub = Github;
+const SiGithub = GitBranch;
 const SiCloudflare = Cloud;
 const SiAppwrite = Server;
 const SiSolana = Coins;
