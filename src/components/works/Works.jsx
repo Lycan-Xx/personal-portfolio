@@ -1089,19 +1089,17 @@ export const Works = () => {
             )}
           </AnimatePresence>
 
-          {/* Footer count */}
+          {/* Footer count — desktop only */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={sectionInView ? { opacity: 1 } : {}}
             transition={{ delay: 0.9 }}
-            className="mt-10 flex items-center gap-2"
+            className="hidden md:flex mt-10 items-center gap-2"
             style={{ fontFamily: "JetBrains Mono, monospace" }}
           >
-            <span
-              className="w-2 h-2 rounded-full bg-[var(--color-accent)] animate-pulse"
-            />
+            <span className="w-2 h-2 rounded-full bg-[var(--color-accent)] animate-pulse" />
             <span className="text-[9px] text-slate-500">
-              {projects.length} projects · click any card to inspect
+              {projects.length} projects · click any row to inspect · ↑/↓ to navigate
             </span>
           </motion.div>
 
