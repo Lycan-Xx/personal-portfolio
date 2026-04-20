@@ -658,6 +658,11 @@ export const Works = () => {
   const [mobileSelected, setMobileSelected] = useState(null);
   const [visibleCards, setVisibleCards] = useState(new Set());
   const cardRefs = useRef([]);
+  const listScrollRef = useRef(null);
+  const listItemRefs = useRef([]);
+  const mobileScrollRef = useRef(null);
+  const mobileItemRefs = useRef([]);
+  const [mobileIndex, setMobileIndex] = useState(0);
 
   // Track per-card visibility for carousel throttling
   useEffect(() => {
@@ -687,12 +692,57 @@ export const Works = () => {
     }
   }, [projects]);
 
-  // Close drawer on Escape
+  // Auto-scroll left list to selected on desktop
   useEffect(() => {
-    const handler = (e) => e.key === "Escape" && setSelected(null);
+    if (!selected || !projects?.length) return;
+    const idx = projects.findIndex((p) => (p._id || p.id) === (selected._id || selected.id));
+    const el = listItemRefs.current[idx];
+    if (el) el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }, [selected, projects]);
+
+  // Keyboard nav: ↑/↓ to switch project, Esc to clear
+  useEffect(() => {
+    const handler = (e) => {
+      if (!projects?.length) return;
+      if (e.key === "Escape") {
+        setSelected(null);
+        return;
+      }
+      if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+      const tag = (e.target?.tagName || "").toLowerCase();
+      if (tag === "input" || tag === "textarea") return;
+      const idx = selected
+        ? projects.findIndex((p) => (p._id || p.id) === (selected._id || selected.id))
+        : -1;
+      const next = e.key === "ArrowDown"
+        ? Math.min(projects.length - 1, idx + 1)
+        : Math.max(0, idx - 1);
+      if (next !== idx) {
+        e.preventDefault();
+        setSelected(projects[next]);
+      }
+    };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, []);
+  }, [selected, projects]);
+
+  // Mobile carousel: track active index based on scroll position
+  useEffect(() => {
+    const el = mobileScrollRef.current;
+    if (!el || !projects?.length) return;
+    const onScroll = () => {
+      const i = Math.round(el.scrollLeft / el.clientWidth);
+      setMobileIndex(Math.max(0, Math.min(projects.length - 1, i)));
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [projects]);
+
+  const scrollMobileTo = (i) => {
+    const el = mobileScrollRef.current;
+    if (!el) return;
+    el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
+  };
 
   // ── Loading / error / empty ──────────────────────────────────────────────
   if (loading) {
