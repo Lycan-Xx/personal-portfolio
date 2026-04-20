@@ -35,8 +35,7 @@ const ContentHub = () => {
       className="relative min-h-screen py-16 sm:py-20 px-0 md:px-4 z-20"
     >
       <div className="w-full max-w-[86rem] mx-auto relative">
-        <div className="absolute inset-0 bg-black/20 backdrop-blur-md rounded-none md:rounded-3xl shadow-lg shadow-cyan-400/5" />
-        <div className="absolute inset-0 bg-black/50 rounded-none md:rounded-3xl" />
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm rounded-none md:rounded-3xl shadow-lg shadow-cyan-400/5" />
 
         <div className="relative p-6 md:p-10 z-10">
           {/* Section heading */}
@@ -47,8 +46,8 @@ const ContentHub = () => {
             className="mb-10 text-start"
           >
             <h2
-              className="text-3xl md:text-4xl font-bold text-white relative inline-block pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-2/3 after:h-1 after:bg-cyan-400"
-              style={{ fontFamily: 'ChocoCooky' }}
+              className="font-bold text-white relative inline-block pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-2/3 after:h-1 after:bg-cyan-400"
+              style={{ fontFamily: 'ChocoCooky', fontSize: 'clamp(32px, 4.5vw, 44px)' }}
             >
               Content Hub
             </h2>

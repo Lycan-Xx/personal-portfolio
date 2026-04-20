@@ -127,8 +127,7 @@ export const Contact = () => {
     >
       <div className="w-full max-w-[86rem] mx-auto relative">
         {/* Glass container */}
-        <div className="absolute inset-0 bg-black/20 backdrop-blur-md rounded-none md:rounded-3xl shadow-lg shadow-cyan-400/5" />
-        <div className="absolute inset-0 bg-black/50 rounded-none md:rounded-3xl" />
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm rounded-none md:rounded-3xl shadow-lg shadow-cyan-400/5" />
 
         <div className="relative p-6 md:p-10 z-10">
 
@@ -144,7 +143,7 @@ export const Contact = () => {
               className="text-white relative inline-block pb-2
                          after:content-[''] after:absolute after:bottom-0 after:left-0
                          after:w-2/3 after:h-[2px] after:bg-cyan-400"
-              style={{ fontFamily: 'ChocoCooky', fontSize: 'clamp(28px, 4vw, 40px)' }}
+              style={{ fontFamily: 'ChocoCooky', fontSize: 'clamp(32px, 4.5vw, 44px)' }}
             >
               {'< Contact Me />'}
             </h2>
@@ -325,7 +324,7 @@ export const Contact = () => {
                       rel="noopener noreferrer"
                       initial={{ opacity: 0, x: 16 }}
                       animate={inViewCards ? { opacity: 1, x: 0 } : {}}
-                      transition={{ duration: 0.4, delay: 0.25 + i * 0.07 }}
+                      transition={{ duration: 0.4, delay: 0.25 + Math.min(i, 6) * 0.06 }}
                       className="flex items-center justify-between px-4 py-3 rounded-xl
                                  bg-black/20 border border-transparent
                                  hover:border-cyan-400/25 hover:bg-cyan-400/5

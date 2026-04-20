@@ -2,15 +2,31 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import {
-  FaCode, FaLinux, FaShieldAlt, FaWrench, FaFlask,
-} from 'react-icons/fa';
-import {
-  SiReact, SiTypescript, SiJavascript, SiNextdotjs,
-  SiTailwindcss, SiFirebase, SiSupabase, SiPostgresql,
-  SiGithub, SiCloudflare, SiAppwrite, SiSolana,
-} from 'react-icons/si';
-import { VscTerminalBash } from 'react-icons/vsc';
-import { TbBrandVite } from 'react-icons/tb';
+  Code2, Atom, FileType2, Braces, Triangle, Wind, Zap,
+  Flame, Database, Server, Cloud, Coins,
+  Terminal, ShieldCheck, GitBranch, Wrench, FlaskConical,
+} from 'lucide-react';
+
+// Icon aliases mapped from react-icons → lucide-react
+const FaCode = Code2;
+const FaLinux = Terminal;
+const FaShieldAlt = ShieldCheck;
+const FaWrench = Wrench;
+const FaFlask = FlaskConical;
+const SiReact = Atom;
+const SiTypescript = FileType2;
+const SiJavascript = Braces;
+const SiNextdotjs = Triangle;
+const SiTailwindcss = Wind;
+const SiFirebase = Flame;
+const SiSupabase = Database;
+const SiPostgresql = Database;
+const SiGithub = GitBranch;
+const SiCloudflare = Cloud;
+const SiAppwrite = Server;
+const SiSolana = Coins;
+const VscTerminalBash = Terminal;
+const TbBrandVite = Zap;
 
 /* ─── Data ─────────────────────────────────────────────── */
 
@@ -182,8 +198,7 @@ const About = () => {
     >
       {/* Section glass container */}
       <div className="w-full max-w-[86rem] mx-auto relative">
-        <div className="absolute inset-0 bg-black/20 backdrop-blur-md rounded-none md:rounded-3xl" />
-        <div className="absolute inset-0 bg-black/50 rounded-none md:rounded-3xl" />
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm rounded-none md:rounded-3xl" />
 
         <div className="relative p-6 md:p-10 z-10">
 
@@ -199,7 +214,7 @@ const About = () => {
                 className="text-white relative inline-block pb-2
                            after:content-[''] after:absolute after:bottom-0 after:left-0
                            after:w-2/3 after:h-[2px] after:bg-cyan-400"
-                style={{ fontFamily: 'ChocoCooky', fontSize: 'var(--fs-h2)' }}
+                style={{ fontFamily: 'ChocoCooky', fontSize: 'clamp(32px, 4.5vw, 44px)' }}
               >
                 {'< Who Am I />'}
               </h2>
@@ -218,7 +233,7 @@ const About = () => {
                   key={i}
                   initial={{ opacity: 0, y: 10 }}
                   animate={sectionInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.4, delay: 0.3 + i * 0.08 }}
+                  transition={{ duration: 0.4, delay: 0.3 + Math.min(i, 6) * 0.06 }}
                   className="flex flex-col items-center"
                 >
                   <span
