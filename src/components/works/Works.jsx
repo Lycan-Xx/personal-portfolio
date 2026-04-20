@@ -536,9 +536,8 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
   );
 };
 
-// ─── MOBILE CARD (full-width stacked) ────────────────────────────────────────
+// ─── MOBILE CARD (story-card; used inside horizontal snap carousel) ──────────
 const MobileProjectCard = ({ project, index, inView, onOpenDetail }) => {
-  const [isFocused, setIsFocused] = useState(false);
   const status = STATUS_CONFIG[project.status] || STATUS_CONFIG.dormant;
   const images = project.images || [];
 
@@ -551,26 +550,19 @@ const MobileProjectCard = ({ project, index, inView, onOpenDetail }) => {
 
   return (
     <motion.div
-      onMouseEnter={() => setIsFocused(true)}
-      onMouseLeave={() => setIsFocused(false)}
-      onTouchStart={() => setIsFocused(true)}
       initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.4, delay: index * 0.07 }}
-      className="rounded-xl border border-[var(--color-accent)]/15 overflow-hidden mb-4"
-      style={{ background: "rgba(15,23,42,0.85)", fontFamily: "JetBrains Mono, monospace" }}
+      transition={{ duration: 0.4, delay: Math.min(index, 3) * 0.05 }}
+      className="snap-center shrink-0 w-full px-2"
+      style={{ fontFamily: "JetBrains Mono, monospace" }}
     >
-      {/* Image */}
-      {images.length > 0 && (
-        <div className="relative h-40 bg-slate-900">
-          <DrawerCarousel images={images} title={project.title} autoPlay={isFocused} />
-        </div>
-      )}
-
-      <div className="p-4">
-        {/* Header */}
-        <div className="flex items-start justify-between gap-3 mb-2">
-          <h3 className="text-white text-[15px] font-semibold leading-tight">
+      <div
+        className="rounded-xl border border-[var(--color-accent)]/15 overflow-hidden"
+        style={{ background: "rgba(15,23,42,0.85)" }}
+      >
+        {/* Header — title row above the image (never clipped) */}
+        <div className="flex items-center justify-between gap-3 px-4 pt-4 pb-2.5">
+          <h3 className="text-white text-[15px] font-semibold leading-tight line-clamp-1 flex-1 min-w-0">
             {project.title}
           </h3>
           <span className={`text-[10px] flex-shrink-0 px-2 py-0.5 rounded border ${status.badge}`}>
@@ -578,63 +570,78 @@ const MobileProjectCard = ({ project, index, inView, onOpenDetail }) => {
           </span>
         </div>
 
-        <p className="text-[11px] text-slate-400 leading-relaxed mb-2">
-          {short}
-          {isTruncated && (
-            <>
-              {" "}
-              <button
-                type="button"
-                onClick={() => onOpenDetail?.(project)}
-                className="text-[var(--color-accent)] hover:underline font-medium"
+        {/* Image */}
+        {images.length > 0 && (
+          <div className="relative h-44 bg-slate-900/40">
+            <DrawerCarousel
+              images={images}
+              title={project.title}
+              autoPlay={false}
+              fit={project.imageFit === "contain" ? "contain" : "cover"}
+              heightClass="h-44"
+            />
+          </div>
+        )}
+
+        <div className="p-4">
+          <p className="text-[12px] text-slate-300 leading-relaxed mb-3">
+            {short}
+            {isTruncated && (
+              <>
+                {" "}
+                <button
+                  type="button"
+                  onClick={() => onOpenDetail?.(project)}
+                  className="text-[var(--color-accent)] hover:underline font-medium"
+                >
+                  read more →
+                </button>
+              </>
+            )}
+          </p>
+
+          {/* Tags */}
+          <div className="flex flex-wrap gap-1.5 mb-3">
+            {(project.tags || []).slice(0, 4).map((tag) => (
+              <span
+                key={tag}
+                className="text-[10px] px-2 py-0.5 rounded
+                           text-[var(--color-accent)] bg-[var(--color-accent)]/10
+                           border border-[var(--color-accent)]/20"
               >
-                Read more →
-              </button>
-            </>
-          )}
-        </p>
+                {tag}
+              </span>
+            ))}
+          </div>
 
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2 mt-3 mb-3">
-          {(project.tags || []).slice(0, 4).map((tag) => (
-            <span
-              key={tag}
-              className="text-[9px] px-2 py-0.5 rounded
-                         text-[var(--color-accent)] bg-[var(--color-accent)]/10
-                         border border-[var(--color-accent)]/20"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        {/* Links */}
-        <div className="flex gap-2">
-          {(project.link || project.liveLink) && (
-            <a
-              href={project.link || project.liveLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg
-                         text-[10px] no-underline
-                         text-[var(--color-accent)] bg-[var(--color-accent)]/8
-                         border border-[var(--color-accent)]/20"
-            >
-              <FaExternalLinkAlt size={10} /> Live Demo
-            </a>
-          )}
-          {(project.repo || project.repoLink) && (
-            <a
-              href={project.repo || project.repoLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg
-                         text-[10px] no-underline
-                         text-slate-400 bg-slate-800/50 border border-slate-700/40"
-            >
-              <FaGithub size={10} /> Source Code
-            </a>
-          )}
+          {/* Links */}
+          <div className="flex gap-2">
+            {(project.link || project.liveLink) && (
+              <a
+                href={project.link || project.liveLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg
+                           text-[11px] no-underline
+                           text-[var(--color-accent)] bg-[var(--color-accent)]/8
+                           border border-[var(--color-accent)]/20"
+              >
+                <FaExternalLinkAlt size={10} /> Live
+              </a>
+            )}
+            {(project.repo || project.repoLink) && (
+              <a
+                href={project.repo || project.repoLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg
+                           text-[11px] no-underline
+                           text-slate-300 bg-slate-800/50 border border-slate-700/40"
+              >
+                <FaGithub size={10} /> Source
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </motion.div>
