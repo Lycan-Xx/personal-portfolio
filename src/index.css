@@ -501,6 +501,10 @@ section {
   .w-72 { width: 18rem; }
   .right-72 { right: 18rem; }
   .left-72 { left: 18rem; }
+
+  /* Hide native scrollbars (used by mobile Works horizontal carousel) */
+  .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
   
   /* Consistent border utilities */
   .border-themed {
