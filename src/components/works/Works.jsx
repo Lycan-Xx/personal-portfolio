@@ -409,33 +409,34 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
           <button
             onClick={() => currentIdx > 0 && onNavigate(projects[currentIdx - 1])}
             disabled={currentIdx === 0}
-            className="w-6 h-6 rounded flex items-center justify-center
-                       text-[var(--color-accent)]/40 border border-[var(--color-accent)]/10
-                       hover:text-[var(--color-accent)] hover:border-[var(--color-accent)]/30
+            className="w-8 h-8 rounded-lg flex items-center justify-center
+                       text-slate-300 border border-slate-500/40
+                       hover:text-[var(--color-accent)] hover:border-[var(--color-accent)]/40
                        hover:bg-[var(--color-accent)]/5 disabled:opacity-20 disabled:cursor-not-allowed
                        transition-all duration-150"
           >
-            <FaChevronLeft size={9} />
+            <FaChevronLeft size={11} />
           </button>
           <button
             onClick={() => currentIdx < projects.length - 1 && onNavigate(projects[currentIdx + 1])}
             disabled={currentIdx === projects.length - 1}
-            className="w-6 h-6 rounded flex items-center justify-center
-                       text-[var(--color-accent)]/40 border border-[var(--color-accent)]/10
-                       hover:text-[var(--color-accent)] hover:border-[var(--color-accent)]/30
+            className="w-8 h-8 rounded-lg flex items-center justify-center
+                       text-slate-300 border border-slate-500/40
+                       hover:text-[var(--color-accent)] hover:border-[var(--color-accent)]/40
                        hover:bg-[var(--color-accent)]/5 disabled:opacity-20 disabled:cursor-not-allowed
                        transition-all duration-150"
           >
-            <FaChevronRight size={9} />
+            <FaChevronRight size={11} />
           </button>
           <button
             onClick={onClose}
-            className="w-6 h-6 rounded flex items-center justify-center ml-1
-                       text-slate-600 border border-slate-700/40
-                       hover:text-slate-300 hover:border-slate-500
+            className="w-8 h-8 rounded-lg flex items-center justify-center ml-1
+                       text-slate-300 border border-slate-500/40
+                       hover:text-rose-400 hover:border-rose-400/40
+                       hover:bg-rose-400/5
                        transition-all duration-150"
           >
-            <FaTimes size={9} />
+            <FaTimes size={11} />
           </button>
         </div>
       </div>
@@ -905,7 +906,7 @@ export const Works = () => {
                          border-r border-[var(--color-accent)]/12
                          scrollbar-thin scrollbar-thumb-[var(--color-accent)]/20
                          scrollbar-track-transparent"
-              style={{ scrollSnapType: "y mandatory" }}
+              style={{ scrollSnapType: "y mandatory", scrollPaddingTop: "3rem" }}
             >
               {/* Wall header */}
               <div

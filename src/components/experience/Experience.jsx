@@ -245,9 +245,9 @@ const DetailPanel = ({ item, globalIndex, onNavigate, inView }) => {
           <button
             onClick={() => onNavigate(globalIndex - 1)}
             disabled={globalIndex === 0}
-            className="text-[9px] text-[var(--color-accent)]/40 border border-[var(--color-accent)]/12
-                       rounded px-3 py-1.5 transition-all duration-150 disabled:opacity-20
-                       hover:text-[var(--color-accent)] hover:border-[var(--color-accent)]/30
+            className="text-[10px] text-slate-300 border border-slate-500/40
+                       rounded px-3.5 py-2 transition-all duration-150 disabled:opacity-20
+                       hover:text-[var(--color-accent)] hover:border-[var(--color-accent)]/40
                        hover:bg-[var(--color-accent)]/5 disabled:cursor-not-allowed"
           >
             ← prev
@@ -258,9 +258,9 @@ const DetailPanel = ({ item, globalIndex, onNavigate, inView }) => {
           <button
             onClick={() => onNavigate(globalIndex + 1)}
             disabled={globalIndex === TOTAL - 1}
-            className="text-[9px] text-[var(--color-accent)]/40 border border-[var(--color-accent)]/12
-                       rounded px-3 py-1.5 transition-all duration-150 disabled:opacity-20
-                       hover:text-[var(--color-accent)] hover:border-[var(--color-accent)]/30
+            className="text-[10px] text-slate-300 border border-slate-500/40
+                       rounded px-3.5 py-2 transition-all duration-150 disabled:opacity-20
+                       hover:text-[var(--color-accent)] hover:border-[var(--color-accent)]/40
                        hover:bg-[var(--color-accent)]/5 disabled:cursor-not-allowed"
           >
             next →

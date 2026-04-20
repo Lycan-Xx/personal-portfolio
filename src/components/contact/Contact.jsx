@@ -8,22 +8,22 @@ import { Icons } from "../../utils/iconMap";
 /* ─── Social links data ─────────────────────────────────── */
 // Replace SocialLinks component dump with explicit pill rows
 const socials = [
-  { platform: 'GitHub',   handle: 'Lycan-Xx',        href: 'https://github.com/Lycan-Xx',                   icon: <Icons.github className="w-4 h-4" /> },
-  { platform: 'LinkedIn', handle: 'mohammad-bello',  href: 'https://linkedin.com/in/mohammad-bello',         icon: <Icons.linkedin className="w-4 h-4" /> },
-  { platform: 'X (twitter)',  handle: 'LycanXx0',        href: 'https://x.com/LycanXx0',                  icon: <Icons.twitter className="w-4 h-4" /> },
-  { platform: 'Discord',  handle: 'lycan_xx0',       href: 'https://discord.com/users/lycan_xx0',            icon: <Icons.discord className="w-4 h-4" /> },
-  { platform: 'Medium',   handle: '@lycan-xx',       href: 'https://medium.com/@lycan-xx',                  icon: <Icons.telegram className="w-4 h-4" /> },
-  { platform: 'Dev.to',   handle: 'lycan_xx',        href: 'https://dev.to/lycan_xx',                       icon: <Icons.code className="w-4 h-4" /> },
+  { platform: 'GitHub', handle: 'Lycan-Xx', href: 'https://github.com/Lycan-Xx', icon: <Icons.github className="w-4 h-4" /> },
+  { platform: 'LinkedIn', handle: 'mohammad-bello', href: 'https://linkedin.com/in/mohammad-bello', icon: <Icons.linkedin className="w-4 h-4" /> },
+  { platform: 'X (twitter)', handle: 'LycanXx0', href: 'https://x.com/LycanXx0', icon: <Icons.twitter className="w-4 h-4" /> },
+  { platform: 'Discord', handle: 'lycan_xx0', href: 'https://discord.com/users/lycan_xx0', icon: <Icons.discord className="w-4 h-4" /> },
+  { platform: 'Medium', handle: '@lycan-xx', href: 'https://medium.com/@lycan-xx', icon: <Icons.telegram className="w-4 h-4" /> },
+  { platform: 'Dev.to', handle: 'lycan_xx', href: 'https://dev.to/lycan_xx', icon: <Icons.code className="w-4 h-4" /> },
 ];
 
 /* ─── Shared motion variants ────────────────────────────── */
 const fadeUp = {
-  hidden:  { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 },
 };
 
 const cardVariant = {
-  hidden:  { opacity: 0, y: 16 },
+  hidden: { opacity: 0, y: 16 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -71,22 +71,23 @@ const Field = ({ label, name, type = 'text', rows, required }) => (
 export const Contact = () => {
   const formRef = useRef();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [copied, setCopied]             = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const [refSection, inViewSection] = useInView({ triggerOnce: true, threshold: 0.15 });
-  const [refCards,   inViewCards]   = useInView({ triggerOnce: true, threshold: 0.08 });
+  const [refCards, inViewCards] = useInView({ triggerOnce: true, threshold: 0.08 });
 
   /* Email send */
   const sendEmail = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await emailjs.sendForm(
-        'service_8bezxog',
-        'template_jmsk313',
+      const result = await emailjs.sendForm(
+        'service_44liirh',
+        'template_y7gd6xs',
         formRef.current,
-        'knwNTK4YU4K30HYMd'
+        { publicKey: 'm7Xk_KITehj63_WCh' }
       );
+      console.log('EmailJS SUCCESS:', result.status, result.text);
       Swal.fire({
         icon: 'success',
         title: 'Message Sent!',
@@ -97,7 +98,8 @@ export const Contact = () => {
         color: '#fff',
       });
       formRef.current.reset();
-    } catch {
+    } catch (err) {
+      console.error('EmailJS FAILED:', err);
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -116,7 +118,7 @@ export const Contact = () => {
       await navigator.clipboard.writeText('msbello514@gmail.com');
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
-    } catch {}
+    } catch { }
   };
 
   return (
@@ -145,7 +147,7 @@ export const Contact = () => {
                          after:w-2/3 after:h-[2px] after:bg-cyan-400"
               style={{ fontFamily: 'ChocoCooky', fontSize: 'clamp(32px, 4.5vw, 44px)' }}
             >
-              {'< Contact Me />'}
+              {'< Get in touch />'}
             </h2>
             <p
               className="mt-3 text-slate-400 text-xs"
@@ -191,20 +193,8 @@ export const Contact = () => {
                   <div className="flex-1 space-y-2">
                     {/* Email with copy */}
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span
-                        className="text-[10px] text-cyan-400/60 uppercase tracking-widest"
-                        style={{ fontFamily: 'JetBrains Mono, monospace' }}
-                      >
-                        email
-                      </span>
-                      <button
-                        onClick={handleCopyEmail}
-                        className="text-xs text-slate-300 hover:text-cyan-400
-                                   transition-colors duration-200 cursor-pointer"
-                        style={{ fontFamily: 'JetBrains Mono, monospace' }}
-                      >
-                        msbello514@gmail.com
-                      </button>
+
+
                       <motion.span
                         initial={{ opacity: 0 }}
                         animate={{ opacity: copied ? 1 : 0 }}
@@ -249,8 +239,8 @@ export const Contact = () => {
                 {/* Contact form */}
                 <form ref={formRef} onSubmit={sendEmail} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Field label="Name"    name="user_name"    required />
-                    <Field label="Email"   name="user_email"   type="email" required />
+                    <Field label="Name" name="user_name" required />
+                    <Field label="Email" name="user_email" type="email" required />
                   </div>
                   <Field label="Subject" name="subject" />
                   <Field label="Message" name="message" rows={5} required />
