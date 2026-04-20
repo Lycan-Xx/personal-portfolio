@@ -105,7 +105,7 @@ const StatusRotator = ({ status }) => {
 };
 
 // ─── IMAGE CAROUSEL (drawer version — large) ─────────────────────────────────
-const DrawerCarousel = React.memo(({ images, title, autoPlay = true }) => {
+const DrawerCarousel = React.memo(({ images, title, autoPlay = true, fit = "contain", heightClass = "h-56" }) => {
   const [current, setCurrent] = useState(0);
   const [dir, setDir] = useState(1);
 
@@ -139,7 +139,7 @@ const DrawerCarousel = React.memo(({ images, title, autoPlay = true }) => {
   const currentUrl = getImageUrl(images[current]) || FALLBACK_IMG;
 
   return (
-    <div className="relative w-full h-56 rounded-xl overflow-hidden group">
+    <div className={`relative w-full ${heightClass} rounded-xl overflow-hidden group bg-slate-900/40`}>
       <AnimatePresence mode="sync" initial={false} custom={dir}>
         <motion.div
           key={current}
@@ -158,7 +158,7 @@ const DrawerCarousel = React.memo(({ images, title, autoPlay = true }) => {
           <img
             src={currentUrl}
             alt={images[current]?.alt || title}
-            className="w-full h-full object-contain"
+            className={`w-full h-full ${fit === "cover" ? "object-cover" : "object-contain"}`}
             onError={(e) => { e.currentTarget.src = FALLBACK_IMG; }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
