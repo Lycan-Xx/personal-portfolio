@@ -1,109 +1,106 @@
 
 
-# Works Redesign — Snap-Lock Split View + Mobile Story Cards
+# Performance & Layout Consistency Pass
 
-## Goals
-1. **Desktop**: Split-pane where the right detail pane "locks" in place (sticky) while only the left list scrolls. Selected project's full content + uncropped image fills the available right-pane space.
-2. **Mobile**: Fix the hidden title/initial-text bug and make browsing fun with a horizontal swipeable "story card" carousel.
-3. Preserve current aesthetic (glass surface, cyan accent, JetBrains Mono / ChocoCooky, status badges, StatusRotator, DrawerCarousel).
+## Goal
+Make the portfolio noticeably snappier on mid-range devices without changing the look. The video background stays. The dark glass aesthetic stays. We attack the *invisible* costs: redundant background layers, framer-motion overuse, observer churn, and one botched icon migration.
 
 ---
 
-## Desktop — Sticky Snap-Lock Split
+## A. Performance fixes (impact-ranked)
 
-### Layout
-```text
-┌────────────────────────────────────────────────────────────────┐
-│  < Works />                                                    │
-├────────────────────────┬───────────────────────────────────────┤
-│ LEFT: scroll snap list │ RIGHT: sticky detail (locked)         │
-│  ┌──────────────────┐  │  ┌─────────────────────────────────┐  │
-│  │ ▣ Project A   ●  │  │  │  [ FULL UNCROPPED IMAGE ]       │  │
-│  │   short blurb    │◀─┤  │   object-contain, fills h-1/2   │  │
-│  └──────────────────┘  │  ├─────────────────────────────────┤  │
-│  ┌──────────────────┐  │  │  Title (ChocoCooky 36-44px)     │  │
-│  │ ▣ Project B   ●  │  │  │  status · date · stack          │  │
-│  └──────────────────┘  │  │  Full description (scrolls if   │  │
-│  ┌──────────────────┐  │  │  it overflows the bottom half)  │  │
-│  │ ▣ Project C   ●  │  │  │  [ Live Demo ] [ Source Code ]  │  │
-│  └──────────────────┘  │  └─────────────────────────────────┘  │
-└────────────────────────┴───────────────────────────────────────┘
-```
+### A1. Kill the duplicate background layer
+`Home.jsx` mounts `<AnimatedBackground />` (50 framer-motion dots animating forever) AND `App.jsx` mounts `<VideoBackground />`. Both run continuously, both are `fixed inset-0`. The dots are invisible against the video anyway.
+- **Remove** `<AnimatedBackground />` from `Home.jsx`. Keep `VideoBackground` as the sole background.
+- Estimated win: ~50 active framer-motion timelines killed, fewer composited layers.
 
-### Implementation details
-- Container: `flex md:gap-4`, fixed height `h-[calc(100vh-8rem)]` (or `min-h-[760px]`), `overflow-hidden` on the outer split.
-- **Left pane** (`w-[42%]`):
-  - `overflow-y-auto`, `scroll-snap-type: y mandatory`.
-  - Each card wrapper: `scroll-snap-align: start scroll-snap-stop: always`.
-  - Cards become **horizontal compact rows** (thumbnail 96×96 left, title + 2-line blurb + status badge right). Removes the cropped 32-h tile look that competes with the right pane.
-  - Selected card gets cyan left border (`border-l-2 border-[var(--color-accent)]`) + lifted background.
-- **Right pane** (`w-[58%]`):
-  - `position: sticky; top: 0; align-self: flex-start;` so it locks visually while the left list scrolls.
-  - Layout split vertically: top 50% = image, bottom 50% = scrollable content.
-  - Image uses `object-contain` inside a flex container with `bg-slate-900/40` letterbox so screenshots are never cropped regardless of aspect ratio. DrawerCarousel gets a new `fit="contain"` prop and `h-full` mode.
-  - Bottom half: independent `overflow-y-auto` with cyan thin scrollbar. Title, status, date, full description, full stack tags, action buttons.
-- **Auto-scroll on select**: when user clicks a left card, scroll its element into view with `scrollIntoView({ block: 'start', behavior: 'smooth' })`.
-- **Keyboard**: ↑ / ↓ navigate between projects, Esc unselects.
+### A2. Reduce `backdrop-blur` paint cost
+`backdrop-blur-md` is a per-frame paint over the video — extremely expensive on weaker GPUs. Currently used in `Works`, `ContentHub`, `About`, `Experience`, `Contact` glass surfaces (all stacked over the video).
+- Replace `backdrop-blur-md` with `backdrop-blur-sm` on section glass overlays (still gives the frosted look, ~3× cheaper).
+- Keep the `bg-black/50` solid overlay (which is what actually carries the readability — blur is mostly aesthetic).
+- Drop the second redundant overlay div in `ContentHub` (line 39) — already has `bg-black/20` + blur on line 38; one is enough.
 
-### DrawerCarousel updates
-Add `fit` prop (`'contain' | 'cover'`) and `heightClass` prop. Default `h-56` for current call sites; right pane uses `h-full object-contain`.
+### A3. Works: collapse per-card observers
+`Works.jsx` lines 668–686 creates one `IntersectionObserver` per project (N observers). The result (`visibleCards` Set) is computed but **never read** anywhere. Dead weight.
+- Delete the `visibleCards` state, the `cardRefs` observer effect, and the unused `isVisible` prop on `ProjectCard`.
+- Use the existing single `gridInView` from `useInView` for the only thing that actually matters.
 
----
+### A4. DrawerCarousel: stop work when off-screen
+The drawer carousel runs a 4 s `setInterval` even when its parent is off-screen (mobile cards autoplay is already off — good). The desktop right pane carousel and `CardThumbnail` (rotates on hover) are fine. But `preloadImages` runs on every `images` change and creates `new Image()` objects unconditionally.
+- Wrap autoplay interval in a check: pause when `document.hidden` (Page Visibility API). One-line listener.
+- Memo the preload to only run once per unique image set.
 
-## Mobile — Swipeable Story Cards
+### A5. Framer-motion: lighten entrance animations
+Many components use `initial → animate` with stagger on every list item. After the first paint these create layout work but add no value. The plan's project memory already says "max stagger 0.08s" — Works does `i * 0.06` but capped at 8 (good). About/Experience/Contact stagger isn't capped.
+- Cap all map-stagger delays to `Math.min(i, 6) * 0.06` in `About.jsx`, `Experience.jsx`, `Contact.jsx`.
+- Replace `motion.div` with plain `div` for purely decorative wrappers that animate just once with `opacity 0→1` (use a single CSS class `.animate-fade-in-up` already defined in `index.css`).
 
-The current mobile bug: a long `project.title` plus the rotating status badge wraps and pushes the description below the fold; the image (160px) takes most of the first viewport. Fix + redesign.
+### A6. Finish the abandoned icon migration in `About.jsx`
+About still imports `react-icons/fa`, `/si`, `/vsc`, `/tb` — pulls in the entire icon font bundle (~heavy chunk). The earlier migration claimed completion but missed this file.
+- Swap About's icons to `lucide-react` per the established mapping in the prior plan (Atom, Wind, Database, Terminal, ShieldCheck, Wrench, FlaskConical, Zap, Code2, etc.).
+- Then `react-icons` is only referenced by `Admin.jsx` (route-split, not on the home bundle) — no further home-bundle bloat.
 
-### New layout: horizontal snap carousel
-```text
-   ←  swipe  →
-┌──────────────────────────┐
-│  Project A     ● active  │  ← title in its own row, never pushed
-│  ──────────────────────  │
-│  [ image · 16:9 cover ]  │  h-44, contain mode for screenshots
-│                          │
-│  First 40 words of desc… │
-│  read more →             │
-│                          │
-│  #tag #tag #tag          │
-│  [Live]  [Source]        │
-│                          │
-│  ● ○ ○ ○   1 / 4         │
-└──────────────────────────┘
-```
+### A7. AnimatedBackground component itself
+After A1 it's unused on the home route. Still imported by `Home.jsx`. Remove the import. Leave the file in place (zero cost when unused) in case it's referenced elsewhere.
 
-- Outer wrapper: `flex overflow-x-auto snap-x snap-mandatory` with each card `min-w-full snap-center`.
-- Touch-action `pan-x` so vertical page scroll still works between cards.
-- Title sits **above** the image on its own line (full width) so it can never be clipped by the badge. Status badge moves to the top-right corner of the card header row.
-- Image height fixed `h-44`, uses `object-cover` for landscape screenshots, `object-contain` if `image.aspectMode === 'contain'` (optional metadata hint, default cover).
-- Description: 40-word truncation kept; "read more →" opens existing detail overlay.
-- Bottom dot indicator + `1 / N` counter — tap a dot to jump.
-- Optional: native scrollbar hidden via `scrollbar-width: none`.
-
-### Why a swipeable carousel is the "fun" part
-- One project per screen → focused reading, no long scroll.
-- Swipe gesture matches phone-native expectations.
-- Snap indicators give a sense of progression ("3 of 7 projects").
+### A8. Shared `useInView` thresholds
+Several components use `threshold: 0.1`. With sections at `min-h-screen`, that's a lot of pixels to wait for. Drop to `0.05` everywhere for consistency (matches what ContentHub/Works already do) so first-paint animations trigger sooner — perceived perf win.
 
 ---
 
-## Shared / Cleanup
-- Add memory note recording the new Works structure.
-- Remove the bottom "click any card to inspect" footer line on mobile (it's only relevant on desktop now); keep on desktop.
-- Keep existing `MobileProjectCard` API but rebuild internals (still receives `project`, `index`, `inView`, `onOpenDetail`).
-- Mobile detail overlay (`mobileSelected`) untouched — opened by "read more".
+## B. Layout consistency review
+
+Audited every section against the project memory rules. Findings + fixes:
+
+### B1. Section container width inconsistency
+- About: `max-w-[86rem]`
+- Experience: `max-w-[86rem]`
+- Works: `max-w-[90rem]` ← outlier
+- ContentHub: `max-w-[86rem]`
+- Contact: needs verification
+
+**Fix**: Standardize all sections to `max-w-[86rem]`. Works at 90rem creates a noticeably wider block that breaks the column rhythm when scrolling.
+
+### B2. Section padding inconsistency
+- About / Experience / ContentHub / Contact: `py-16 sm:py-20`
+- Works: `py-20 sm:py-32` ← outlier (2× the vertical breathing room of others)
+
+**Fix**: Bring Works in line: `py-16 sm:py-20`.
+
+### B3. Inner padding inconsistency
+- ContentHub: `p-6 md:p-10`
+- Works: `p-8 md:p-12` ← outlier
+
+**Fix**: Standardize to `p-6 md:p-10` so the glass cards feel like the same component family.
+
+### B4. Section heading size drift
+- ContentHub: `text-3xl md:text-4xl` (Tailwind classes — ~30/36 px)
+- Works: `clamp(36px, 6vw, 52px)` (much bigger)
+- About: needs check
+- Experience: needs check
+
+**Fix**: Use one rule everywhere — `style={{ fontFamily: 'ChocoCooky', fontSize: 'clamp(32px, 4.5vw, 44px)' }}` and remove the Tailwind size classes. This keeps headings in the same visual weight tier across sections (still big, but no longer 52 px on Works vs 36 px on Hub).
+
+### B5. Footer "Lycan-Xx" badge
+Currently `fixed bottom-4 right-4 z-50`. Speed Dial is also bottom-right. Verify they don't overlap on mobile (Speed Dial is bigger and takes precedence). If overlap exists, move the badge to `bottom-4 left-4`.
+
+### B6. Today card mobile centering — verify
+Per last fix, wrapper is `flex justify-center md:justify-start`. Confirmed in code; no change needed.
 
 ---
 
-## Files Modified
+## C. Files Modified
 
 | File | Change |
 |------|--------|
-| `src/components/works/Works.jsx` | Rebuild desktop split (sticky right, snap-scroll left, compact list rows). Rebuild `MobileProjectCard` as full-width snap card; wrap mobile section in horizontal snap carousel with dot pager. Add keyboard nav + scrollIntoView on select. Update `DrawerCarousel` with `fit` + `heightClass` props. |
-| `src/index.css` | Add `.no-scrollbar` utility for the mobile horizontal carousel (hide native scrollbar). |
-| `mem://features/works-layout` | New memory: documents desktop sticky split + mobile snap carousel pattern. |
-| `mem://index.md` | Add reference to the new memory file (preserve all existing content). |
+| `src/pages/Home.jsx` | Remove `AnimatedBackground` import & render |
+| `src/components/works/Works.jsx` | Remove dead per-card observers + `visibleCards`; drop unused `isVisible` prop; container `max-w-[90rem]→86rem`; padding `py-20 sm:py-32→py-16 sm:py-20`, `p-8 md:p-12→p-6 md:p-10`; heading `clamp(36px,6vw,52px)→clamp(32px,4.5vw,44px)`; carousel autoplay pauses when `document.hidden` |
+| `src/components/content/ContentHub.jsx` | `backdrop-blur-md→sm`; remove redundant 2nd overlay div; heading style unified |
+| `src/components/about/About.jsx` | Swap react-icons → lucide-react (Atom, Wind, Database, Terminal, ShieldCheck, Wrench, FlaskConical, Zap, Code2); `backdrop-blur-md→sm`; cap stagger; heading style unified |
+| `src/components/experience/Experience.jsx` | `backdrop-blur-md→sm`; cap stagger; heading style unified |
+| `src/components/contact/Contact.jsx` | `backdrop-blur-md→sm`; cap stagger; heading style unified; verify width = 86rem |
+| `src/app/App.jsx` | If "Lycan-Xx" overlaps SpeedDial on mobile, move to `bottom-4 left-4` |
 
 ## Do Not Touch
-StatusRotator behavior, status colors, project data shape, useProjects hook, mobile detail overlay component, ChocoCooky font, glass overlay treatment, section heading.
+VideoBackground, LoadingScreen, ChocoCooky font, status badge logic, StatusRotator, DrawerCarousel image transition (cosmetic core), data fetching/caching layers, scroll-snap rules, mobile detail overlay, the Works snap-lock split layout itself, `experience.json`, `projects.json`.
 
