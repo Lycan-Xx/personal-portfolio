@@ -105,13 +105,27 @@ const StatusRotator = ({ status }) => {
 };
 
 // ─── IMAGE CAROUSEL (drawer version — large) ─────────────────────────────────
-const DrawerCarousel = React.memo(({ images, title, autoPlay = true, fit = "contain", heightClass = "h-56" }) => {
+const DrawerCarousel = React.memo(({ images, title, autoPlay = true, fit = "contain", heightClass, maxHeight = "50vh", minHeight = "240px" }) => {
   const [current, setCurrent] = useState(0);
   const [dir, setDir] = useState(1);
   const [tabHidden, setTabHidden] = useState(typeof document !== "undefined" && document.hidden);
+  const [aspectRatio, setAspectRatio] = useState(16 / 9); // sensible default
 
   useEffect(() => {
     preloadImages(images);
+  }, [images]);
+
+  // Measure the first image's natural aspect ratio to size the container
+  useEffect(() => {
+    const url = getImageUrl(images[0]);
+    if (!url) return;
+    const img = new Image();
+    img.onload = () => {
+      if (img.naturalWidth && img.naturalHeight) {
+        setAspectRatio(img.naturalWidth / img.naturalHeight);
+      }
+    };
+    img.src = url;
   }, [images]);
 
   useEffect(() => {
@@ -145,8 +159,17 @@ const DrawerCarousel = React.memo(({ images, title, autoPlay = true, fit = "cont
 
   const currentUrl = getImageUrl(images[current]) || FALLBACK_IMG;
 
+  // If a fixed heightClass is provided, use the old fixed-height approach;
+  // otherwise, let aspect-ratio drive the height.
+  const containerStyle = heightClass
+    ? {}
+    : { aspectRatio, maxHeight, minHeight };
+
   return (
-    <div className={`relative w-full ${heightClass} rounded-xl overflow-hidden group bg-slate-900/40`}>
+    <div
+      className={`relative w-full ${heightClass || ""} rounded-xl overflow-hidden group bg-slate-900/40`}
+      style={containerStyle}
+    >
       <AnimatePresence mode="sync" initial={false} custom={dir}>
         <motion.div
           key={current}
@@ -201,8 +224,8 @@ const DrawerCarousel = React.memo(({ images, title, autoPlay = true, fit = "cont
                 key={i}
                 onClick={() => goTo(i)}
                 className={`rounded-full transition-all duration-300 ${i === current
-                    ? "w-4 h-1.5 bg-[var(--color-accent)]"
-                    : "w-1.5 h-1.5 bg-white/30 hover:bg-white/50"
+                  ? "w-4 h-1.5 bg-[var(--color-accent)]"
+                  : "w-1.5 h-1.5 bg-white/30 hover:bg-white/50"
                   }`}
               />
             ))}
@@ -371,11 +394,11 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 40 }}
       transition={{ duration: 0.28, ease: "easeOut" }}
-      className="flex flex-col h-full"
+      className=""
       style={{ fontFamily: "JetBrains Mono, monospace" }}
     >
       {/* Drawer top bar */}
-      <div className="flex items-center justify-between mb-4 flex-shrink-0">
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <span className={`w-2 h-2 rounded-full flex-shrink-0 ${status.dot}`} />
           <span className="text-[9px] text-slate-400">
@@ -419,15 +442,17 @@ const DetailDrawer = ({ project, onClose, projects, onNavigate }) => {
 
       {/* Carousel */}
       {images.length > 0 && (
-        <div className="flex-shrink-0 mb-4">
-          <DrawerCarousel images={images} title={project.title} />
+        <div className="mb-4">
+          <DrawerCarousel
+            images={images}
+            title={project.title}
+            fit={project.imageFit === "cover" ? "cover" : "contain"}
+          />
         </div>
       )}
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto min-h-0 pr-1 space-y-4
-                      scrollbar-thin scrollbar-thumb-[var(--color-accent)]/20
-                      scrollbar-track-transparent">
+      <div className="pr-1 space-y-4">
 
         {/* Title block */}
         <div>
@@ -980,7 +1005,9 @@ export const Works = () => {
             </motion.div>
 
             {/* RIGHT: Sticky / locked detail pane */}
-            <div className="w-[58%] h-full overflow-hidden bg-black/25 p-5">
+            <div className="w-[58%] h-full overflow-y-auto bg-black/25 p-5
+                          scrollbar-thin scrollbar-thumb-[var(--color-accent)]/20
+                          scrollbar-track-transparent">
               <AnimatePresence mode="wait">
                 {selected && (
                   <DetailDrawer
@@ -1020,18 +1047,17 @@ export const Works = () => {
 
             {/* Dot pager + counter */}
             <div className="flex items-center justify-between mt-4 px-2"
-                 style={{ fontFamily: "JetBrains Mono, monospace" }}>
+              style={{ fontFamily: "JetBrains Mono, monospace" }}>
               <div className="flex gap-1.5 flex-wrap">
                 {projects.map((_, i) => (
                   <button
                     key={i}
                     onClick={() => scrollMobileTo(i)}
                     aria-label={`Go to project ${i + 1}`}
-                    className={`rounded-full transition-all duration-300 ${
-                      i === mobileIndex
-                        ? "w-5 h-1.5 bg-[var(--color-accent)]"
-                        : "w-1.5 h-1.5 bg-white/30 hover:bg-white/50"
-                    }`}
+                    className={`rounded-full transition-all duration-300 ${i === mobileIndex
+                      ? "w-5 h-1.5 bg-[var(--color-accent)]"
+                      : "w-1.5 h-1.5 bg-white/30 hover:bg-white/50"
+                      }`}
                   />
                 ))}
               </div>
