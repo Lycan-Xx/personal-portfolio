@@ -881,24 +881,28 @@ export const Works = () => {
             </motion.p>
           </motion.div>
 
-          {/* ── DESKTOP: Card Wall + Drawer ── */}
-          <div className="hidden md:flex gap-0 rounded-3xl overflow-hidden
-                       border border-[var(--color-accent)]/15 min-h-[700px]">
-
-            {/* LEFT: Scrollable card wall */}
+          {/* ── DESKTOP: Snap-Lock Split View ── */}
+          <div
+            className="hidden md:flex gap-4 rounded-3xl overflow-hidden
+                       border border-[var(--color-accent)]/15"
+            style={{ height: "calc(100vh - 12rem)", minHeight: "700px", maxHeight: "900px" }}
+          >
+            {/* LEFT: Scrollable, snap-aligned compact list */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={sectionInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.1 }}
-              ref={gridRef}
-              className={`transition-all duration-300 ease-in-out overflow-y-auto
-                          bg-black/40 border-r border-[var(--color-accent)]/12
-                          ${selected ? "w-[52%]" : "w-full"}`}
+              ref={(el) => { gridRef(el); listScrollRef.current = el; }}
+              className="w-[42%] h-full overflow-y-auto bg-black/40
+                         border-r border-[var(--color-accent)]/12
+                         scrollbar-thin scrollbar-thumb-[var(--color-accent)]/20
+                         scrollbar-track-transparent"
+              style={{ scrollSnapType: "y mandatory" }}
             >
               {/* Wall header */}
               <div
                 className="sticky top-0 z-10 px-5 py-3 border-b border-[var(--color-accent)]/10
-                           bg-black/60 backdrop-blur-sm flex items-center justify-between"
+                           bg-black/70 backdrop-blur-sm flex items-center justify-between"
                 style={{ fontFamily: "JetBrains Mono, monospace" }}
               >
                 <p className="text-[10px] text-slate-500 tracking-widest uppercase">
@@ -918,79 +922,140 @@ export const Works = () => {
                 </div>
               </div>
 
-              {/* Grid */}
-              <div
-                className={`p-5 grid gap-4 transition-all duration-300
-                          ${selected
-                    ? "grid-cols-1"
-                    : "grid-cols-2 xl:grid-cols-3"
-                  }`}
-              >
-                {projects.map((project, i) => (
-                  <div
-                    key={project._id || project.id}
-                    ref={(el) => (cardRefs.current[i] = el)}
-                  >
-                    <ProjectCard
-                      project={project}
-                      index={i}
-                      isSelected={
-                        selected &&
-                        (selected._id || selected.id) === (project._id || project.id)
-                      }
-                      onClick={() =>
-                        setSelected(
-                          selected &&
-                            (selected._id || selected.id) === (project._id || project.id)
-                            ? null
-                            : project
-                        )
-                      }
-                      isVisible={visibleCards.has(i)}
-                      inView={gridInView}
-                    />
-                  </div>
-                ))}
+              {/* Compact horizontal-row list */}
+              <div className="p-3 space-y-2" style={{ fontFamily: "JetBrains Mono, monospace" }}>
+                {projects.map((project, i) => {
+                  const isSel =
+                    selected &&
+                    (selected._id || selected.id) === (project._id || project.id);
+                  const status = STATUS_CONFIG[project.status] || STATUS_CONFIG.dormant;
+                  const thumb = getImageUrl((project.images || [])[0]) || FALLBACK_IMG;
+                  return (
+                    <motion.button
+                      key={project._id || project.id}
+                      ref={(el) => { listItemRefs.current[i] = el; cardRefs.current[i] = el; }}
+                      onClick={() => setSelected(project)}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={gridInView ? { opacity: 1, y: 0 } : {}}
+                      transition={{ duration: 0.3, delay: Math.min(i, 8) * 0.04 }}
+                      style={{
+                        scrollSnapAlign: "start",
+                        scrollSnapStop: "always",
+                        background: isSel ? "rgba(66,188,188,0.08)" : "rgba(15,23,42,0.65)",
+                      }}
+                      className={`w-full text-left flex gap-3 p-2.5 rounded-lg
+                                  border transition-all duration-200
+                                  ${isSel
+                          ? "border-[var(--color-accent)]/50 border-l-2 border-l-[var(--color-accent)]"
+                          : "border-[var(--color-accent)]/10 hover:border-[var(--color-accent)]/30 hover:bg-[var(--color-accent)]/4"
+                        }`}
+                    >
+                      {/* Thumb */}
+                      <div className="relative w-20 h-20 flex-shrink-0 rounded-md overflow-hidden bg-slate-900">
+                        <img
+                          src={thumb}
+                          alt={project.title}
+                          loading="lazy"
+                          className="w-full h-full object-cover"
+                          onError={(e) => { e.currentTarget.src = FALLBACK_IMG; }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                      </div>
+
+                      {/* Body */}
+                      <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${status.dot}`} />
+                            <h3 className="text-white text-[13px] font-semibold leading-tight truncate flex-1">
+                              {project.title}
+                            </h3>
+                          </div>
+                          <p className="text-[10px] text-slate-400 line-clamp-2 leading-relaxed">
+                            {project.description}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2 mt-1.5">
+                          <span className={`text-[9px] px-1.5 py-0.5 rounded border ${status.badge}`}>
+                            {status.label}
+                          </span>
+                          {project.featured && (
+                            <span
+                              className="text-[9px] px-1.5 py-0.5 rounded border
+                                         text-[var(--color-secondary)] bg-[var(--color-secondary)]/10
+                                         border-[var(--color-secondary)]/25"
+                            >
+                              ★
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </motion.button>
+                  );
+                })}
               </div>
             </motion.div>
 
-            {/* RIGHT: Detail Drawer */}
-            <AnimatePresence>
-              {selected && (
-                <motion.div
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: "48%", opacity: 1 }}
-                  exit={{ width: 0, opacity: 0 }}
-                  transition={{ duration: 0.28, ease: "easeInOut" }}
-                  className="flex-shrink-0 overflow-hidden bg-black/25"
-                >
-                  <div className="w-full h-full p-5 overflow-hidden">
-                    <AnimatePresence mode="wait">
-                      <DetailDrawer
-                        key={selected._id || selected.id}
-                        project={selected}
-                        onClose={() => setSelected(null)}
-                        projects={projects}
-                        onNavigate={(p) => setSelected(p)}
-                      />
-                    </AnimatePresence>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {/* RIGHT: Sticky / locked detail pane */}
+            <div className="w-[58%] h-full overflow-hidden bg-black/25 p-5">
+              <AnimatePresence mode="wait">
+                {selected && (
+                  <DetailDrawer
+                    key={selected._id || selected.id}
+                    project={selected}
+                    onClose={() => setSelected(null)}
+                    projects={projects}
+                    onNavigate={(p) => setSelected(p)}
+                  />
+                )}
+              </AnimatePresence>
+            </div>
           </div>
 
-          {/* ── MOBILE: Stacked cards ── */}
+          {/* ── MOBILE: Horizontal swipeable story carousel ── */}
           <div ref={mobileRef} className="md:hidden">
-            {projects.map((project, i) => (
-              <MobileProjectCard
-                key={project._id || project.id}
-                project={project}
-                index={i}
-                inView={mobileInView}
-                onOpenDetail={(p) => setMobileSelected(p)}
-              />
-            ))}
+            <div
+              ref={mobileScrollRef}
+              className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar -mx-2"
+              style={{ touchAction: "pan-x pan-y" }}
+            >
+              {projects.map((project, i) => (
+                <div
+                  key={project._id || project.id}
+                  ref={(el) => (mobileItemRefs.current[i] = el)}
+                  className="snap-center shrink-0 w-full"
+                >
+                  <MobileProjectCard
+                    project={project}
+                    index={i}
+                    inView={mobileInView}
+                    onOpenDetail={(p) => setMobileSelected(p)}
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Dot pager + counter */}
+            <div className="flex items-center justify-between mt-4 px-2"
+                 style={{ fontFamily: "JetBrains Mono, monospace" }}>
+              <div className="flex gap-1.5 flex-wrap">
+                {projects.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => scrollMobileTo(i)}
+                    aria-label={`Go to project ${i + 1}`}
+                    className={`rounded-full transition-all duration-300 ${
+                      i === mobileIndex
+                        ? "w-5 h-1.5 bg-[var(--color-accent)]"
+                        : "w-1.5 h-1.5 bg-white/30 hover:bg-white/50"
+                    }`}
+                  />
+                ))}
+              </div>
+              <span className="text-[10px] text-slate-400">
+                {mobileIndex + 1} / {projects.length}
+              </span>
+            </div>
           </div>
 
           {/* Mobile Detail Overlay */}
