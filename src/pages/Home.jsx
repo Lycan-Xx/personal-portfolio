@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Content } from '../components/content/Content';
-import AnimatedBackground from '../components/background/AnimatedBackground';
 // import { ThemeToggle } from '../components/theme/ThemeToggle';
 import { Resume } from '../components/resume/Resume';
 import SpeedDial from '../components/speedDial/SpeedDial';
@@ -25,8 +24,6 @@ export const Home = () => {
 
   return (
     <div className="flex flex-col min-h-screen pt-20 md:pt-[60px] relative overflow-hidden max-w-[100vw]" id="home">
-      <AnimatedBackground />
-      
       <div className="relative z-10 w-full max-w-[1200px] mx-auto px-2 md:px-1 overflow-hidden max-w-[100vw]">
         <Content />
       </div>

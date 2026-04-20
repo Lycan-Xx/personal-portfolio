@@ -361,14 +361,13 @@ const Experience = () => {
     <section
       ref={sectionRef}
       id="experience"
-      className="relative min-h-screen py-20 sm:py-32 px-0 md:px-4 z-20"
+      className="relative min-h-screen py-16 sm:py-20 px-0 md:px-4 z-20"
     >
-      <div className="w-full max-w-[90rem] mx-auto relative">
+      <div className="w-full max-w-[86rem] mx-auto relative">
         {/* Glass container */}
-        <div className="absolute inset-0 bg-black/20 backdrop-blur-md rounded-none md:rounded-3xl" />
-        <div className="absolute inset-0 bg-black/50 rounded-none md:rounded-3xl" />
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm rounded-none md:rounded-3xl" />
 
-        <div className="relative p-8 md:p-12 z-10">
+        <div className="relative p-6 md:p-10 z-10">
 
           {/* ── Header ── */}
           <motion.div
@@ -381,7 +380,7 @@ const Experience = () => {
               className="text-white relative inline-block pb-3
                          after:content-[''] after:absolute after:bottom-0 after:left-0
                          after:w-2/3 after:h-[3px] after:bg-[var(--color-accent)]"
-              style={{ fontFamily: 'ChocoCooky', fontSize: 'clamp(36px, 6vw, 52px)', textShadow: '0 0 20px rgba(66, 188, 188, 0.15)' }}
+              style={{ fontFamily: 'ChocoCooky', fontSize: 'clamp(32px, 4.5vw, 44px)', textShadow: '0 0 20px rgba(66, 188, 188, 0.15)' }}
             >
               {'< Experience />'}
             </h2>
