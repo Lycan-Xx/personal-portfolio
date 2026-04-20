@@ -250,7 +250,7 @@ const CardThumbnail = React.memo(({ images, isSliding, title }) => {
 CardThumbnail.displayName = "CardThumbnail";
 
 // ─── PROJECT WALL CARD ────────────────────────────────────────────────────────
-const ProjectCard = React.memo(({ project, index, isSelected, onClick, isVisible, inView }) => {
+const ProjectCard = React.memo(({ project, index, isSelected, onClick, inView }) => {
   const [isHovered, setIsHovered] = useState(false);
   const status = STATUS_CONFIG[project.status] || STATUS_CONFIG.dormant;
   const images = project.images || [];
