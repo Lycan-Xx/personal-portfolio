@@ -439,16 +439,16 @@ const Experience = () => {
               </div>
 
               {/* Education sub-section */}
-              <div className="border-t border-[var(--color-accent)]/10 py-2 relative">
+              <div className="border-t-2 border-[var(--color-accent)]/25 py-3 px-3.5 relative bg-gradient-to-b from-transparent to-[var(--color-accent)]/3">
                 <div
-                  className="absolute left-[28px] top-0 bottom-0 w-px pointer-events-none opacity-20"
-                  style={{ background: 'var(--color-accent)' }}
+                  className="absolute left-[28px] top-0 bottom-0 w-px pointer-events-none"
+                  style={{ background: 'linear-gradient(to bottom, rgba(66,188,188,0.3), rgba(66,188,188,0.05))' }}
                 />
                 <p
-                  className="px-3.5 pb-1.5 text-[8.5px] text-slate-500 tracking-widest uppercase"
-                  style={{ fontFamily: 'JetBrains Mono, monospace' }}
+                  className="text-[9px] text-[var(--color-accent)] tracking-widest uppercase font-semibold mb-2"
+                  style={{ fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em' }}
                 >
-                  education
+                  → Education
                 </p>
                 {education.map((edu, i) => (
                   <BranchItem
@@ -481,14 +481,35 @@ const Experience = () => {
 
           {/* ── MOBILE LAYOUT ── */}
           <div ref={mobileRef} className="md:hidden pl-3 pr-3">
-            {allItems.map((item, i) => (
-              <MobileCard
-                key={item.id}
-                item={item}
-                index={i}
-                inView={mobileInView}
-              />
-            ))}
+            {allItems.map((item, i) => {
+              const isEducationStart = i === experiences.length;
+              return (
+                <div key={item.id}>
+                  {isEducationStart && (
+                    <motion.div
+                      initial={{ opacity: 0, scaleX: 0 }}
+                      animate={mobileInView ? { opacity: 1, scaleX: 1 } : {}}
+                      transition={{ duration: 0.5, delay: Math.min(i, 6) * 0.06 }}
+                      className="flex items-center gap-3 my-6 py-4 px-4 rounded-lg
+                                 bg-gradient-to-r from-[var(--color-accent)]/5 to-transparent
+                                 border-l-2 border-[var(--color-accent)]/30 origin-left"
+                    >
+                      <span className="text-[9px] text-[var(--color-accent)] font-semibold tracking-widest uppercase"
+                            style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                        → Education
+                      </span>
+                      <div className="flex-1 h-px bg-gradient-to-r from-[var(--color-accent)]/20 to-transparent" />
+                    </motion.div>
+                  )}
+                  <MobileCard
+                    key={item.id}
+                    item={item}
+                    index={i}
+                    inView={mobileInView}
+                  />
+                </div>
+              );
+            })}
           </div>
 
         </div>

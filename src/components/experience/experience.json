@@ -161,6 +161,35 @@
         "Developed systematic problem-solving skills under expert technician supervision",
         "Managed customer relations and ensured quality repair standards across multiple phone models"
       ]
+    },
+    {
+      "id": "fce-it-support",
+      "commitHash": "j5d9e33",
+      "branch": "feature/itsupport",
+      "role": "IT Support Technician",
+      "org": "Federal College of Education, Yola",
+      "type": "Apprenticeship",
+      "workType": "On-site",
+      "period": "Mar 2019 – Oct 2021",
+      "periodShort": "Mar '19",
+      "duration": "2 yrs 8 mos",
+      "location": "Yola, Adamawa State",
+      "status": "completed",
+      "color": "slate",
+      "description": "Provided IT infrastructure maintenance and technical support for the college's computer systems and networks. Gained hands-on experience in troubleshooting, repairing computer systems, networking, and server management while supporting critical academic operations including CBT center setup and examination operations.",
+      "tags": [
+        "IT Infrastructure",
+        "Computer Systems",
+        "Networking",
+        "Server Management",
+        "Technical Support"
+      ],
+      "bullets": [
+        "Assisted in IT infrastructure maintenance under the supervision of the IT maintenance officer",
+        "Gained practical experience in troubleshooting and repairing computer systems, networking, and server management",
+        "Helped set up networking, wiring, and exam software installation for the CBT center, supporting various national, state, and college tests",
+        "Participated in monitoring and supervising exam sessions to ensure smooth operations and swift addressing of any technical issues"
+      ]
     }
   ],
   "education": [
