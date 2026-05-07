@@ -5,58 +5,23 @@ const VideoBackground = () => {
 	const containerRef = useRef(null);
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [hasError, setHasError] = useState(false);
-	const [isVisible, setIsVisible] = useState(false);
 	const [videoSrc, setVideoSrc] = useState(null);
-	const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
 
-	// Set up intersection observer to detect when component is in viewport
+	// Start loading video immediately on mount (during loading screen)
+	// Check connection quality to avoid loading on slow connections or save-data mode
 	useEffect(() => {
-		// Check if user prefers reduced data usage
 		const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
 		const isSlowConnection = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
 		const isSaveData = connection && connection.saveData;
 		
 		// Don't load video on slow connections or save-data mode
 		if (isSlowConnection || isSaveData) {
-			// Skip video load due to connection constraints
 			return;
 		}
 		
-		const options = {
-			root: null, // viewport
-			rootMargin: '0px',
-			threshold: 0.1 // Trigger when at least 10% of the element is visible
-		};
-
-		const observer = new IntersectionObserver((entries) => {
-			entries.forEach(entry => {
-				// When component enters viewport
-				if (entry.isIntersecting) {
-					setShouldLoadVideo(true);
-					// Once we've detected visibility, we can disconnect the observer
-					observer.disconnect();
-				}
-			});
-		}, options);
-
-		if (containerRef.current) {
-			observer.observe(containerRef.current);
-		}
-
-		return () => {
-			if (observer) {
-				observer.disconnect();
-			}
-		};
+		// Load video immediately on component mount so it's ready when loading screen finishes
+		setVideoSrc("https://res.cloudinary.com/cloudinary-lycan-xx/video/upload/v1742216068/video_compressed-for-testing_fkyn7j.mp4");
 	}, []);
-
-	// Only set the video source when we should load it
-	useEffect(() => {
-		if (shouldLoadVideo) {
-			setIsVisible(true);
-			setVideoSrc("https://res.cloudinary.com/cloudinary-lycan-xx/video/upload/v1742216068/video_compressed-for-testing_fkyn7j.mp4");
-		}
-	}, [shouldLoadVideo]);
 
 	// Handle video loading and events
 	useEffect(() => {
@@ -109,7 +74,7 @@ const VideoBackground = () => {
 					loop
 					muted
 					playsInline
-					preload="metadata"
+					preload="auto"
 				>
 					<source 
 						src={videoSrc}
