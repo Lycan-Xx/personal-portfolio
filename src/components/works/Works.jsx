@@ -694,6 +694,7 @@ export const Works = () => {
   const mobileScrollRef = useRef(null);
   const mobileItemRefs = useRef([]);
   const [mobileIndex, setMobileIndex] = useState(0);
+  const isInitialMount = useRef(true);
 
   // Auto-select first project on desktop
   useEffect(() => {
@@ -702,9 +703,14 @@ export const Works = () => {
     }
   }, [projects]);
 
-  // Auto-scroll left list to selected on desktop
+  // Auto-scroll left list to selected on desktop (but skip on initial mount)
   useEffect(() => {
     if (!selected || !projects?.length) return;
+    // Skip scrolling on initial mount to prevent unwanted page scroll
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
     const idx = projects.findIndex((p) => (p._id || p.id) === (selected._id || selected.id));
     const el = listItemRefs.current[idx];
     if (el) el.scrollIntoView({ block: "nearest", behavior: "smooth" });
