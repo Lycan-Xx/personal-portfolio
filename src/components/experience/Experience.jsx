@@ -385,7 +385,13 @@ const Experience = () => {
               {'< Experience />'}
             </h2>
             <p
-              className="mt-4 text-cyan-400/80 text-[11px]"
+              className="mt-2 text-slate-400 text-[11px]"
+              style={{ fontFamily: 'JetBrains Mono, monospace' }}
+            >
+              click an entry to preview — use <span className="text-slate-300">↑ ↓</span> to navigate
+            </p>
+            <p
+              className="mt-3 text-cyan-400/80 text-[11px]"
               style={{ fontFamily: 'JetBrains Mono, monospace' }}
             >
               {`// ${experiences.filter(e => e.status === 'active').length} active roles · ${experiences.length} total entries`}

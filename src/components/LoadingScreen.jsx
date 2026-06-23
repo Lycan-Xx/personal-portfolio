@@ -1,17 +1,47 @@
 import React, { useState, useEffect } from 'react';
 
-const LoadingScreen = ({ children }) => {
+const LoadingScreen = ({ children, blockForVideo = true, videoTimeout = 3500 }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Always set loading to false after a short delay
-        // This ensures the app doesn't get stuck
-        const timer = setTimeout(() => {
+        let settled = false;
+        const finalize = () => {
+            if (settled) return;
+            settled = true;
             setLoading(false);
-        }, 1500);
+        };
 
-        return () => clearTimeout(timer);
-    }, []);
+        // Always fallback after a short delay to avoid stuck loading screen
+        const fallback = setTimeout(() => {
+            finalize();
+        }, Math.max(1500, videoTimeout));
+
+        if (!blockForVideo || typeof window === 'undefined') {
+            // not blocking or SSR
+            finalize();
+            clearTimeout(fallback);
+            return () => clearTimeout(fallback);
+        }
+
+        // Listen for video readiness events emitted by VideoBackground
+        const onReady = (e) => {
+            if (e?.detail?.loaded) {
+                clearTimeout(fallback);
+                finalize();
+            } else if (e?.detail?.error) {
+                // video failed; don't block indefinitely
+                clearTimeout(fallback);
+                finalize();
+            }
+        };
+
+        window.addEventListener('video:ready', onReady);
+
+        return () => {
+            window.removeEventListener('video:ready', onReady);
+            clearTimeout(fallback);
+        };
+    }, [blockForVideo, videoTimeout]);
 
     if (loading) {
         return (

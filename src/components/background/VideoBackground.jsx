@@ -30,12 +30,19 @@ const VideoBackground = () => {
 		if (videoElement && videoSrc) {
 			const handleLoaded = () => {
 				setIsLoaded(true);
+				// Notify interested parties that background video is ready
+				try {
+					window.dispatchEvent(new CustomEvent('video:ready', { detail: { loaded: true } }));
+				} catch (e) {}
 				// Video loaded successfully
 			};
 			
 			const handleError = (error) => {
 				// Error loading video
 				setHasError(true);
+				try {
+					window.dispatchEvent(new CustomEvent('video:ready', { detail: { loaded: false, error: true } }));
+				} catch (e) {}
 			};
 			
 			// Add event listeners

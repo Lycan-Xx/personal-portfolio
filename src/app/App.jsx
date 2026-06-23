@@ -39,7 +39,7 @@ export const App = () => {
 	}
 
 	return (
-		<LoadingScreen>
+		<LoadingScreen blockForVideo={true} videoTimeout={4000}>
 			<ErrorBoundary>
 				<CustomThemeProvider>
 					{/* <Navbar /> */}

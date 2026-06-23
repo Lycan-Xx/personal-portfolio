@@ -888,6 +888,15 @@ export const Works = () => {
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
+              transition={{ duration: 0.45, delay: 0.08 }}
+              className="mt-2 text-slate-400 text-[11px]"
+              style={{ fontFamily: "JetBrains Mono, monospace" }}
+            >
+              click a row to preview — <span className="text-slate-300">← →</span> or <span className="text-slate-300">Enter</span> to open
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.1 }}
               className="mt-4 text-cyan-400/80 text-[11px]"
               style={{ fontFamily: "JetBrains Mono, monospace" }}
@@ -1016,7 +1025,7 @@ export const Works = () => {
                           scrollbar-thin scrollbar-thumb-[var(--color-accent)]/20
                           scrollbar-track-transparent">
               <AnimatePresence mode="wait">
-                {selected && (
+                {selected ? (
                   <DetailDrawer
                     key={selected._id || selected.id}
                     project={selected}
@@ -1024,6 +1033,20 @@ export const Works = () => {
                     projects={projects}
                     onNavigate={(p) => setSelected(p)}
                   />
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="flex items-center justify-center h-full"
+                  >
+                    <div className="text-center text-slate-400" style={{ fontFamily: "JetBrains Mono, monospace" }}>
+                      <div className="w-40 h-28 mx-auto mb-4 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
+                        <div className="animate-pulse text-slate-500">Select an item to preview</div>
+                      </div>
+                      <div className="text-[11px]">Tip: hover a row to see live thumbnail previews</div>
+                    </div>
+                  </motion.div>
                 )}
               </AnimatePresence>
             </div>
