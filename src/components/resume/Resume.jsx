@@ -31,7 +31,7 @@ const ResumeIcon = () => {
 export const Resume = () => {
   return (
     <a
-      href="https://drive.google.com/uc?export=download&id=1gHKziEw8DylvkVUH8iOqZTEVjNJMlqkZ"
+      href="/June-2026_Developer-resume.pdf"
       target="_blank"
       rel="noopener noreferrer"
       className="glass-button group flex items-center gap-3"
